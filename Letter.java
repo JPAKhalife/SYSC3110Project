@@ -1,6 +1,5 @@
 /**
- * The Letter class is responsible for tracking the state of scrabble
- * and contains the main line of execution
+ * The Letter class is responsible for keeping track of letters and their value in points.
  * @author Elyssa Grant, Gillian O'Connel, John Khalife, Sandy Alzabadani 
  * @date 08/10/2024
  */
