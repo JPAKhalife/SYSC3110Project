@@ -16,9 +16,14 @@ public class Board {
             letterString += s.getLetter();
         }
         //check if string is a valid word in the enum
-        if(letterString.equalsIgnoreCase(Words)){
+        /*
+        ENUM NOT PRESENTLY CREATED
+        THIS IS COMMENTED OUT TO AVOID ERROR
+         if(letterString.equalsIgnoreCase(Words)){
             return true;
         }
+         */
+
         return false;
     }
 
@@ -27,17 +32,28 @@ public class Board {
         if(location.size() > 2){
             return false;
         }
+        //break loaction into each coordinate
+        char letter = location.get(0).charAt(0);
+        char digit = location.get(1).charAt(0);
+
         //location is not in proper [letter, number] format
         //diagonal value is not a number
+        /*
         try{
             Integer.parseInt(location.get(1));
         }
         catch(NumberFormatException e){
             return false;
         }
+         */
+
         //diagonal value is not a letter
-        char c = location.get(0).charAt(0);
-        if(!Character.isLetter(c)){
+
+        if(!Character.isLetter(letter)){
+            return false;
+        }
+        //diagonal value is not a digit
+        if(!Character.isDigit(digit)){
             return false;
         }
         //horizontal value is out of board bounds
