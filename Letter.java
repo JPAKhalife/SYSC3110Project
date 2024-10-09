@@ -10,7 +10,7 @@ public class Letter {
     private char letter;
     private int points;
 
-    public Letter(char letter, char points) {
+    public Letter(char letter, int points) {
         this.letter = letter;
         this.points = points;
     }
