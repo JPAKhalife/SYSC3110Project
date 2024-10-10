@@ -14,9 +14,9 @@ public class WordLoader {
 
     HashSet<String> words;
     
-    //This should be called in the constructtor
+    //This should be called in the constructor
     /**
-     * 
+     * This method loads valid words that can be used in Scrabble to memory so they can be checked against player input.
      */
     private void loadWords() {
                 //This is where words will be stored.     
