@@ -1,3 +1,44 @@
-public class Display {
+/**
+ * The Display class is responsible for displaying information about the game.
+ * @author Elyssa Grant, Gillian O'Connel, John Khalife, Sandy Alzabadani 
+ * @date 08/10/2024
+ */
+// public class Display {
     
-}
+//     //Member variables
+//     Game game;
+
+//     public Display(Game game) {
+//         this.game = game;
+//     }
+
+//     /**
+//      * This method is intended to print the current state of the board.
+//      * @param board - the board that this method should print the state of.
+//      */
+// TODO: This may need to be changed to a getSlot method just for future upgrades to an actual GUI
+//     public void displayBoard(Board board) {
+//         System.out.println("Current board: ");
+//         System.out.println(board.toString());
+//     }
+
+//     /**
+//      * This method is intended to reveal the score of all players
+//      */
+//     //Whether or not this takes an arraylist is debatable
+//     public void showScores() {
+            // System.out.println("Player scores:")
+            // for (int i = 0 ; i < this.game.getPlayers().size() ; i++) {
+            //     System.out.println("Player " + playerNum + ": " + this.game.getPlayers().get(i).getScore());
+            // }
+//     }
+
+//     public void showScore(int playerNum) {
+//         //This method should get the name of the player or the playe number
+//         System.out.println("Player " + playerNum + ", your score is: " + this.game.getPlayers.get(playerNum).getScore());
+//     }    
+// }
+
+
+
+
