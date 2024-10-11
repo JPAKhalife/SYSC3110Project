@@ -36,19 +36,7 @@ public class Board {
         char letter = location.get(0).charAt(0);
         char digit = location.get(1).charAt(0);
 
-        //location is not in proper [letter, number] format
-        //diagonal value is not a number
-        /*
-        try{
-            Integer.parseInt(location.get(1));
-        }
-        catch(NumberFormatException e){
-            return false;
-        }
-         */
-
         //diagonal value is not a letter
-
         if(!Character.isLetter(letter)){
             return false;
         }
@@ -66,8 +54,27 @@ public class Board {
         }
 
         return true;
+    }
 
+    public boolean addWord(Dictionary<Letter, ArrayList<String>> word){
+        //check if word is word
+        return true;
+    }
 
+    public String toString(){
+        String strBoard = "";
+        for(int i = 0; i < BOARD_SIZE; i++){
+            for(int j = 0; j < BOARD_SIZE; j++){
+                if(this.board[i][j] == null){
+                    strBoard += "[ ]";
+                }else{
+                    strBoard += "[" + this.board[i][j].getLetter() + "]";
+                }
+            }
+            strBoard += "\n";
+        }
+
+        return strBoard;
     }
 
 } //end class
