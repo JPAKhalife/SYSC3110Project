@@ -130,6 +130,7 @@
 - nextPlayerTurn(): void
 + addPlayer(): boolean
 +findWinner(): Player
++placeWord(word: Dictionary &lt;Letter,String&gt;): boolean
 +&lt;u&gt;main(args: String[]): void &lt;/u&gt;</string>
      </void>
     </void>
@@ -173,7 +174,7 @@
       <string>+Player()
 + getScore(): int
 - updateScore(int turnScore): void
-+ playerTurn(): void
++ playerTurn(): Dictionary&lt;Letter, String&gt;
 - pullFromBag(): void</string>
      </void>
     </void>
