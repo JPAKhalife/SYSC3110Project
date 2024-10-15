@@ -1,4 +1,10 @@
 # SYSC3110Project
+Project distribution (temp)
+-John: Enum (Word), Letter, Display
+-Elyssa: Player
+-Gillian: Board
+-Sandy: LetterBag, Game
+
 The authours of this project are John Khalife, Elyssa Grant, Sandy Alzabadani, and Gillian O'Connell.
 
 This repositiory contains Milestone 1- a text-based implementation of Scrabble. In this deliverable,

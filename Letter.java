@@ -1,5 +1,5 @@
 /**
- * The Letter class is responsible for keeping track of which letters warrant which points.
+ * The Letter class is responsible for keeping track of letters and their value in points.
  * @author Elyssa Grant, Gillian O'Connel, John Khalife, Sandy Alzabadani 
  * @date 08/10/2024
  */
