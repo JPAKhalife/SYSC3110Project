@@ -1,7 +1,7 @@
 # SYSC3110Project
 Project distribution (temp)
 -John: Enum (Word), Letter, Display
--Elyssa: Player
+-Elyssa: Player, Game
 -Gillian: Board
 -Sandy: LetterBag, Game
 
