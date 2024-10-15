@@ -32,13 +32,7 @@ public class Board {
             letterString += s.getLetter();
         }
         //check if string is a valid word in the enum
-        /*
-        ENUM NOT PRESENTLY CREATED
-        THIS IS COMMENTED OUT TO AVOID ERROR
-         if(letterString.equalsIgnoreCase(Words)){
-            return true;
-        }
-         */
+         if()
 
         return false;
     }
