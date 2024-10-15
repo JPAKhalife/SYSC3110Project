@@ -40,7 +40,7 @@ public class Display {
      */
     public void showScore(int playerNum) {
         //This method should get the name of the player or the playe number
-        System.out.println("Player " + playerNum + ", your score is: " + this.game.getPlayers.get(playerNum).getScore());
+        System.out.println("Player " + playerNum + ", your score is: " + this.game.getPlayers().get(playerNum).getScore());
     }    
 }
 

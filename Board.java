@@ -6,18 +6,21 @@
  * @date 2024/10/08
  */
 
+import java.io.File;
 import java.util.*;
 import java.lang.*;
 
 public class Board {
     public static final int BOARD_SIZE = 15;
     private Letter[][] board;
+    HashSet<String> words;
 
     /**
      * Constructor for Board
      */
     public Board(){
        board = new Letter [BOARD_SIZE][BOARD_SIZE];
+       loadWords();
     }
 
     /**
@@ -113,4 +116,22 @@ public class Board {
         return strBoard;
     }
 
+    //This should be called in the constructor
+    /**
+     * This method loads valid words that can be used in Scrabble to memory so they can be checked against player input.
+     */
+    private void loadWords() {
+        //This is where words will be stored.
+        try {
+            File inputFile = new File("words.txt");
+            Scanner reader = new Scanner(inputFile);
+            while (reader.hasNextLine()) {
+                words.add(reader.nextLine());
+            }
+            reader.close();
+        } catch (Exception e) {
+            System.out.println("There was an error reading from file.");
+            e.printStackTrace();
+        }
+    }
 } //end class
