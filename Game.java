@@ -1,12 +1,13 @@
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Scanner;
 
 //** NOTE: This class doesn't actually need to exist, just copy paste the loading method to whatever class checks if a play is valid (probabbly board) */
-public class WordLoader {
+public class Game {
 
     //Completely useless constructor
-    WordLoader() {
+    Game() {
         words = new HashSet<>();
         loadWords();
     }
@@ -43,9 +44,12 @@ public class WordLoader {
         return words.contains(word.toLowerCase());
     }
 
-    public static void main(String[] args) {
-        WordLoader blah = new WordLoader();
-        System.out.print(blah.isValidWord("Zealand"));
+    /**
+     * This method returns all of the players in the game.
+     * @return An ArrayList of players
+     */
+    public ArrayList<Player> getPlayers() {
+        return this.players;
     }
 }
 
