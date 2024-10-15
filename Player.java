@@ -32,13 +32,15 @@ public class Player {
     /**
      * Plays one turn of scrabble using the player's rack
      */
-    public Dictionary<Letter, String> playerTurn()
+    public Dictionary<ArrayList<Letter>, ArrayList<String>> playerTurn()
     {
         String userTurn; //stores the turn type the user wants to perform
         int numLettersToPlay; //stores the number of letters the user wants to play
         int letterToPlay; //stores the actual letters the user plays
-        Dictionary<Letter, String> playerWord = new Hashtable<>(); //Stores the scrabble notation for where the user wants to add things to the board
+        Dictionary<ArrayList<Letter>, ArrayList<String>> playerWord = new Hashtable<>(); //Stores the scrabble notation for where the user wants to add things to the board
         ArrayList<Integer> usedValues = new ArrayList<>();
+        ArrayList<Letter> letters = new ArrayList<>();
+        ArrayList<String> locations = new ArrayList<>();
         int turnScore = 0;
 
         //printing the player's rack
@@ -66,12 +68,15 @@ public class Player {
                 }
                 else
                 {
+                    letters.add(rack.get(letterToPlay));
                     System.out.println("Using scrabble notation of [Col][Row], input the location of the letter");
-                    playerWord.put(rack.get(letterToPlay), scan.nextLine());
+                    locations.add(scan.nextLine())
                 }
+
+                playerWord.put(letters, locations);
             }
         }
-        else if(userTurn.equals("2")) { //The user wants to exchange letters wtih the letter bag
+        else if(userTurn.equals("2")) { //The user wants to exchange letters with the letter bag
             System.out.print("Please enter the number of letters you would like to exchange: ");
             numLettersToPlay = scan.nextInt();
 
