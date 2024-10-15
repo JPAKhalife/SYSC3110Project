@@ -6,18 +6,41 @@
  * @date 2024/10/08
  */
 
+import java.io.File;
 import java.util.*;
 import java.lang.*;
 
 public class Board {
     public static final int BOARD_SIZE = 15;
     private Letter[][] board;
+    private static HashSet<String> words;
 
     /**
      * Constructor for Board
      */
     public Board(){
        board = new Letter [BOARD_SIZE][BOARD_SIZE];
+       words = new HashSet<>();
+       loadWords();
+    }
+
+    /**
+     * Create the bank of vailid words that can be played in Scrabble. All words are fetched
+     * from external txt file accessed from https://www.mit.edu/~ecprice/wordlist.10000
+     */
+    private void loadWords() {
+        //This is where words will be stored.
+        try {
+            File inputFile = new File("words.txt");
+            Scanner reader = new Scanner(inputFile);
+            while (reader.hasNextLine()) {
+                words.add(reader.nextLine());
+            }
+            reader.close();
+        } catch (Exception e) {
+            System.out.println("There was an error reading from file.");
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -81,8 +104,9 @@ public class Board {
      * @param word The word being placed on the board
      * @return placement successfullness
      */
-    public boolean addWord(Dictionary<Letter, ArrayList<String>> word){
-        //check if word is word
+    public boolean addWord(){
+        //check if letters can be placed in specified locations
+        for(Letter l : )
         return true;
     }
 
