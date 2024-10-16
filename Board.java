@@ -114,36 +114,37 @@ public class Board {
      * @param word The word being placed on the board, letterLocation The location on the board of each letter in the word
      * @return placement successfullness
      */
-    public boolean addWord(ArrayList<Letter> word, ArrayList<String> letterLocation){
+    public boolean addWord(ArrayList<Letter> word, ArrayList<String> letterLocation) {
         //check that each letter has a location
-        if(word.size() != letterLocation.size()){
+        if (word.size() != letterLocation.size()) {
             return false;
         }
         //check if letters can be placed in specified locations
-        for(String l: letterLocation){
-            if(!isValidPlacement(l)){
+        for (String l : letterLocation) {
+            if (!isValidPlacement(l)) {
                 return false;
             }
         }
         //check if the word is a valid word
-        if(!isWord(word)){
+        if (!isWord(word)) {
             return false;
         }
         //add word to the board
-        for(int i = 0; i < word.size(); i++){
+        for (int i = 0; i < word.size(); i++) {
             //get letter coordinate from location
             String location = letterLocation.get(i);
 
             char locationLetter = letterLocation.get(i).charAt(0);
             //get numeric coordinate from location
             String numberString = "";
-            for(int j = 1; j < location.length(); j++){
+            for (int j = 1; j < location.length(); j++) {
                 numberString += location.charAt(j);
             }
             int locationNumber = Integer.parseInt(numberString);
 
             //add letter to board
             board[locationLetter - 'a'][locationNumber] = word.get(i);
+        }
 
         return true;
     }
