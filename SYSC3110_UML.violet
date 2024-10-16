@@ -129,6 +129,7 @@
       <string>+Game()
 - nextPlayerTurn(): void
 + addPlayer(): boolean
++ getPlayer(index: int): Player
 +findWinner(): Player
 +placeWord(word: Dictionary &lt;ArrayList&lt;Letter&gt;, ArrayList&lt;String&gt;&gt;): boolean
 +&lt;u&gt;main(args: String[]): void &lt;/u&gt;</string>
@@ -173,9 +174,9 @@
      <void property="text">
       <string>+Player()
 + getScore(): int
-- updateScore(int turnScore): void
++ updateScore(int turnScore): void
 + playerTurn(): Dictionary &lt;ArrayList&lt;Letter&gt;, ArrayList&lt;String&gt;&gt;
-- pullFromBag(): void</string>
++ pullFromBag(): boolean</string>
      </void>
     </void>
     <void property="name">
