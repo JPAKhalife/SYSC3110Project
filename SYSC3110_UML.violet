@@ -12,7 +12,7 @@
      <void property="text">
       <string>+Board()
  - isWord(letters: ArrayList&lt;Letter&gt;): boolean
-- isValidPlacement(locations: ArrayList&lt;String&gt;): boolean
+- isValidPlacement(locations: String): boolean
 + addWord(word: ArrayList&lt;Letter&gt;, locations: ArrayList&lt;String&gt;): boolean
 </string>
      </void>
