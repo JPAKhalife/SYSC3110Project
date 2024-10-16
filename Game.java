@@ -1,7 +1,5 @@
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Scanner;
+import java.util.*;
 
 //** NOTE: This class doesn't actually need to exist, just copy paste the loading method to whatever class checks if a play is valid (probabbly board) */
 public class Game {
@@ -10,6 +8,9 @@ public class Game {
     private Board board;
     private int currentPlayer;
 
+    /**
+     * Basic constructor for Game
+     */
     public Game()
     {
         players = new ArrayList<>();
@@ -18,11 +19,12 @@ public class Game {
     }
 
     /**
-     * This method returns all of the players in the game.
-     * @return An ArrayList of players
+     * This method returns a desired player given their index
+     * @param index The index of the player to be extracted
+     * @return The player located at the appropriate index
      */
-    public ArrayList<Player> getPlayers() {
-        return this.players;
+    public Player getPlayer(int index) {
+        return this.players.get(index);
     }
 
     public boolean addPlayer()
@@ -38,7 +40,11 @@ public class Game {
         }
     }
 
-    public Player findWinnner()
+    /**
+     * Using the known player scores, determines the winner at the end of the game
+     * @return The Player who won
+     */
+    public Player findWinner()
     {
         Player winner = new Player();
         int winnerScore = 0;
@@ -60,6 +66,17 @@ public class Game {
         for (int i = 0; i < 4; i++) {
             game.addPlayer();
         }
+
+        Player currentPlayer = game.getPlayer(0);
+
+        while(currentPlayer.pullFromBag())
+        {
+            Dictionary<ArrayList<Letter>, ArrayList<String>> word =  currentPlayer.playerTurn();
+
+        }
+
+
+
 
     }
 }

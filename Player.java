@@ -70,7 +70,7 @@ public class Player {
                 {
                     letters.add(rack.get(letterToPlay));
                     System.out.println("Using scrabble notation of [Col][Row], input the location of the letter");
-                    locations.add(scan.nextLine())
+                    locations.add(scan.nextLine());
                 }
 
                 playerWord.put(letters, locations);
@@ -106,7 +106,7 @@ public class Player {
     /**
      * Pulls more letters from the bag to fill their rack up to 7 letters
      */
-    private boolean pullFromBag()
+    public boolean pullFromBag()
     {
         while(rack.size() < 7)
         {
