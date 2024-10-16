@@ -133,14 +133,10 @@ public class Board {
         for (int i = 0; i < word.size(); i++) {
             //get letter coordinate from location
             String location = letterLocation.get(i);
-
             char locationLetter = letterLocation.get(i).charAt(0);
+
             //get numeric coordinate from location
-            String numberString = "";
-            for (int j = 1; j < location.length(); j++) {
-                numberString += location.charAt(j);
-            }
-            int locationNumber = Integer.parseInt(numberString);
+            int locationNumber = getNumericCoordinate(location);
 
             //add letter to board
             board[locationLetter - 'a'][locationNumber] = word.get(i);
@@ -170,4 +166,17 @@ public class Board {
         return strBoard;
     }
 
+    /**
+     * Take the string representation of a board location and return the numeric coordinate
+     * @param location The loaction on the board
+     * @return the numeric coordinate of the location
+     */
+    private int getNumericCoordinate(String location){
+        //get numeric coordinate from location
+        String numberString = "";
+        for (int j = 1; j < location.length(); j++) {
+            numberString += location.charAt(j);
+        }
+        return Integer.parseInt(numberString);
+    }
 } //end class
