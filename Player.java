@@ -106,11 +106,21 @@ public class Player {
     /**
      * Pulls more letters from the bag to fill their rack up to 7 letters
      */
-    private void pullFromBag()
+    private boolean pullFromBag()
     {
         while(rack.size() < 7)
         {
-            rack.add(LetterBag.getNextLetter());
+            Letter letter = LetterBag.getNextLetter();
+            if(letter != null)
+            {
+                rack.add(letter);
+            }
+            else
+            {
+                return false;
+            }
         }
+
+        return true;
     }
 }

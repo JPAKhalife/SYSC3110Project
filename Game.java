@@ -27,12 +27,20 @@ public class Game {
 
     public boolean addPlayer()
     {
-        players.add(new Player());
+        try
+        {
+            players.add(new Player());
+            return true;
+        }
+        catch(Exception e)
+        {
+            return false;
+        }
     }
 
     public Player findWinnner()
     {
-        Player winner;
+        Player winner = new Player();
         int winnerScore = 0;
         for(Player player: players)
         {
@@ -44,5 +52,14 @@ public class Game {
         }
 
         return winner;
+    }
+
+    public static void main(String[] args) {
+        Game game = new Game();
+
+        for (int i = 0; i < 4; i++) {
+            game.addPlayer();
+        }
+
     }
 }
