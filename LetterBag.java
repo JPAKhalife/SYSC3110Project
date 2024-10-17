@@ -98,9 +98,9 @@ public class LetterBag {
 
         int remainingCount = letters.get(selectedLetter) - 1;
         if (remainingCount > 0) {
-            letters.put(selectedLetter, remainingCount);
+            letters.put(selectedLetter, remainingCount); //update the count after the letter has been removed
         } else {
-            letters.remove(selectedLetter);
+            letters.remove(selectedLetter); //if the count is 0 then the key should be removed from the dictionary
         }
 
         letterList.remove(index); // Update the list to reflect the removal
