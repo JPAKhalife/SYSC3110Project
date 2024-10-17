@@ -60,6 +60,14 @@ public class Game {
         return winner;
     }
 
+    public boolean placeWord(Dictionary<ArrayList<Letter>, ArrayList<String>> word)
+    {
+        ArrayList<Letter> letters = word.keys().nextElement(); //Extracting the letters
+        ArrayList<String> locations = word.elements().nextElement(); //Extracting the locatiosn
+
+        return false; //NEED to add board to input
+    }
+
     public static void main(String[] args) {
         Game game = new Game();
 
@@ -72,7 +80,12 @@ public class Game {
         while(currentPlayer.pullFromBag())
         {
             Dictionary<ArrayList<Letter>, ArrayList<String>> word =  currentPlayer.playerTurn();
+            boolean success = Game.addWord(word);
 
+            if(success)
+            {
+                
+            }
         }
 
 
