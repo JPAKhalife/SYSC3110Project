@@ -7,7 +7,7 @@ import java.util.*;
  */
 public class LetterBag {
     private Dictionary<Letter,Integer> letters;
-    private List<Letter> letterList = new ArrayList<>(); // Maintain state across method calls
+    private List<Letter> letterList = new ArrayList<>();
     private Random random = new Random();
 
 
@@ -67,8 +67,27 @@ public class LetterBag {
         letters.put(letterY,3);
         letters.put(letterZ,4);
 
+        for(Enumeration<Letter> e = letters.keys();e.hasMoreElements();){
+            Letter letter = e.nextElement();
+            int number = letters.get(letter);
+            for(int i=0; i<number; i++){
+                letterList.add(letter);
+            }
+
      }
 
+    public void addLetter(Letter letter, int total){
+        if(letters.get(letter)!=null) {
+            int currTotal = letters.get(letter);
+            letters.put(letter, total + currTotal);
+            letterList.add(letter);
+        }else{
+            letters.put(letter, total);
+        }
+         for(int i=0; i<total; i++){
+             letterList.add(letter);
+         }
+     }
     public Letter getNextLetter(){
         if (letterList.isEmpty()) {
             return null; // No letters in the bag
