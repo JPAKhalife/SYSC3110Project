@@ -72,7 +72,7 @@ public class Game {
      * It extracts the letters and locations specified by the player.
      * @param word - A dictionnary that contains the letter and 
      * where it will be added to the board.
-     * @return A boolean stating whether or not the word was successfully added to the board
+     * @return A boolean stating whether the word was successfully added to the board
      */
     public boolean addWord(Dictionary<ArrayList<Letter>, ArrayList<String>> word)
     {
@@ -83,9 +83,11 @@ public class Game {
     }
 
     public static void main(String[] args) {
-        boolean notPlayerRackEmpty = true; //Useful for determining whether the game should finish or not
 
         Game game = new Game();
+        boolean success = false;
+        boolean gameOn = true;
+        int playerIndex = 0;
 
         //Adding a standard 4 players
         for (int i = 0; i < 4; i++) {
@@ -93,18 +95,28 @@ public class Game {
         }
 
         //Starting player
-        Player currentPlayer = game.getPlayer(0);
+        Player currentPlayer = game.getPlayer(playerIndex);
 
         //While there are still letters to pull from the bag, and no player's rack is empty, the game continues
-        while(currentPlayer.pullFromBag() && notPlayerRackEmpty)
+        while(gameOn)
         {
-            Dictionary<ArrayList<Letter>, ArrayList<String>> word =  currentPlayer.playerTurn();
-            boolean success = game.addWord(word);
-            if(success)
+            //Player can attempt over and over again to create a proper word
+            while(!success) {
+                Dictionary<ArrayList<Letter>, ArrayList<String>> word = currentPlayer.playerTurn();
+                success = game.addWord(word);
+            }
+            //Only update the score if the user's word is valid
+            currentPlayer.updateScore();
+
+            //player pulls from the bag until they have 7 letters in their rack
+            boolean bagNotEmpty = currentPlayer.pullFromBag();
+            //if the user's rack is empty, the game is over
+            if(currentPlayer.isRackEmpty() && !bagNotEmpty)
             {
-                currentPlayer.updateScore();
+                gameOn = false;
             }
 
+            currentPlayer = game.getPlayer(playerIndex);
         }
 
     }
