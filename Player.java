@@ -1,7 +1,7 @@
 /**
  * This class is responsible for each player's information as well as the actions they perform in a turn.
  * @author Elyssa
- * @date 2024/10/08
+ * @date 2024/18/08
  */
 import java.util.*;
 
@@ -33,6 +33,7 @@ public class Player {
 
     /**
      * Plays one turn of scrabble using the player's rack
+     * @return A Dictionary with the word of letters as the key, and the desired locations as the value
      */
     public Dictionary<ArrayList<Letter>, ArrayList<String>> playerTurn()
     {
@@ -108,6 +109,7 @@ public class Player {
 
     /**
      * Pulls more letters from the bag to fill their rack up to 7 letters
+     * @return a boolean indicating whether the rack was filled back up to 7 letters successfully
      */
     public boolean pullFromBag()
     {
@@ -129,12 +131,16 @@ public class Player {
 
     /**
      * This method returns true if the rack is empty
-     * @return a boolean stating whether or not the rack is empty
+     * @return a boolean stating whether the rack is empty
      */
     public boolean isRackEmpty() {
         return rack.size() <= 0;
     }
 
+    /**
+     *
+     * @return A copy of the
+     */
     public ArrayList<Letter> getRack()
     {
         return new ArrayList<Letter>(rack);

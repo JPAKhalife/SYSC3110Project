@@ -1,7 +1,7 @@
 /**
  * The Game class contains the current state of Scrabble and the main line of execution.
  * @author Elyssa Grant, Gillian O'Connel, John Khalife, Sandy Alzabadani 
- * @date 08/10/2024
+ * @date 08/18/2024
  */
 
 import java.io.File;
@@ -116,7 +116,7 @@ public class Game {
                 gameOn = false;
             }
 
-            currentPlayer = game.getPlayer(playerIndex);
+            currentPlayer = game.getPlayer(playerIndex++);
         }
 
     }
