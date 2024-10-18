@@ -126,4 +126,12 @@ public class Player {
 
         return true;
     }
+
+    /**
+     * This method returns true if the rack is empty
+     * @return a boolean stating whether or not the rack is empty
+     */
+    public boolean isRackEmpty() {
+        return rack.size() <= 0;
+    }
 }
