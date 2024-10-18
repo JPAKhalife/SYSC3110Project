@@ -50,9 +50,13 @@ public class Board {
      */
     private boolean isWord(ArrayList<Letter> letters){
         String letterString = "";
+        char l;
+
         //convert ArrayList of Letters to a string
         for(Letter s : letters){
-            letterString += s.getLetter();
+            l = s.getLetter();
+            Character.toLowerCase(l);
+            letterString += l;
         }
         //check if string is a valid word in the enum
         if(words.contains(letterString)){
@@ -61,6 +65,7 @@ public class Board {
 
         return false;
     }
+
 
     /**
      * Check if the placement of a particular letter is avalible on the board
