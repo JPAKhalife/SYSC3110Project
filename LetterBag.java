@@ -67,6 +67,14 @@ public class LetterBag {
         letters.put(letterY,3);
         letters.put(letterZ,4);
 
+        for(Enumeration<Letter> e = letters.keys();e.hasMoreElements();) {
+            Letter letter = e.nextElement();
+            int number = letters.get(letter);
+            for (int i = 0; i < number; i++) {
+                letterList.add(letter);
+            }
+        }
+
     }
 
     public static Letter getNextLetter(){

@@ -34,6 +34,8 @@ public class Game {
 
     public ArrayList<Player> getPlayers(){ return new ArrayList<Player>(players);}
 
+    public Board getBoard() {return this.board;}
+
     public boolean addPlayer()
     {
         try
@@ -83,15 +85,22 @@ public class Game {
     }
 
     public static void main(String[] args) {
-
+        LetterBag.createBag();
         Game game = new Game();
         boolean success = false;
         boolean gameOn = true;
         int playerIndex = 0;
+        Display gui = new Display(game);
 
         //Adding a standard 4 players
         for (int i = 0; i < 4; i++) {
             game.addPlayer();
+            boolean working = game.getPlayer(i).pullFromBag();
+            if(!working)
+            {
+                System.out.println("Failed to pull from bag");
+            }
+
         }
 
         //Starting player
@@ -107,6 +116,8 @@ public class Game {
             }
             //Only update the score if the user's word is valid
             currentPlayer.updateScore();
+
+            gui.displayBoard();
 
             //player pulls from the bag until they have 7 letters in their rack
             boolean bagNotEmpty = currentPlayer.pullFromBag();

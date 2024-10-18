@@ -51,7 +51,7 @@ public class Player {
         System.out.print("Player's rack: \n");
         for(int i = 0; i<rack.size(); i++)
         {
-            System.out.println(i+". "+rack.get(i));
+            System.out.println(i+". "+rack.get(i).getLetter());
         }
 
         System.out.println("1. Place Letters\n 2. Exchange Letters\n 3.Pass turn");
@@ -74,6 +74,7 @@ public class Player {
                 {
                     letters.add(rack.get(letterToPlay));
                     turnScore += rack.get(letterToPlay).getPoints();
+                    scan.nextLine(); //Clearing the buffer of newlines
                     System.out.println("Using scrabble notation of [Col][Row], input the location of the letter");
                     locations.add(scan.nextLine());
                 }
@@ -139,7 +140,7 @@ public class Player {
 
     /**
      *
-     * @return A copy of the
+     * @return A copy of the player's rack
      */
     public ArrayList<Letter> getRack()
     {
