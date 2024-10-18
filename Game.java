@@ -83,7 +83,7 @@ public class Game {
     }
 
     public static void main(String[] args) {
-        boolean playerRackEmpty = false; //Useful for determining whether the game should finish or not
+        boolean notPlayerRackEmpty = true; //Useful for determining whether the game should finish or not
 
         Game game = new Game();
 
@@ -96,18 +96,16 @@ public class Game {
         Player currentPlayer = game.getPlayer(0);
 
         //While there are still letters to pull from the bag, and no player's rack is empty, the game continues
-        while(currentPlayer.pullFromBag())
+        while(currentPlayer.pullFromBag() && notPlayerRackEmpty)
         {
             Dictionary<ArrayList<Letter>, ArrayList<String>> word =  currentPlayer.playerTurn();
             boolean success = game.addWord(word);
             if(success)
             {
-                
+                currentPlayer.updateScore();
             }
+
         }
-
-
-
 
     }
 }
