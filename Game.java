@@ -27,6 +27,8 @@ public class Game {
         return this.players.get(index);
     }
 
+    public ArrayList<Player> getPlayers(){ return new ArrayList<Player>(players);}
+
     public boolean addPlayer()
     {
         try
