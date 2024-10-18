@@ -1,11 +1,11 @@
-
 /**
- * This class is reposnible for checking if the word a player is looking to place on the board is valid and
- * storing the game status (i.e. words previously placed by players).
+ * This class is responsible for checking if the word a player is looking to place on the board is valid and
+ * storing the current board status (i.e. words previously placed by players).
  * @author Gillian O'Connell
  * @date 2024/10/08
  */
 
+import javax.imageio.stream.ImageInputStream;
 import java.io.File;
 import java.util.*;
 import java.lang.*;
@@ -13,14 +13,34 @@ import java.lang.*;
 public class Board {
     public static final int BOARD_SIZE = 15;
     private Letter[][] board;
-    HashSet<String> words;
+    private static HashSet<String> words;
 
     /**
      * Constructor for Board
      */
     public Board(){
-       board = new Letter [BOARD_SIZE][BOARD_SIZE];
-       loadWords();
+        board = new Letter [BOARD_SIZE][BOARD_SIZE];
+        words = new HashSet<>();
+        loadWords();
+    }
+
+    /**
+     * Create the bank of valid words that can be played in Scrabble. All words are fetched
+     * from external txt file accessed from https://www.mit.edu/~ecprice/wordlist.10000
+     */
+    private void loadWords() {
+        //This is where words will be stored.
+        try {
+            File inputFile = new File("words.txt");
+            Scanner reader = new Scanner(inputFile);
+            while (reader.hasNextLine()) {
+                words.add(reader.nextLine().strip());
+            }
+            reader.close();
+        } catch (Exception e) {
+            System.out.println("There was an error reading from file.");
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -30,55 +50,65 @@ public class Board {
      */
     private boolean isWord(ArrayList<Letter> letters){
         String letterString = "";
+        char l;
+
         //convert ArrayList of Letters to a string
         for(Letter s : letters){
-            letterString += s.getLetter();
+            l = s.getLetter();
+            Character.toLowerCase(l);
+            letterString += l;
         }
+
+        System.out.println(letterString.toLowerCase()+" is the word\n");
         //check if string is a valid word in the enum
-        /*
-        ENUM NOT PRESENTLY CREATED
-        THIS IS COMMENTED OUT TO AVOID ERROR
-         if(letterString.equalsIgnoreCase(Words)){
+        if(words.contains(letterString.toLowerCase())){
             return true;
         }
-         */
 
         return false;
     }
+
 
     /**
      * Check if the placement of a particular letter is avalible on the board
      * @param location The square the letter is being placed on
      * @return whether the letter can be placed
      */
-    private boolean isValidPlacement(ArrayList<String> location){
-        //location did not give two-dimensional coordinates
-        if(location.size() > 2){
+    private boolean isValidPlacement(String location){
+        //location is not a two-dimensional coordinate (number may be 2 digits)
+        if(location.length() > 3){
             return false;
         }
-        //break loaction into each coordinate
-        char letter = location.get(0).charAt(0);
-        char digit = location.get(1).charAt(0);
+        //break location into each coordinate (ignoring case)
+        //get letter from first index of string
+        char letter = Character.toLowerCase(location.charAt(0));
+        //get digits from second index on wards, checking that there are no letters
+        String number = "";
+        for(int i = 1; i < location.length(); i++){
+            //character is not a number
+            if(!Character.isDigit(location.charAt(i))){
+                return false;
+            }
+            //character is a number
+            number += Character.toString(location.charAt(i));
+        }
 
         //diagonal value is not a letter
         if(!Character.isLetter(letter)){
             return false;
         }
-        //diagonal value is not a digit
-        if(!Character.isDigit(digit)){
-            return false;
-        }
+
         //horizontal value is out of board bounds
-        if(location.get(0).toLowerCase().compareTo("o") > 0){
+        if(letter > 'o'){
             return false;
         }
         //vertical vale is out of board bounds
-        if(Integer.parseInt(location.get(1)) > 15){
+        if(Integer.parseInt(number) > 15){
             return false;
         }
 
         //check is placement is taken already
-        if(board[letter][digit] != null){
+        if(board[letter - 'a'][Integer.parseInt(number)] != null){
             return false;
         }
 
@@ -87,11 +117,43 @@ public class Board {
 
     /**
      * Add the word the player wants to play to the board
-     * @param word The word being placed on the board
+     * @param word The word being placed on the board, letterLocation The location on the board of each letter in the word
      * @return placement successfullness
      */
-    public boolean addWord(Dictionary<Letter, ArrayList<String>> word){
-        //check if word is word
+    public boolean addWord(ArrayList<Letter> word, ArrayList<String> letterLocation) {
+        //check that each letter has a location
+        if (word.size() != letterLocation.size()) {
+            System.out.println("Word location mismatch\n");
+            return false;
+        }
+        //check if letters can be placed in specified locations
+        for (String l : letterLocation) {
+            if (!isValidPlacement(l)) {
+                System.out.println("Invalid placement on board");
+                return false;
+            }
+        }
+        //check if the word is a valid word
+        if (isWord(word) == false) {
+            System.out.println("Not a known word");
+            return false;
+        }
+        //add word to the board
+        for (int i = 0; i < word.size(); i++) {
+            //get letter coordinate from location
+            String location = letterLocation.get(i);
+            char locationLetter = letterLocation.get(i).charAt(0);
+
+            //get numeric coordinate from location
+            int locationNumber = getNumericCoordinate(location);
+
+            System.out.println("Location letter: "+ locationLetter);
+            System.out.println("Location number: " + locationNumber);
+
+            //add letter to board
+            board[locationLetter - 'a'][locationNumber] = word.get(i);
+        }
+
         return true;
     }
 
@@ -116,22 +178,17 @@ public class Board {
         return strBoard;
     }
 
-    //This should be called in the constructor
     /**
-     * This method loads valid words that can be used in Scrabble to memory so they can be checked against player input.
+     * Take the string representation of a board location and return the numeric coordinate
+     * @param location The loaction on the board
+     * @return the numeric coordinate of the location
      */
-    private void loadWords() {
-        //This is where words will be stored.
-        try {
-            File inputFile = new File("words.txt");
-            Scanner reader = new Scanner(inputFile);
-            while (reader.hasNextLine()) {
-                words.add(reader.nextLine());
-            }
-            reader.close();
-        } catch (Exception e) {
-            System.out.println("There was an error reading from file.");
-            e.printStackTrace();
+    private int getNumericCoordinate(String location){
+        //get numeric coordinate from location
+        String numberString = "";
+        for (int j = 1; j < location.length(); j++) {
+            numberString += location.charAt(j);
         }
+        return Integer.parseInt(numberString);
     }
 } //end class
