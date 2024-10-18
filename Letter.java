@@ -14,10 +14,19 @@ public class Letter {
         this.letter = letter;
         this.points = points;
     }
+
+    /**
+     * An accessor method that gets the letter character stored by the object
+     * @return the character contained by the object
+     */
     public char getLetter() {
         return letter;
     }
 
+    /**
+     * A getPoints method that gets the number of points that a letter is worth.
+     * @return an integer representing a number of points.
+     */
     public int getPoints() {
         return points;
     }
