@@ -96,6 +96,10 @@ public class Player {
 
             pullFromBag();
         }
+
+        //clearing the buffer
+        scan.nextLine();
+
         return playerWord;
     }
 

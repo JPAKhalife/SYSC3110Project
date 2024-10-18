@@ -58,8 +58,10 @@ public class Board {
             Character.toLowerCase(l);
             letterString += l;
         }
+
+        System.out.println(letterString.toLowerCase()+" is the word\n");
         //check if string is a valid word in the enum
-        if(words.contains(letterString)){
+        if(words.contains(letterString.toLowerCase())){
             return true;
         }
 
@@ -121,16 +123,19 @@ public class Board {
     public boolean addWord(ArrayList<Letter> word, ArrayList<String> letterLocation) {
         //check that each letter has a location
         if (word.size() != letterLocation.size()) {
+            System.out.println("Word location mismatch\n");
             return false;
         }
         //check if letters can be placed in specified locations
         for (String l : letterLocation) {
             if (!isValidPlacement(l)) {
+                System.out.println("Invalid placement on board");
                 return false;
             }
         }
         //check if the word is a valid word
-        if (!isWord(word)) {
+        if (isWord(word) == false) {
+            System.out.println("Not a known word");
             return false;
         }
         //add word to the board
@@ -141,6 +146,9 @@ public class Board {
 
             //get numeric coordinate from location
             int locationNumber = getNumericCoordinate(location);
+
+            System.out.println("Location letter: "+ locationLetter);
+            System.out.println("Location number: " + locationNumber);
 
             //add letter to board
             board[locationLetter - 'a'][locationNumber] = word.get(i);

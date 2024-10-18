@@ -119,6 +119,7 @@ public class Game {
         //While there are still letters to pull from the bag, and no player's rack is empty, the game continues
         while(gameOn)
         {
+            success = false;
             //Player can attempt over and over again to create a proper word
             while(!success) {
                 Dictionary<ArrayList<Letter>, ArrayList<String>> word = currentPlayer.playerTurn();
@@ -142,7 +143,9 @@ public class Game {
                 gameOn = false;
             }
 
-            currentPlayer = game.getPlayer(playerIndex++);
+            playerIndex = (playerIndex + 1) % 4;
+
+            currentPlayer = game.getPlayer(playerIndex);
         }
 
     }
