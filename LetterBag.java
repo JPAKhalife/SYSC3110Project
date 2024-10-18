@@ -90,6 +90,7 @@ public class LetterBag {
             letters.put(selectedLetter, remainingCount);
         } else {
             letters.remove(selectedLetter);
+
         }
 
         letterList.remove(index); // Update the list to reflect the removal
