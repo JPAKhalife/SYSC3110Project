@@ -9,6 +9,7 @@ public class Player {
     private ArrayList <Letter> rack;
     private int score;
     private Scanner scan;
+    private int turnScore;
 
     /**
      * Constructor for the Player class
@@ -18,6 +19,7 @@ public class Player {
         rack = new ArrayList<>();
         score = 0;
         scan = new Scanner(System.in);
+        turnScore = 0;
     }
 
     /**
@@ -34,6 +36,7 @@ public class Player {
      */
     public Dictionary<ArrayList<Letter>, ArrayList<String>> playerTurn()
     {
+        turnScore = 0;
         String userTurn; //stores the turn type the user wants to perform
         int numLettersToPlay; //stores the number of letters the user wants to play
         int letterToPlay; //stores the actual letters the user plays
@@ -69,6 +72,7 @@ public class Player {
                 else
                 {
                     letters.add(rack.get(letterToPlay));
+                    turnScore += rack.get(letterToPlay).getPoints();
                     System.out.println("Using scrabble notation of [Col][Row], input the location of the letter");
                     locations.add(scan.nextLine());
                 }
@@ -96,9 +100,8 @@ public class Player {
 
     /**
      * Updates the player's score after they have played a round of scrabble
-     * @param turnScore The score the player accumulated during that turn of play
      */
-    private void updateScore(int turnScore)
+    public void updateScore()
     {
         score+= turnScore;
     }
