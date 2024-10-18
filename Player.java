@@ -134,4 +134,9 @@ public class Player {
     public boolean isRackEmpty() {
         return rack.size() <= 0;
     }
+
+    public ArrayList<Letter> getRack()
+    {
+        return new ArrayList<Letter>(rack);
+    }
 }
