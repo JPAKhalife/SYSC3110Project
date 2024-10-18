@@ -33,14 +33,13 @@ public class Display {
             }
     }
 
-    //TODO: This method may not be needed, depends (I have not added it to the UML)
     /**
      * This method shows the score of a particular player.
      * @param playerNum - the player whose score will be displayed.
      */
     public void showScore(int playerNum) {
         //This method should get the name of the player or the playe number
-        System.out.println("Player " + playerNum + ", your score is: " + this.game.getPlayers().get(playerNum).getScore());
+        System.out.println("Player " + playerNum + ", your score is: " + this.game.getPlayer(playerNum).getScore());
     }    
 }
 
