@@ -179,4 +179,14 @@ public class Board {
         }
         return Integer.parseInt(numberString);
     }
+
+    public static void main(String[] args) {
+        Board b = new Board();
+
+        if(b.words.contains("hog")){
+            System.out.println("\ncontains hog");
+        }else{
+            System.out.println("\nfailed hog");
+        }
+    }
 } //end class
