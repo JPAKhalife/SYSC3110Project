@@ -90,6 +90,8 @@ public class Player {
                 System.out.println("Enter letter index to be exchanged: ");
                 letterToPlay = scan.nextInt();
                 Letter tempLetter = rack.remove(letterToPlay);
+                //clearing buffer
+                scan.nextLine();
 
                 LetterBag.addLetter(tempLetter);
             }

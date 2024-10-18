@@ -78,8 +78,15 @@ public class Game {
      */
     public boolean addWord(Dictionary<ArrayList<Letter>, ArrayList<String>> word)
     {
+        if(word.isEmpty())
+        {
+            return true;
+        }
+
         ArrayList<Letter> letters = word.keys().nextElement(); //Extracting the letters
         ArrayList<String> locations = word.elements().nextElement(); //Extracting the locations
+
+
 
         for(Letter l: letters)
         {
