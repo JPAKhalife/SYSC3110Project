@@ -1,5 +1,5 @@
 /**
- * This class is reposnible for checking if the word a player is looking to place on the board is valid and
+ * This class is responsible for checking if the word a player is looking to place on the board is valid and
  * storing the current board status (i.e. words previously placed by players).
  * @author Gillian O'Connell
  * @date 2024/10/08
@@ -25,7 +25,7 @@ public class Board {
     }
 
     /**
-     * Create the bank of vailid words that can be played in Scrabble. All words are fetched
+     * Create the bank of valid words that can be played in Scrabble. All words are fetched
      * from external txt file accessed from https://www.mit.edu/~ecprice/wordlist.10000
      */
     private void loadWords() {
@@ -34,7 +34,7 @@ public class Board {
             File inputFile = new File("words.txt");
             Scanner reader = new Scanner(inputFile);
             while (reader.hasNextLine()) {
-                words.add(reader.nextLine());
+                words.add(reader.nextLine().strip());
             }
             reader.close();
         } catch (Exception e) {
@@ -72,7 +72,7 @@ public class Board {
         if(location.length() > 3){
             return false;
         }
-        //break loaction into each coordinate (ignoring case)
+        //break location into each coordinate (ignoring case)
         //get letter from first index of string
         char letter = Character.toLowerCase(location.charAt(0));
         //get digits from second index on wards, checking that there are no letters

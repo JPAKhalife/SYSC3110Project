@@ -72,7 +72,7 @@ public class Game {
     /**
      * This method is responsible for adding a word to the board. 
      * It extracts the letters and locations specified by the player.
-     * @param word - A dictionnary that contains the letter and 
+     * @param word - A dictionary that contains the letter and
      * where it will be added to the board.
      * @return A boolean stating whether the word was successfully added to the board
      */
@@ -113,6 +113,11 @@ public class Game {
             while(!success) {
                 Dictionary<ArrayList<Letter>, ArrayList<String>> word = currentPlayer.playerTurn();
                 success = game.addWord(word);
+
+                if(! success)
+                {
+                    System.out.println("Not a valid word or placement. Please try again\n");
+                }
             }
             //Only update the score if the user's word is valid
             currentPlayer.updateScore();
