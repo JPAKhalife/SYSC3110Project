@@ -96,7 +96,6 @@ public class Player {
 
             pullFromBag();
         }
-
         return playerWord;
     }
 

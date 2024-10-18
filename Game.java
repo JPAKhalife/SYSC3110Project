@@ -81,6 +81,16 @@ public class Game {
         ArrayList<Letter> letters = word.keys().nextElement(); //Extracting the letters
         ArrayList<String> locations = word.elements().nextElement(); //Extracting the locations
 
+        for(Letter l: letters)
+        {
+            System.out.println(l.getLetter());
+
+        }
+        for(String s: locations)
+        {
+            System.out.println(s);
+        }
+
         return board.addWord(letters, locations);
     }
 
