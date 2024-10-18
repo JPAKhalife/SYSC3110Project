@@ -13,14 +13,12 @@ public class Display {
         this.game = game;
     }
 
-    // TODO: This may need to be changed to a getSlot method just for future upgrades to an actual GUI
     /**
      * This method is intended to print the current state of the board.
-     * @param board - the board that this method should print the state of.
      */
-    public void displayBoard(Board board) {
+    public void displayBoard() {
         System.out.println("Current board: ");
-        System.out.println(board.toString());
+        System.out.println(game.getBoard().toString());
     }
 
     /**
