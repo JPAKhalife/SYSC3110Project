@@ -69,14 +69,19 @@ public class Game {
     }
 
     public static void main(String[] args) {
+        boolean playerRackEmpty = false; //Useful for determining whether the game should finish or not
+
         Game game = new Game();
 
+        //Adding a standard 4 players
         for (int i = 0; i < 4; i++) {
             game.addPlayer();
         }
 
+        //Starting player
         Player currentPlayer = game.getPlayer(0);
 
+        //While there are still letters to pull from the bag, and no player's rack is empty, the game continues
         while(currentPlayer.pullFromBag())
         {
             Dictionary<ArrayList<Letter>, ArrayList<String>> word =  currentPlayer.playerTurn();
