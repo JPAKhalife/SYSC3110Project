@@ -51,9 +51,13 @@ public class Board {
      */
     private boolean isWord(ArrayList<Letter> letters){
         String letterString = "";
+        char l;
+
         //convert ArrayList of Letters to a string
         for(Letter s : letters){
-            letterString += s.getLetter();
+            l = s.getLetter();
+            Character.toLowerCase(l);
+            letterString += l;
         }
         //check if string is a valid word in the enum
          if(words.contains(letterString)){
@@ -183,10 +187,11 @@ public class Board {
     public static void main(String[] args) {
         Board b = new Board();
 
-        if(b.words.contains("hog")){
-            System.out.println("\ncontains hog");
+        if(b.words.contains("au")){
+            System.out.println("\ncontains au");
         }else{
-            System.out.println("\nfailed hog");
+            System.out.println("\nfailed contains au");
         }
+
     }
 } //end class
