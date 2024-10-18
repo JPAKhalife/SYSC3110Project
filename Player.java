@@ -1,7 +1,7 @@
 /**
  * This class is responsible for each player's information as well as the actions they perform in a turn.
  * @author Elyssa
- * @date 2024/10/08
+ * @date 2024/18/08
  */
 import java.util.*;
 
@@ -9,6 +9,7 @@ public class Player {
     private ArrayList <Letter> rack;
     private int score;
     private Scanner scan;
+    private int turnScore;
 
     /**
      * Constructor for the Player class
@@ -18,6 +19,7 @@ public class Player {
         rack = new ArrayList<>();
         score = 0;
         scan = new Scanner(System.in);
+        turnScore = 0;
     }
 
     /**
@@ -31,21 +33,25 @@ public class Player {
 
     /**
      * Plays one turn of scrabble using the player's rack
+     * @return A Dictionary with the word of letters as the key, and the desired locations as the value
      */
-    public Dictionary<Letter, String> playerTurn()
+    public Dictionary<ArrayList<Letter>, ArrayList<String>> playerTurn()
     {
+        turnScore = 0;
         String userTurn; //stores the turn type the user wants to perform
         int numLettersToPlay; //stores the number of letters the user wants to play
         int letterToPlay; //stores the actual letters the user plays
-        Dictionary<Letter, String> playerWord = new Hashtable<>(); //Stores the scrabble notation for where the user wants to add things to the board
+        Dictionary<ArrayList<Letter>, ArrayList<String>> playerWord = new Hashtable<>(); //Stores the scrabble notation for where the user wants to add things to the board
         ArrayList<Integer> usedValues = new ArrayList<>();
+        ArrayList<Letter> letters = new ArrayList<>();
+        ArrayList<String> locations = new ArrayList<>();
         int turnScore = 0;
 
         //printing the player's rack
         System.out.print("Player's rack: \n");
         for(int i = 0; i<rack.size(); i++)
         {
-            System.out.println(i+". "+rack.get(i));
+            System.out.println(i+". "+rack.get(i).getLetter());
         }
 
         System.out.println("1. Place Letters\n 2. Exchange Letters\n 3.Pass turn");
@@ -66,12 +72,17 @@ public class Player {
                 }
                 else
                 {
+                    letters.add(rack.get(letterToPlay));
+                    turnScore += rack.get(letterToPlay).getPoints();
+                    scan.nextLine(); //Clearing the buffer of newlines
                     System.out.println("Using scrabble notation of [Col][Row], input the location of the letter");
-                    playerWord.put(rack.get(letterToPlay), scan.nextLine());
+                    locations.add(scan.nextLine());
                 }
+
+                playerWord.put(letters, locations);
             }
         }
-        else if(userTurn.equals("2")) { //The user wants to exchange letters wtih the letter bag
+        else if(userTurn.equals("2")) { //The user wants to exchange letters with the letter bag
             System.out.print("Please enter the number of letters you would like to exchange: ");
             numLettersToPlay = scan.nextInt();
 
@@ -91,21 +102,48 @@ public class Player {
 
     /**
      * Updates the player's score after they have played a round of scrabble
-     * @param turnScore The score the player accumulated during that turn of play
      */
-    private void updateScore(int turnScore)
+    public void updateScore()
     {
         score+= turnScore;
     }
 
     /**
      * Pulls more letters from the bag to fill their rack up to 7 letters
+     * @return a boolean indicating whether the rack was filled back up to 7 letters successfully
      */
-    private void pullFromBag()
+    public boolean pullFromBag()
     {
         while(rack.size() < 7)
         {
-            rack.add(LetterBag.getNextLetter());
+            Letter letter = LetterBag.getNextLetter();
+            if(letter != null)
+            {
+                rack.add(letter);
+            }
+            else
+            {
+                return false;
+            }
         }
+
+        return true;
+    }
+
+    /**
+     * This method returns true if the rack is empty
+     * @return a boolean stating whether the rack is empty
+     */
+    public boolean isRackEmpty() {
+        return rack.size() <= 0;
+    }
+
+    /**
+     *
+     * @return A copy of the player's rack
+     */
+    public ArrayList<Letter> getRack()
+    {
+        return new ArrayList<Letter>(rack);
     }
 }
