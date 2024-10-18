@@ -1,7 +1,12 @@
+/**
+ * The Game class contains the current state of Scrabble and the main line of execution.
+ * @author Elyssa Grant, Gillian O'Connel, John Khalife, Sandy Alzabadani 
+ * @date 08/10/2024
+ */
+
 import java.io.File;
 import java.util.*;
 
-//** NOTE: This class doesn't actually need to exist, just copy paste the loading method to whatever class checks if a play is valid (probabbly board) */
 public class Game {
 
     private ArrayList<Player> players;
@@ -62,6 +67,13 @@ public class Game {
         return winner;
     }
 
+    /**
+     * This method is responsible for adding a word to the board. 
+     * It extracts the letters and locations specified by the player.
+     * @param word - A dictionnary that contains the letter and 
+     * where it will be added to the board.
+     * @return A boolean stating whether or not the word was successfully added to the board
+     */
     public boolean addWord(Dictionary<ArrayList<Letter>, ArrayList<String>> word)
     {
         ArrayList<Letter> letters = word.keys().nextElement(); //Extracting the letters
@@ -88,7 +100,6 @@ public class Game {
         {
             Dictionary<ArrayList<Letter>, ArrayList<String>> word =  currentPlayer.playerTurn();
             boolean success = game.addWord(word);
-
             if(success)
             {
                 
