@@ -13,4 +13,5 @@ a working model of the game is produced that will allow two to four players to p
 Future deliverables of this project will expand the features of the game and create a better user experience while playing the game. Some of these enhancments include a GUI displaying the game board's current state, premium and enhanced user features such as the ability to undo/redo letter placements, blank tiles, and premium squares. Additionally, futurue deliverables will include expanding the design model to be a complete MVC pattern.
 
 
-
+Known issues:
+- Exchanging letters with the bag requires players to start with the highest index and work their way down, to avoid IndexOutOfBounds exception
