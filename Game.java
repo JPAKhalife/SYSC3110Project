@@ -150,10 +150,19 @@ public class Game {
                 gameOn = false;
             }
 
+            //displaying the player's updated score to them
+            gui.showScore(currentPlayer.getScore());
+
+            //updating which player is working
             playerIndex = (playerIndex + 1) % 4;
 
             currentPlayer = game.getPlayer(playerIndex);
         }
+
+        //Game is over, now must calculate the winner
+        Player winner = game.findWinner();
+
+        System.out.println("The winner is: Player " + game.getPlayers().indexOf(winner));
 
     }
 }
