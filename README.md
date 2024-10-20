@@ -4,6 +4,8 @@ The authors of this project are John Khalife, Elyssa Grant, Sandy Alzabadani, an
 
 This repository presently contains Milestone 1 of the SYSC 3110 project. This deliverable is comprised of a simplified, text-based implementation of Scrabble. This Scrabble game is the 'model' component of the MVC design pattern. This game supports two to four players. On a player's turn, the player will be able to place letters onto the board to create words and will be awarded points based on the letters used in the completed word. A simplified version of the game is used, which does not include blank tiles or premium squares.
 
+Presently, this game contains an imperfect implementation of the game logic. When a player exchanges letters on his/her rack, exchanges must be made from the letter at the highest index to the lowest. If this is not adhered to, the indexes of the other letters will shift down, which may result in IndexOutOfBounds errors being thrown.
+
 The following is a breakdown of the details of future deliverables- outlining how the current implementation of the game will be expanded.
 
 Deliverable 2 will use the game logic of Deliverable 1, but will include a Graphical User Interface. With this change, the Scrabble game will adhere to the complete MVC design pattern. Additionally, a thorough unit testing module will be created to ensure the game operates as intended.
