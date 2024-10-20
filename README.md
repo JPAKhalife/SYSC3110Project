@@ -8,7 +8,7 @@ The following is a breakdown of the details of future deliverables- outlining ho
 
 Deliverable 2 will use the game logic of Deliverable 1, but will include a Graphical User Interface. With this change, the Scrabble game will adhere to the complete MVC design pattern. Additionally, a thorough unit testing module will be created to ensure the game operates as intended.
 
-Deliverable 3 will expand upon the simplified game logic of Deliverables 1 and 2 by implementing blank tiles and premium squares. 'AI' players will also be included, allowing the user to play against the game instead of other people by developing a strategy algorithm. The game will support multiple 'AI' players within a game.
+Deliverable 3 will expand upon the simplified game logic of Deliverables 1 and 2 by implementing blank tiles and premium squares. 'AI' players will also be included, allowing the user to play against the game instead of other people. The 'AI' players will be designed to use a strategy algorithm to determine their next move. The game will support multiple 'AI' players within a game.
 
 Deliverable 4 will further expand upon the game logic. These changes will include a multi-level undo/redo feature for players. Additionally, players can save incomplete games and load them in the future to continue playing. Finally, the game will allow users to implement custom boards with varying placements of premium squares.
 
