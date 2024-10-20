@@ -78,7 +78,7 @@ public class Player {
                     turnScore += rack.get(letterToPlay).getPoints();
                     scan.nextLine(); //Clearing the buffer of newlines
                     System.out.println("Using scrabble notation of [Row][Col], input the location of the letter (ex. a1)");
-                    locations.add(scan.nextLine());
+                    locations.add(scan.nextLine().toLowerCase());
                 }
 
                 playerWord.put(letters, locations);
