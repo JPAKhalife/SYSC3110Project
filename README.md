@@ -17,4 +17,5 @@ Deliverable 4 will further expand upon the game logic. These changes will includ
 Overall, future deliverables aim to enhance the user experience by adding a more attractive interface and expanding the current features to offer a unique Scrabble game each time.
 
 
-
+Known issues:
+- Exchanging letters with the bag requires players to start with the highest index and work their way down, to avoid IndexOutOfBounds exception
