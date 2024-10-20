@@ -10,6 +10,7 @@ public class Player {
     private int score;
     private Scanner scan;
     private int turnScore;
+    private ArrayList<Letter> playedLetters;
 
     /**
      * Constructor for the Player class
@@ -20,6 +21,7 @@ public class Player {
         score = 0;
         scan = new Scanner(System.in);
         turnScore = 0;
+        playedLetters = new ArrayList<>();
     }
 
     /**
@@ -75,8 +77,8 @@ public class Player {
                     letters.add(rack.get(letterToPlay));
                     turnScore += rack.get(letterToPlay).getPoints();
                     scan.nextLine(); //Clearing the buffer of newlines
-                    System.out.println("Using scrabble notation of [Col][Row], input the location of the letter");
-                    locations.add(scan.nextLine().toLowerCase());
+                    System.out.println("Using scrabble notation of [Row][Col], input the location of the letter (ex. a1)");
+                    locations.add(scan.nextLine());
                 }
 
                 playerWord.put(letters, locations);
@@ -86,10 +88,16 @@ public class Player {
             System.out.print("Please enter the number of letters you would like to exchange: ");
             numLettersToPlay = scan.nextInt();
 
+            //array to store all the values to be removed
+            int[] removal = new int[numLettersToPlay];
             for (int i = 0; i < numLettersToPlay; i++) {
                 System.out.println("Enter letter index to be exchanged: ");
                 letterToPlay = scan.nextInt();
+
+                //Need to get the letter, then add it all to the letterBag and THEN remove the letters all at once, from lowest index to highest
                 Letter tempLetter = rack.remove(letterToPlay);
+                //clearing buffer
+                scan.nextLine();
 
                 LetterBag.addLetter(tempLetter);
             }
@@ -104,11 +112,16 @@ public class Player {
     }
 
     /**
-     * Updates the player's score after they have played a round of scrabble
+     * Updates the player's score after they have played a round of scrabble, and officially removes the letters from the player's rack
      */
     public void updateScore()
     {
         score+= turnScore;
+
+        for(Letter l: playedLetters)
+        {
+            rack.remove(l);
+        }
     }
 
     /**
