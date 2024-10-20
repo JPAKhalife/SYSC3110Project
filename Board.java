@@ -232,6 +232,7 @@ public class Board {
         int smallestCoord = BOARD_SIZE;
         int largestCoord = 0; //These are the coordinates that are different for smallest and largest coordinate of letter
         ArrayList<Letter> line = new ArrayList<Letter>(BOARD_SIZE); //This will be passed to the isWord function.
+        for (int i = 0 ; i < BOARD_SIZE ; i++) {line.add(null);}// Initialize line with null values
 
         //Fill up the line + get largest and smallest coordinates
         for (int i = 0 ; i < letterLocation.size() ; i++) {
