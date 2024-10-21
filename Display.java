@@ -27,7 +27,7 @@ public class Display {
     public void showScores() {
             System.out.println("Player scores:");
             for (int i = 0 ; i < this.game.getPlayers().size() ; i++) {
-                System.out.println("Player " + i + ": " + this.game.getPlayers().get(i).getScore());
+                System.out.println("Player " + (i + 1) + ": " + this.game.getPlayers().get(i).getScore());
             }
     }
 

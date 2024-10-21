@@ -144,7 +144,7 @@ public class Game {
 
                 if(! success)
                 {
-                    System.out.println("Not a valid word or placement. Please try again\n");
+                    System.out.println("Please try again.\n");
                 }
             }
 

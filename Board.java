@@ -14,6 +14,7 @@ public class Board {
     public static final int BOARD_SIZE = 15;
     private Letter[][] board;
     public static HashSet<String> words;
+    private boolean firstTurn;
 
     /**
      * Constructor for Board
@@ -21,6 +22,7 @@ public class Board {
     public Board(){
         board = new Letter [BOARD_SIZE][BOARD_SIZE];
         words = new HashSet<>();
+        firstTurn = true;
         loadWords();
     }
 
@@ -124,17 +126,40 @@ public class Board {
 
         // check that each letter has a location
         if (word.size() != letterLocation.size()) {
-            System.out.println("letter location ratio invalid");
+            System.out.println("Word size and location size are different.");
             return 0;
         }
 
         // check if letters can be placed in specified locations
         for (String l : letterLocation) {
             if (!isValidPlacement(l)) {
-                System.out.println("invalid placedment");
+                System.out.println("A letter does not have a valid placement.");
                 return 0;
 
             }
+        }
+
+        //If it is the first turn of the game
+        // check to make sure that there is a word being placed at the middle square
+        if (firstTurn) {
+            if (letterLocation.size() < 2) {
+                System.out.println("The first word placed must have 2 or more letters.");
+                return 0;
+            }
+            boolean correctStart = false;
+            for (String l : letterLocation) {
+                if (l.equals("h8")) {
+                    correctStart = true;
+                }
+            }
+            if (!correctStart) {
+                System.out.println("The first word must touch square H8.");
+                return 0;
+            }
+        } else {
+            //If it is not the first turn, it needs to be verified
+            //that the word being added intersects another word.
+            if (!isConnected(letterLocation)) {return 0;}
         }
 
         //Grab the primary direction - all letters must be placed on one axis
@@ -150,14 +175,13 @@ public class Board {
         //Ensure that direction is correct and there are no empty spaces
         if (!verifyDirection(direction,word,letterLocation)) {
             setWord(null,letterLocation); //unset letters from board
-            System.out.println("direction faulty");
             return 0;
         };
 
         //Check primary direction for valid words
-        if ((turnScore += verifyWordSlice(direction,letterLocation.get(0))) == 0) {
+        if ((turnScore += verifyWordSlice(direction,letterLocation.get(0))) < 0) {
             setWord(null,letterLocation); //unset letters from board
-            System.out.println("primary direction faulty");
+            System.out.println("The letters added do not form a word.");
             return 0; // If any direction does not have a valid score, return 0
         };
 
@@ -165,13 +189,14 @@ public class Board {
         int points = 0;
         for (String l : letterLocation) {
             points = verifyWordSlice(direction^1, l);
-            if (points == 0) {
+            if (points < 0) {
                 setWord(null,letterLocation); //unset letters from board
-                System.out.println("secondary direction faulty");
+                System.out.println("One of the letters added intersects a word but does not create a new one.");
                 return 0;
             }
             turnScore += points;
         }
+        firstTurn = false; //if the check passes, it is never needed again.
         return turnScore;
     }
 
@@ -227,6 +252,16 @@ public class Board {
     }
 
     /**
+     * This method gets to values and turns it into a letter and number coordinate
+     * @param row - representing the letter aspect of the coordinate
+     * @param col - representing the number aspect of the coordinate
+     * @return a string representing the entire coordinate encompasing row and column.
+     */
+    private String getLocationFromCoordinates(int row, int col) {
+        return (char)('a' + row) + (String.valueOf(col+1));
+    }
+
+    /**
      * This method returns a slice of the board in either the horizontal or vertical direction.
      * @param direction - whether to grab a vertical or horizontal slice
      * @param location - Any location within the slice for reference
@@ -254,21 +289,17 @@ public class Board {
         return line;
     }
 
+    /**
+     * This method checks a wordslice for whether or not it contains a word.
+     * @param direction - the direction of the word slice
+     * @param location - the location of a single letter of the word.
+     * @return a point score.
+     */
     private int verifyWordSlice(int direction, String location) {
         int points = 0;
         int smallestCoord = getCoordinateFromLocation(direction,location);
         int largestCoord = getCoordinateFromLocation(direction,location);
         ArrayList<Letter> boardSlice = grabWordSlice(direction, location);
-        System.out.println("board Slice:");
-        for (int i = 0 ; i < boardSlice.size() ; i++) {
-            if (boardSlice.get(i) == null) {
-                System.out.print("_");
-            } else {
-                System.out.print(boardSlice.get(i).getLetter());
-            }
-
-        }
-        System.out.print("\n");
 
         //Now grab the smallest and largest coords of the full word formed
         for (int i = 0 ; i <= smallestCoord ; i++) {
@@ -281,32 +312,38 @@ public class Board {
             largestCoord = largestCoord + j;
         }
 
-
-
         ArrayList<Letter> scoreWord = new ArrayList<Letter>(boardSlice.subList(smallestCoord, largestCoord + 1));
-        System.out.println("score word:");
-        for (int i = 0 ; i < scoreWord.size() ; i++) {
-            if (scoreWord.get(i) == null) {
-                System.out.print("_");
-            } else {
-                System.out.print(scoreWord.get(i).getLetter());
+        if (!isWord(scoreWord)) {
+            for (int i = 0 ; i < scoreWord.size() ; i++) {
+                if (scoreWord.get(i) == null) {
+                    System.out.print("_");
+                } else {
+                    System.out.print(scoreWord.get(i).getLetter());
+                }
+            }
+            System.out.println(" is not a word.");
+            return -1;
+        }
+        //Tally the score of the score word
+        //Reason for checking the size: if we are checking a single letter,
+        // it is likely perpendicular with no intercepts, and should not be counted for points.
+        // A single word will never be entered here, as the minimum word size must be 2 on the first turn.
+        // Afterwards, if one letter is placed it must be intersecting so more than one letter will be passed here.
+        if (scoreWord.size() > 1) {
+            for (int i = 0; i < scoreWord.size(); i++) {
+                points += scoreWord.get(i).getPoints();
             }
 
         }
-        System.out.print("\n");
-
-
-        if (!isWord(scoreWord)) {
-            System.out.println("Scoreword not a word");
-            return 0;
-        }
-        //Tally the score of the score word
-        for (int i = 0 ; i < scoreWord.size() ; i++) {
-            points += scoreWord.get(i).getPoints();
-        }
         return points;
+
     }
 
+    /**
+     * This method is responsible for setting + unsetting locations on the board
+     * @param word - list of letters to be added
+     * @param letterLocation - list of the letters locations
+     */
     private void setWord(ArrayList<Letter> word, ArrayList<String> letterLocation) {
         if (word == null) {
             for (int i = 0 ; i < letterLocation.size() ; i++) {
@@ -324,6 +361,14 @@ public class Board {
 
     }
 
+    /**
+     * This method is responsible for checking that all the letters have been placed on one axis,
+     * and that there are no null spaces within the word
+     * @param direction - the axis that the words have been placed in
+     * @param word - a list of all letters being placed
+     * @param letterLocation - a list of the locations of every letter being placed
+     * @return a boolean representing if this check has passed
+     */
     private boolean verifyDirection(int direction, ArrayList<Letter> word, ArrayList<String> letterLocation) {
         //Verify the direction, at the same time grab the smallest and largest coordinates
         int currentCoord;
@@ -332,6 +377,7 @@ public class Board {
         int largestCoord = getCoordinateFromLocation(direction,letterLocation.get(0)); //These are the coordinates that are different for smallest and largest coordinate of letter
         for (int i = 1 ; i < letterLocation.size() ; i++) {
             if (getCoordinateFromLocation(direction ^ 1,letterLocation.get(i)) != getCoordinateFromLocation(direction ^ 1,letterLocation.get(i - 1))) {
+                System.out.println("The letters specified are not in the same axis.");
                 return false;
             }
             currentCoord = getCoordinateFromLocation(direction,letterLocation.get(i));
@@ -344,17 +390,57 @@ public class Board {
         if (direction == 1) {
             for (int i = smallestCoord ; i <= largestCoord  ; i++) {
                 if (board[i][unchangingCoordinate] == null) {
+                    System.out.println("The letters specified are not connected to each other.");
                     return false;
                 }
             }
         } else {
             for (int i = smallestCoord ; i <= largestCoord  ; i++) {
                 if (board[unchangingCoordinate][i] == null) {
+                    System.out.println("The letters specified are not connected to each other.");
                     return false;
                 }
             }
         }
         return true;
+    }
+
+    /**
+     * This method checks to make sure that the letters placed are connected to another word.
+     * @param letterLocation - a list of the locations of all letters placed
+     * @return true or false depending on whether the letters are connected.
+     */
+    private boolean isConnected (ArrayList<String> letterLocation) {
+        HashSet<String> allLetters = new HashSet<String>(letterLocation); //change to hashset for faster access
+        for (int i = 0 ; i < letterLocation.size() ; i++) {
+            int row = getCoordinateFromLocation(1,letterLocation.get(i));
+            int col = getCoordinateFromLocation(0,letterLocation.get(i));
+            //Check all four directions
+            //left
+            if (col > 0) {
+                if (board[row][col - 1] != null && !allLetters.contains(getLocationFromCoordinates(row,col - 1))) {
+                    return true;
+                }
+            }
+            if (col < BOARD_SIZE - 1) { // right
+                if (board[row][col+1] != null && !allLetters.contains(getLocationFromCoordinates(row,col + 1))) {
+                    return true;
+                }
+            }
+            if (row > 0) { // up
+                if (board[row-1][col] != null && !allLetters.contains(getLocationFromCoordinates(row-1,col))) {
+                    return true;
+                }
+            }
+            if (row < BOARD_SIZE - 1) { //down
+                if (board[row+1][col] != null && !allLetters.contains(getLocationFromCoordinates(row+1,col))) {
+                    return true;
+                }
+            }
+        }
+
+        System.out.println("The letters played are not connected to another word.");
+        return false;
     }
 
 } //end class
