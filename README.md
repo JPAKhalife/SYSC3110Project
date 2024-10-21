@@ -15,3 +15,4 @@ Future deliverables of this project will expand the features of the game and cre
 
 Known issues:
 - Exchanging letters with the bag requires players to start with the highest index and work their way down, to avoid IndexOutOfBounds exception
+- An empty line is occasionally created during the player's input, which requires "Enter" to be pressed. This is done to avoid buffering issues where the player's input is overwritten by the newline character of their previous input
