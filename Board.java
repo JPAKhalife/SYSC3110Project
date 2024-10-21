@@ -119,70 +119,60 @@ public class Board {
      * @return placement successfullness
      */
     public int addWord(ArrayList<Letter> word, ArrayList<String> letterLocation) {
+        int turnScore = 0; //represents score
+        int direction; //0 is horizontal, 1 is vertical.
+
         // check that each letter has a location
         if (word.size() != letterLocation.size()) {
+            System.out.println("letter location ratio invalid");
             return 0;
         }
+
         // check if letters can be placed in specified locations
         for (String l : letterLocation) {
             if (!isValidPlacement(l)) {
+                System.out.println("invalid placedment");
                 return 0;
+
             }
         }
 
-        int direction; //0 is horizontal, 1 is vertical, 2 is both (meaning someone placed 1 tile,) anything else is illegal
-
-        //Grab the direction 
-        if (letterLocation.size() == 1) {
-            direction = 2;
-        } else if (getCoordinateFromLocation(0, letterLocation.get(0)) == getCoordinateFromLocation(0,letterLocation.get(letterLocation.size() - 1))) {
+        //Grab the primary direction - all letters must be placed on one axis
+        if (getCoordinateFromLocation(0, letterLocation.get(0)) == getCoordinateFromLocation(0,letterLocation.get(letterLocation.size() - 1))) {
             direction = 1;
         } else {
             direction = 0;
         }
 
-        //Verify the direction
-        if (direction != 2) {
-            for (int i = 1 ; i < letterLocation.size() ; i++) {
-                if (getCoordinateFromLocation(direction ^ 1,letterLocation.get(i)) != getCoordinateFromLocation(direction ^ 1,letterLocation.get(i - 1))) {
-                    return 0;
-                }
+        // Temporarily add word to the board
+        setWord(word,letterLocation);
+
+        //Ensure that direction is correct and there are no empty spaces
+        if (!verifyDirection(direction,word,letterLocation)) {
+            setWord(null,letterLocation); //unset letters from board
+            System.out.println("direction faulty");
+            return 0;
+        };
+
+        //Check primary direction for valid words
+        if ((turnScore += verifyWordSlice(direction,letterLocation.get(0))) == 0) {
+            setWord(null,letterLocation); //unset letters from board
+            System.out.println("primary direction faulty");
+            return 0; // If any direction does not have a valid score, return 0
+        };
+
+        //Check secondary direction for valid words
+        int points = 0;
+        for (String l : letterLocation) {
+            points = verifyWordSlice(direction^1, l);
+            if (points == 0) {
+                setWord(null,letterLocation); //unset letters from board
+                System.out.println("secondary direction faulty");
+                return 0;
             }
+            turnScore += points;
         }
-
-        //Check the appropriate direction(s) for valid words
-        boolean validWordDetected = false;
-        int points = 0; //Number of points accumulated from placing the letters on the board
-        if (direction == 2) {
-            for (int i = 0 ; i < direction ; i++) {
-                points += checkWordInDirection(i, word, letterLocation);
-
-                //if the first word is not valid, no point in checking the second one
-                if(points == 0)
-                {
-                    break;
-                }
-            }
-        } else {
-            points += checkWordInDirection(direction, word, letterLocation);
-            validWordDetected = (points != 0);
-        }
-        if (!validWordDetected) {return 0;}
-
-        // All checks have passed, add word to the board
-        for (int i = 0; i < word.size(); i++) {
-            // get letter coordinate from location
-            String location = letterLocation.get(i);
-            char locationLetter = letterLocation.get(i).charAt(0);
-
-            // get numeric coordinate from location
-            int locationNumber = getCoordinateFromLocation(0,location);
-
-            // add letter to board
-            board[locationLetter - 'a'][locationNumber] = word.get(i);
-        }
-
-        return points;
+        return turnScore;
     }
 
     /**
@@ -237,71 +227,134 @@ public class Board {
     }
 
     /**
-     * This method grabs the slice of the board that will be added to by the player and
-     * checks if the a valid word was formed thanks to the player's addition.
+     * This method returns a slice of the board in either the horizontal or vertical direction.
      * @param direction - whether to grab a vertical or horizontal slice
-     * @param word - list of letters that are being placed
-     * @param letterLocation - list of locations of each corresponding letter
-     * @return
+     * @param location - Any location within the slice for reference
+     * @return an arraylist containing a slice of the board
      */
-    private int checkWordInDirection(int direction, ArrayList<Letter> word, ArrayList<String> letterLocation) {
-        int smallestCoord = BOARD_SIZE;
-        int largestCoord = 0; //These are the coordinates that are different for smallest and largest coordinate of letter
+    private ArrayList<Letter> grabWordSlice(int direction, String location) {
         ArrayList<Letter> line = new ArrayList<Letter>(BOARD_SIZE); //This will be passed to the isWord function.
-        int turnScore = 0; //This will be the total number of points awarded to the player from all the words they created on the board
+        //This will be the total number of points awarded to the player from all the words they created on the board
         for (int i = 0 ; i < BOARD_SIZE ; i++) {line.add(null);}
-
-
-        //Fill up the line + get largest and smallest coordinates
-        for (int i = 0 ; i < letterLocation.size() ; i++) {
-            int coord = getCoordinateFromLocation(direction,letterLocation.get(i));
-            if (coord < smallestCoord) {
-                smallestCoord = coord;
-            }
-            if (coord > largestCoord) {
-                largestCoord = coord;
-            }
-            line.set(coord,word.get(i));
-        }
-
-        //Fill up the rest of the spots
-        if (direction == 0) {
+        //Fill up every spot
+        int unchangingCoordinate = getCoordinateFromLocation(direction ^ 1,location);
+        if (direction == 1) {
             for (int i = 0 ; i < line.size() ; i++) {
                 if (line.get(i) == null) {
-                    line.set(i,board[i][getCoordinateFromLocation(direction, letterLocation.get(0))]);
+                    line.set(i,board[i][unchangingCoordinate]);
                 }
             }
         } else {
             for (int i = 0 ; i < line.size() ; i++) {
                 if (line.get(i) == null) {
-                    line.set(i,board[getCoordinateFromLocation(direction, letterLocation.get(0))][i]);
+                    line.set(i,board[unchangingCoordinate][i]);
                 }
             }
         }
+        return line;
+    }
 
-        //Now try every combination of smallest-largest coords + every other to see if a word has been formed.
-        boolean isValidWord = false;
+    private int verifyWordSlice(int direction, String location) {
+        int points = 0;
+        int smallestCoord = getCoordinateFromLocation(direction,location);
+        int largestCoord = getCoordinateFromLocation(direction,location);
+        ArrayList<Letter> boardSlice = grabWordSlice(direction, location);
+        System.out.println("board Slice:");
+        for (int i = 0 ; i < boardSlice.size() ; i++) {
+            if (boardSlice.get(i) == null) {
+                System.out.print("_");
+            } else {
+                System.out.print(boardSlice.get(i).getLetter());
+            }
+
+        }
+        System.out.print("\n");
+
+        //Now grab the smallest and largest coords of the full word formed
         for (int i = 0 ; i <= smallestCoord ; i++) {
-            if (line.get(smallestCoord - i) == null) {break;}
-            for (int j = 0 ; j < (BOARD_SIZE-largestCoord) ; j++) {
-                if (line.get(largestCoord + j) == null) {break;}
-                ArrayList<Letter> tempWord = new ArrayList<Letter>(line.subList(smallestCoord - i, largestCoord + j + 1));
-                if (isWord(tempWord)) {
-                    i = smallestCoord;
-                    j = BOARD_SIZE;
-                    isValidWord = true;
-                }
+            if (boardSlice.get(smallestCoord - i) == null) {break;}
+            smallestCoord = smallestCoord - i;
+        }
 
-                //updating the turn score based on the current word
-                for(Letter l: tempWord)
-                {
-                    turnScore += l.getPoints();
+        for (int j = 0 ; j < (BOARD_SIZE-largestCoord) ; j++) {
+            if (boardSlice.get(largestCoord + j) == null) {break;}
+            largestCoord = largestCoord + j;
+        }
+
+
+
+        ArrayList<Letter> scoreWord = new ArrayList<Letter>(boardSlice.subList(smallestCoord, largestCoord + 1));
+        System.out.println("score word:");
+        for (int i = 0 ; i < scoreWord.size() ; i++) {
+            if (scoreWord.get(i) == null) {
+                System.out.print("_");
+            } else {
+                System.out.print(scoreWord.get(i).getLetter());
+            }
+
+        }
+        System.out.print("\n");
+
+
+        if (!isWord(scoreWord)) {
+            System.out.println("Scoreword not a word");
+            return 0;
+        }
+        //Tally the score of the score word
+        for (int i = 0 ; i < scoreWord.size() ; i++) {
+            points += scoreWord.get(i).getPoints();
+        }
+        return points;
+    }
+
+    private void setWord(ArrayList<Letter> word, ArrayList<String> letterLocation) {
+        if (word == null) {
+            for (int i = 0 ; i < letterLocation.size() ; i++) {
+                board[getCoordinateFromLocation(1,letterLocation.get(i))]
+                        [getCoordinateFromLocation(0,letterLocation.get(i))]
+                        =  null;
+            }
+        } else {
+            for (int i = 0 ; i < letterLocation.size() ; i++) {
+                board[getCoordinateFromLocation(1,letterLocation.get(i))]
+                        [getCoordinateFromLocation(0,letterLocation.get(i))]
+                        =  word.get(i);
+            }
+        }
+
+    }
+
+    private boolean verifyDirection(int direction, ArrayList<Letter> word, ArrayList<String> letterLocation) {
+        //Verify the direction, at the same time grab the smallest and largest coordinates
+        int currentCoord;
+        int unchangingCoordinate = getCoordinateFromLocation(direction ^ 1,letterLocation.get(0));
+        int smallestCoord = getCoordinateFromLocation(direction,letterLocation.get(0));
+        int largestCoord = getCoordinateFromLocation(direction,letterLocation.get(0)); //These are the coordinates that are different for smallest and largest coordinate of letter
+        for (int i = 1 ; i < letterLocation.size() ; i++) {
+            if (getCoordinateFromLocation(direction ^ 1,letterLocation.get(i)) != getCoordinateFromLocation(direction ^ 1,letterLocation.get(i - 1))) {
+                return false;
+            }
+            currentCoord = getCoordinateFromLocation(direction,letterLocation.get(i));
+            smallestCoord = Math.min(currentCoord,smallestCoord);
+            largestCoord = Math.max(currentCoord,largestCoord);
+        }
+
+        //Verify that everything is in contact with each other.
+        //This means that there are no null values on the board between smallest and largest coordinates.
+        if (direction == 1) {
+            for (int i = smallestCoord ; i <= largestCoord  ; i++) {
+                if (board[i][unchangingCoordinate] == null) {
+                    return false;
+                }
+            }
+        } else {
+            for (int i = smallestCoord ; i <= largestCoord  ; i++) {
+                if (board[unchangingCoordinate][i] == null) {
+                    return false;
                 }
             }
         }
-       
-        return turnScore;
-        
+        return true;
     }
 
 } //end class
