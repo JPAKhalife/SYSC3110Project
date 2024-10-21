@@ -1,16 +1,20 @@
 # SYSC3110Project
-Project distribution (temp)
--John: Enum (Word), Letter, Display
--Elyssa: Player, Game
--Gillian: Board
--Sandy: LetterBag, Game
 
-The authours of this project are John Khalife, Elyssa Grant, Sandy Alzabadani, and Gillian O'Connell.
+The authors of this project are John Khalife, Elyssa Grant, Sandy Alzabadani, and Gillian O'Connell.
 
-This repositiory contains Milestone 1- a text-based implementation of Scrabble. In this deliverable,
-a working model of the game is produced that will allow two to four players to play. On a player's turn, the player will be able to place letters onto the board to create words and will be awarded points based on the letters used in the completed word. Finally, deliverable 1 is the 'model' component for a MVC 
+This repository presently contains Milestone 1 of the SYSC 3110 project. This deliverable is comprised of a simplified, text-based implementation of Scrabble. This Scrabble game is the 'model' component of the MVC design pattern. This game supports two to four players. On a player's turn, the player will be able to place letters onto the board to create words and will be awarded points based on the letters used in the completed word. A simplified version of the game is used, which does not include blank tiles or premium squares.
 
-Future deliverables of this project will expand the features of the game and create a better user experience while playing the game. Some of these enhancments include a GUI displaying the game board's current state, premium and enhanced user features such as the ability to undo/redo letter placements, blank tiles, and premium squares. Additionally, futurue deliverables will include expanding the design model to be a complete MVC pattern.
+Presently, this game contains an imperfect implementation of the game logic. When a player exchanges letters on his/her rack, exchanges must be made from the letter at the highest index to the lowest. If this is not adhered to, the indexes of the other letters will shift down, which may result in IndexOutOfBounds errors being thrown.
+
+The following is a breakdown of the details of future deliverables- outlining how the current implementation of the game will be expanded.
+
+Deliverable 2 will use the game logic of Deliverable 1, but will include a Graphical User Interface. With this change, the Scrabble game will adhere to the complete MVC design pattern. Additionally, a thorough unit testing module will be created to ensure the game operates as intended.
+
+Deliverable 3 will expand upon the simplified game logic of Deliverables 1 and 2 by implementing blank tiles and premium squares. 'AI' players will also be included, allowing the user to play against the game instead of other people. The 'AI' players will be designed to use a strategy algorithm to determine their next move. The game will support multiple 'AI' players within a game.
+
+Deliverable 4 will further expand upon the game logic. These changes will include a multi-level undo/redo feature for players. Additionally, players can save incomplete games and load them in the future to continue playing. Finally, the game will allow users to implement custom boards with varying placements of premium squares.
+
+Overall, future deliverables aim to enhance the user experience by adding a more attractive interface and expanding the current features to offer a unique Scrabble game each time.
 
 
 Known issues:

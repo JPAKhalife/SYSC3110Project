@@ -78,8 +78,15 @@ public class Game {
      */
     public boolean addWord(Dictionary<ArrayList<Letter>, ArrayList<String>> word)
     {
+        if(word.isEmpty())
+        {
+            return true;
+        }
+
         ArrayList<Letter> letters = word.keys().nextElement(); //Extracting the letters
         ArrayList<String> locations = word.elements().nextElement(); //Extracting the locations
+
+
 
         for(Letter l: letters)
         {
@@ -120,6 +127,10 @@ public class Game {
         while(gameOn)
         {
             success = false;
+
+            //Displaying the board for the players
+            gui.displayBoard();
+
             //Player can attempt over and over again to create a proper word
             while(!success) {
                 Dictionary<ArrayList<Letter>, ArrayList<String>> word = currentPlayer.playerTurn();
@@ -133,8 +144,6 @@ public class Game {
             //Only update the score if the user's word is valid
             currentPlayer.updateScore();
 
-            gui.displayBoard();
-
             //player pulls from the bag until they have 7 letters in their rack
             boolean bagNotEmpty = currentPlayer.pullFromBag();
             //if the user's rack is empty, the game is over
@@ -143,10 +152,19 @@ public class Game {
                 gameOn = false;
             }
 
+            //displaying the player's updated score to them
+            gui.showScores();
+
+            //updating which player is working
             playerIndex = (playerIndex + 1) % 4;
 
             currentPlayer = game.getPlayer(playerIndex);
         }
+
+        //Game is over, now must calculate the winner
+        Player winner = game.findWinner();
+
+        System.out.println("The winner is: Player " + game.getPlayers().indexOf(winner));
 
     }
 }
