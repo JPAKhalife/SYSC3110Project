@@ -1,5 +1,5 @@
 /**
- * This class is responsible for each player's information as well as the actions they perform in a turn.
+ * This class is responsible for each player's information (their rack and score) as well as the actions they perform in a turn.
  * @author Elyssa
  * @date 2024/18/08
  */

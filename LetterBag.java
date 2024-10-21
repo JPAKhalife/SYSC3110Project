@@ -11,6 +11,9 @@ public class LetterBag {
     private static Random random = new Random();
 
 
+    /**
+     * Static method to create the letter bag's initial contents. Similar to a constructor, but static
+     */
     public static void createBag(){
         letters = new Hashtable<Letter, Integer>();
         Letter letterA = new Letter('a',1);
@@ -77,6 +80,10 @@ public class LetterBag {
 
     }
 
+    /**
+     * Method to pull a single letter from the bag
+     * @return A letter from the bag
+     */
     public static Letter getNextLetter(){
         if (letterList.isEmpty()) {
             return null; // No letters in the bag
@@ -99,6 +106,10 @@ public class LetterBag {
 
     }
 
+    /**
+     * Adds a letter back into the bag
+     * @param tempLetter The letter to be returned to the bag
+     */
     public static void addLetter(Letter tempLetter) {
         letters.put(tempLetter, letters.get(tempLetter) + 1);
     }

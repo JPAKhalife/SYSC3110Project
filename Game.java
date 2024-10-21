@@ -101,6 +101,10 @@ public class Game {
         return board.addWord(letters, locations);
     }
 
+    /**
+     * Main class for the project
+     * @param args Standard input for main class
+     */
     public static void main(String[] args) {
         LetterBag.createBag();
         Game game = new Game();
