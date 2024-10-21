@@ -118,15 +118,15 @@ public class Board {
      * @param letterLocation The list of all corresponding letter locations to each letter.
      * @return placement successfullness
      */
-    public boolean addWord(ArrayList<Letter> word, ArrayList<String> letterLocation) {
+    public int addWord(ArrayList<Letter> word, ArrayList<String> letterLocation) {
         // check that each letter has a location
         if (word.size() != letterLocation.size()) {
-            return false;
+            return 0;
         }
         // check if letters can be placed in specified locations
         for (String l : letterLocation) {
             if (!isValidPlacement(l)) {
-                return false;
+                return 0;
             }
         }
 
@@ -145,21 +145,29 @@ public class Board {
         if (direction != 2) {
             for (int i = 1 ; i < letterLocation.size() ; i++) {
                 if (getCoordinateFromLocation(direction ^ 1,letterLocation.get(i)) != getCoordinateFromLocation(direction ^ 1,letterLocation.get(i - 1))) {
-                    return false;
+                    return 0;
                 }
             }
         }
 
         //Check the appropriate direction(s) for valid words
         boolean validWordDetected = false;
+        int points = 0; //Number of points accumulated from placing the letters on the board
         if (direction == 2) {
             for (int i = 0 ; i < direction ; i++) {
-                validWordDetected = checkWordInDirection(i, word, letterLocation);
+                points += checkWordInDirection(i, word, letterLocation);
+
+                //if the first word is not valid, no point in checking the second one
+                if(points == 0)
+                {
+                    break;
+                }
             }
         } else {
-            validWordDetected = checkWordInDirection(direction, word, letterLocation);
+            points += checkWordInDirection(direction, word, letterLocation);
+            validWordDetected = (points != 0);
         }
-        if (!validWordDetected) {return false;}
+        if (!validWordDetected) {return 0;}
 
         // All checks have passed, add word to the board
         for (int i = 0; i < word.size(); i++) {
@@ -174,7 +182,7 @@ public class Board {
             board[locationLetter - 'a'][locationNumber] = word.get(i);
         }
 
-        return true;
+        return points;
     }
 
     /**
@@ -236,10 +244,11 @@ public class Board {
      * @param letterLocation - list of locations of each corresponding letter
      * @return
      */
-    private boolean checkWordInDirection(int direction, ArrayList<Letter> word, ArrayList<String> letterLocation) {
+    private int checkWordInDirection(int direction, ArrayList<Letter> word, ArrayList<String> letterLocation) {
         int smallestCoord = BOARD_SIZE;
         int largestCoord = 0; //These are the coordinates that are different for smallest and largest coordinate of letter
         ArrayList<Letter> line = new ArrayList<Letter>(BOARD_SIZE); //This will be passed to the isWord function.
+        int turnScore = 0; //This will be the total number of points awarded to the player from all the words they created on the board
         for (int i = 0 ; i < BOARD_SIZE ; i++) {line.add(null);}
 
 
@@ -278,15 +287,22 @@ public class Board {
             if (line.get(smallestCoord - i) != null) {lowBuffer = i;}
             for (int j = 0 ; j < (BOARD_SIZE-largestCoord) ; j++) {
                 if (line.get(largestCoord + j) != null) {highBuffer = j;}
-                if (isWord(new ArrayList<Letter>(line.subList(smallestCoord - lowBuffer, largestCoord + highBuffer + 1)))) {
+                ArrayList<Letter> tempWord = new ArrayList<Letter>(line.subList(smallestCoord - lowBuffer, largestCoord + highBuffer + 1));
+                if (isWord(tempWord)) {
                     i = smallestCoord;
                     j = BOARD_SIZE;
                     isValidWord = true;
                 }
+
+                //updating the turn score based on the current word
+                for(Letter l: tempWord)
+                {
+                    turnScore += l.getPoints();
+                }
             }
         }
        
-        return isValidWord;
+        return turnScore;
         
     }
 

@@ -76,11 +76,11 @@ public class Game {
      * where it will be added to the board.
      * @return A boolean stating whether the word was successfully added to the board
      */
-    public boolean addWord(Dictionary<ArrayList<Letter>, ArrayList<String>> word)
+    public int addWord(Dictionary<ArrayList<Letter>, ArrayList<String>> word)
     {
         if(word.isEmpty())
         {
-            return true;
+            return -1;
         }
 
         ArrayList<Letter> letters = word.keys().nextElement(); //Extracting the letters
@@ -103,7 +103,8 @@ public class Game {
 
     /**
      * Main class for the project
-     * @param args Standard input for main class
+     * @param args Standard input for main class1
+     *
      */
     public static void main(String[] args) {
         LetterBag.createBag();
@@ -130,6 +131,7 @@ public class Game {
         //While there are still letters to pull from the bag, and no player's rack is empty, the game continues
         while(gameOn)
         {
+            int turnPoints = 0;
             success = false;
 
             //Displaying the board for the players
@@ -139,15 +141,23 @@ public class Game {
             while(!success) {
                 System.out.println("It is player " + (playerIndex + 1) + "'s turn.");
                 Dictionary<ArrayList<Letter>, ArrayList<String>> word = currentPlayer.playerTurn();
-                success = game.addWord(word);
+                turnPoints = game.addWord(word);
+                success = (turnPoints != 0);
 
                 if(! success)
                 {
                     System.out.println("Not a valid word or placement. Please try again\n");
                 }
             }
+
+            //Ensuring the player can never lose points
+            if(turnPoints < 0)
+            {
+                turnPoints = 0;
+            }
+
             //Only update the score if the user's word is valid
-            currentPlayer.updateScore();
+            currentPlayer.updateScore(turnPoints);
 
             //player pulls from the bag until they have 7 letters in their rack
             boolean bagNotEmpty = currentPlayer.pullFromBag();
