@@ -2,7 +2,7 @@ import java.util.*;
 
 /**
  * The LetterBag class contains the dictionary of letters and words to be used in the game
- * @author Elyssa Grant, Gillian O'Connel, John Khalife, Sandy Alzabadani
+ * @author Sandy Alzabadani
  * @date 08/10/2024
  */
 public class LetterBag {
@@ -67,10 +67,10 @@ public class LetterBag {
         letters.put(letterY,3);
         letters.put(letterZ,4);
 
-        for(Enumeration<Letter> e = letters.keys();e.hasMoreElements();) {
-            Letter letter = e.nextElement();
-            int number = letters.get(letter);
-            for (int i = 0; i < number; i++) {
+        for(Enumeration<Letter> e = letters.keys();e.hasMoreElements();) {//loop through the enumeration of letter keys
+            Letter letter = e.nextElement(); //get the next element
+            int number = letters.get(letter); //get the count of the letter from the dictionary
+            for (int i = 0; i < number; i++) {//add each letter key into the letter list
                 letterList.add(letter);
             }
         }
@@ -82,14 +82,14 @@ public class LetterBag {
             return null; // No letters in the bag
         }
 
-        int index = random.nextInt(letterList.size());
-        Letter selectedLetter = letterList.get(index);
+        int index = random.nextInt(letterList.size()); //get a random index
+        Letter selectedLetter = letterList.get(index); //use the random index to get a random letter from the list
 
         int remainingCount = letters.get(selectedLetter) - 1;
-        if (remainingCount > 0) {
-            letters.put(selectedLetter, remainingCount);
+        if (remainingCount > 0) { //if the remaining count of the letter is not zero
+            letters.put(selectedLetter, remainingCount); //update the count of the letter in the dictionary
         } else {
-            letters.remove(selectedLetter);
+            letters.remove(selectedLetter); //if the count is zero remove the letter key from the dictionary
 
         }
 
