@@ -111,12 +111,29 @@ public class Game {
         boolean success = false;
         boolean gameOn = true;
         int playerIndex = 0;
+        int numPlayers = 0;
         Display gui = new Display(game);
+        Scanner scan = new Scanner(System.in);
+
+        while(!success)
+        {
+            System.out.print("Enter a number of players (2-4) to play: ");
+            numPlayers = scan.nextInt();
+
+            if(numPlayers < 2 || numPlayers > 4)
+            {
+                System.out.println("Incorrect number of players. Please try again");
+            }
+            else {
+                success = true;
+            }
+        }
 
         //Adding a standard 4 players
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < numPlayers; i++) {
             game.addPlayer();
             boolean working = game.getPlayer(i).pullFromBag();
+
             if(!working)
             {
                 System.out.println("Failed to pull from bag");
@@ -161,7 +178,7 @@ public class Game {
             gui.showScores();
 
             //updating which player is working
-            playerIndex = (playerIndex + 1) % 4;
+            playerIndex = (playerIndex + 1) % numPlayers;
 
             currentPlayer = game.getPlayer(playerIndex);
         }
