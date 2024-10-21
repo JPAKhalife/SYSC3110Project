@@ -130,7 +130,7 @@ public class Board {
             }
         }
         //check if the word is a valid word
-        if (!isWord(word)) {
+        if (isWord(word) == false) {
             return false;
         }
         //add word to the board
@@ -138,6 +138,7 @@ public class Board {
             //get letter coordinate from location
             String location = letterLocation.get(i);
             char locationLetter = letterLocation.get(i).charAt(0);
+            locationLetter = Character.toLowerCase(locationLetter);
 
             //get numeric coordinate from location
             int locationNumber = getNumericCoordinate(location);
@@ -184,14 +185,4 @@ public class Board {
         return Integer.parseInt(numberString);
     }
 
-    public static void main(String[] args) {
-        Board b = new Board();
-
-        if(b.words.contains("au")){
-            System.out.println("\ncontains au");
-        }else{
-            System.out.println("\nfailed contains au");
-        }
-
-    }
 } //end class
