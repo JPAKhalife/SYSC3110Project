@@ -127,6 +127,10 @@ public class Game {
         while(gameOn)
         {
             success = false;
+
+            //Displaying the board for the players
+            gui.displayBoard();
+
             //Player can attempt over and over again to create a proper word
             while(!success) {
                 Dictionary<ArrayList<Letter>, ArrayList<String>> word = currentPlayer.playerTurn();
@@ -139,8 +143,6 @@ public class Game {
             }
             //Only update the score if the user's word is valid
             currentPlayer.updateScore();
-
-            gui.displayBoard();
 
             //player pulls from the bag until they have 7 letters in their rack
             boolean bagNotEmpty = currentPlayer.pullFromBag();
