@@ -272,9 +272,13 @@ public class Board {
 
         //Now try every combination of smallest-largest coords + every other to see if a word has been formed.
         boolean isValidWord = false;
+        int lowBuffer = 0; //These buffers are to make sure no null values are passed to isWord
+        int highBuffer = 0;
         for (int i = 0 ; i <= smallestCoord ; i++) {
+            if (line.get(smallestCoord - i) != null) {lowBuffer = i;}
             for (int j = 0 ; j < (BOARD_SIZE-largestCoord) ; j++) {
-                if (isWord(new ArrayList<Letter>(line.subList(smallestCoord - i, largestCoord + j + 1)))) {
+                if (line.get(largestCoord + j) != null) {highBuffer = j;}
+                if (isWord(new ArrayList<Letter>(line.subList(smallestCoord - lowBuffer, largestCoord + highBuffer + 1)))) {
                     i = smallestCoord;
                     j = BOARD_SIZE;
                     isValidWord = true;
