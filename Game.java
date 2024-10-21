@@ -86,16 +86,6 @@ public class Game {
         ArrayList<Letter> letters = word.keys().nextElement(); //Extracting the letters
         ArrayList<String> locations = word.elements().nextElement(); //Extracting the locations
 
-        for(Letter l: letters)
-        {
-            System.out.println(l.getLetter());
-
-        }
-        for(String s: locations)
-        {
-            System.out.println(s);
-        }
-
         return board.addWord(letters, locations);
     }
 
@@ -111,9 +101,24 @@ public class Game {
         boolean gameOn = true;
         int playerIndex = 0;
         Display gui = new Display(game);
+        Scanner scan = new Scanner(System.in);
+        int numPlayers = 0;
+
+        //Adding the number of players the user wants to the game
+        while(!success)
+        {
+            System.out.print("Enter the number of players that will be playing (2 - 4): ");
+            numPlayers = scan.nextInt();
+
+            if((numPlayers < 5) && (numPlayers > 1))
+            {
+                success = true;
+                scan.nextLine(); //clearing buffer
+            }
+        }
 
         //Adding a standard 4 players
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < numPlayers; i++) {
             game.addPlayer();
             boolean working = game.getPlayer(i).pullFromBag();
             if(!working)
@@ -169,7 +174,7 @@ public class Game {
             gui.showScores();
 
             //updating which player is working
-            playerIndex = (playerIndex + 1) % 4;
+            playerIndex = (playerIndex + 1) % numPlayers;
 
             currentPlayer = game.getPlayer(playerIndex);
         }
