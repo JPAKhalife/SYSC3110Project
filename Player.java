@@ -50,7 +50,7 @@ public class Player {
         int turnScore = 0;
 
         //printing the player's rack
-        System.out.print("Player's rack: \n");
+        System.out.print("Your rack: \n");
         for(int i = 0; i<rack.size(); i++)
         {
             System.out.println(i+". "+rack.get(i).getLetter());

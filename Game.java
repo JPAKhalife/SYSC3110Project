@@ -129,6 +129,7 @@ public class Game {
             success = false;
             //Player can attempt over and over again to create a proper word
             while(!success) {
+                System.out.println("It is player " + playerIndex + "'s turn.");
                 Dictionary<ArrayList<Letter>, ArrayList<String>> word = currentPlayer.playerTurn();
                 success = game.addWord(word);
 

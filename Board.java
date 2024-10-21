@@ -104,7 +104,7 @@ public class Board {
         }
 
         // check is placement is taken already
-        if (board[letter - 'a'][Integer.parseInt(number)] != null) {
+        if (board[letter - 'a'][Integer.parseInt(number) - 1] != null) {
             return false;
         }
 
@@ -144,7 +144,7 @@ public class Board {
         //Verify the direction
         if (direction != 2) {
             for (int i = 1 ; i < letterLocation.size() ; i++) {
-                if (getCoordinateFromLocation(direction ^ 1,letterLocation.get(i)) == getCoordinateFromLocation(1,letterLocation.get(i - 1))) {
+                if (getCoordinateFromLocation(direction ^ 1,letterLocation.get(i)) != getCoordinateFromLocation(direction ^ 1,letterLocation.get(i - 1))) {
                     return false;
                 }
             }
@@ -186,7 +186,15 @@ public class Board {
      */
     public String toString(){
         String strBoard = "";
+        char letter = 'A';
+        strBoard += "   ";
+        for (int i = 1 ; i < BOARD_SIZE + 1 ; i++) {
+            strBoard += "{" + i + "}";
+        }
+        strBoard += "\n";
         for(int i = 0; i < BOARD_SIZE; i++){
+            strBoard += letter + "  ";
+            letter++;
             for(int j = 0; j < BOARD_SIZE; j++){
                 if(this.board[i][j] == null){
                     strBoard += "[ ]";
@@ -208,12 +216,12 @@ public class Board {
      */
     private int getCoordinateFromLocation(int axis, String location){
         //get numeric coordinate from location
-        if (axis == 1) {
+        if (axis == 0) {
             String numberString = "";
             for (int j = 1; j < location.length(); j++) {
                 numberString += location.charAt(j);
             }
-            return Integer.parseInt(numberString);
+            return Integer.parseInt(numberString) - 1;
         } else {
             return location.charAt(0) - 'a';
         }
@@ -232,7 +240,8 @@ public class Board {
         int smallestCoord = BOARD_SIZE;
         int largestCoord = 0; //These are the coordinates that are different for smallest and largest coordinate of letter
         ArrayList<Letter> line = new ArrayList<Letter>(BOARD_SIZE); //This will be passed to the isWord function.
-        for (int i = 0 ; i < BOARD_SIZE ; i++) {line.add(null);}// Initialize line with null values
+        for (int i = 0 ; i < BOARD_SIZE ; i++) {line.add(null);}
+
 
         //Fill up the line + get largest and smallest coordinates
         for (int i = 0 ; i < letterLocation.size() ; i++) {
@@ -263,12 +272,12 @@ public class Board {
 
         //Now try every combination of smallest-largest coords + every other to see if a word has been formed.
         boolean isValidWord = false;
-        for (int i = 0 ; i < smallestCoord ; i++) {
+        for (int i = 0 ; i <= smallestCoord ; i++) {
             for (int j = 0 ; j < (BOARD_SIZE-largestCoord) ; j++) {
                 if (isWord(new ArrayList<Letter>(line.subList(smallestCoord - i, largestCoord + j + 1)))) {
                     i = smallestCoord;
                     j = BOARD_SIZE;
-                    isValidWord = true; //A valid word has been creatd
+                    isValidWord = true;
                 }
             }
         }
