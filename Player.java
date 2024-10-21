@@ -89,17 +89,25 @@ public class Player {
             numLettersToPlay = scan.nextInt();
 
             //array to store all the values to be removed
-            int[] removal = new int[numLettersToPlay];
+            Letter[] removal = new Letter[numLettersToPlay];
             for (int i = 0; i < numLettersToPlay; i++) {
                 System.out.println("Enter letter index to be exchanged: ");
                 letterToPlay = scan.nextInt();
 
                 //Need to get the letter, then add it all to the letterBag and THEN remove the letters all at once, from lowest index to highest
-                Letter tempLetter = rack.remove(letterToPlay);
+                Letter tempLetter = rack.get(letterToPlay);
+                //Adding the letter to be removed
+                removal[i] = tempLetter;
                 //clearing buffer
                 scan.nextLine();
 
                 LetterBag.addLetter(tempLetter);
+            }
+
+
+            for(Letter l: removal)
+            {
+                rack.remove(l);
             }
 
             pullFromBag();
