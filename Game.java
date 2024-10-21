@@ -151,7 +151,7 @@ public class Game {
             }
 
             //displaying the player's updated score to them
-            gui.showScore(currentPlayer.getScore());
+            gui.showScores();
 
             //updating which player is working
             playerIndex = (playerIndex + 1) % 4;
