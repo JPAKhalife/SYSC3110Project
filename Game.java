@@ -100,7 +100,6 @@ public class Game {
         boolean success = false;
         boolean gameOn = true;
         int playerIndex = 0;
-        int numPlayers = 0;
         Display gui = new Display(game);
         Scanner scan = new Scanner(System.in);
         int numPlayers = 0;
