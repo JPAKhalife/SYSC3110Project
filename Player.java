@@ -9,7 +9,6 @@ public class Player {
     private ArrayList <Letter> rack;
     private int score;
     private Scanner scan;
-    private int turnScore;
     private ArrayList<Letter> playedLetters;
 
     /**
@@ -20,7 +19,6 @@ public class Player {
         rack = new ArrayList<>();
         score = 0;
         scan = new Scanner(System.in);
-        turnScore = 0;
         playedLetters = new ArrayList<>();
     }
 
@@ -39,7 +37,6 @@ public class Player {
      */
     public Dictionary<ArrayList<Letter>, ArrayList<String>> playerTurn()
     {
-        turnScore = 0;
         String userTurn; //stores the turn type the user wants to perform
         int numLettersToPlay; //stores the number of letters the user wants to play
         int letterToPlay; //stores the actual letters the user plays
@@ -47,7 +44,6 @@ public class Player {
         ArrayList<Integer> usedValues = new ArrayList<>();
         ArrayList<Letter> letters = new ArrayList<>();
         ArrayList<String> locations = new ArrayList<>();
-        int turnScore = 0;
 
         //printing the player's rack
         System.out.print("Your rack: \n");
@@ -75,7 +71,6 @@ public class Player {
                 else
                 {
                     letters.add(rack.get(letterToPlay));
-                    turnScore += rack.get(letterToPlay).getPoints();
                     scan.nextLine(); //Clearing the buffer of newlines
                     System.out.println("Using scrabble notation of [Row][Col], input the location of the letter (ex. a1)");
                     locations.add(scan.nextLine().toLowerCase());
@@ -91,6 +86,13 @@ public class Player {
             //array to store all the values to be removed
             Letter[] removal = new Letter[numLettersToPlay];
             for (int i = 0; i < numLettersToPlay; i++) {
+
+                if(i != 0)
+                {
+                    //clearing buffer when necessary
+                    scan.nextLine();
+                }
+
                 System.out.println("Enter letter index to be exchanged: ");
                 letterToPlay = scan.nextInt();
 
@@ -98,8 +100,6 @@ public class Player {
                 Letter tempLetter = rack.get(letterToPlay);
                 //Adding the letter to be removed
                 removal[i] = tempLetter;
-                //clearing buffer
-                scan.nextLine();
 
                 LetterBag.addLetter(tempLetter);
             }
@@ -122,7 +122,7 @@ public class Player {
     /**
      * Updates the player's score after they have played a round of scrabble, and officially removes the letters from the player's rack
      */
-    public void updateScore()
+    public void updateScore(int turnScore)
     {
         score+= turnScore;
 
