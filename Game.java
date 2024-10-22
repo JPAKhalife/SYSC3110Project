@@ -100,6 +100,7 @@ public class Game {
         boolean success = false;
         boolean gameOn = true;
         int playerIndex = 0;
+        int numPlayers = 0;
         Display gui = new Display(game);
         Scanner scan = new Scanner(System.in);
         int numPlayers = 0;
@@ -121,6 +122,7 @@ public class Game {
         for (int i = 0; i < numPlayers; i++) {
             game.addPlayer();
             boolean working = game.getPlayer(i).pullFromBag();
+
             if(!working)
             {
                 System.out.println("Failed to pull from bag");
