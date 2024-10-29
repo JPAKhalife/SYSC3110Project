@@ -10,6 +10,8 @@ public class Player {
     private int score;
     private Scanner scan;
     private ArrayList<Letter> playedLetters;
+    private ArrayList<String> playedLocations;
+
 
     /**
      * Constructor for the Player class
@@ -20,6 +22,7 @@ public class Player {
         score = 0;
         scan = new Scanner(System.in);
         playedLetters = new ArrayList<>();
+        playedLocations = new ArrayList<>();
     }
 
     /**
@@ -33,102 +36,83 @@ public class Player {
 
     /**
      * Plays one turn of scrabble using the player's rack
+
+     * @param userTurn Holds what the user wants to do with their turn. 1 = play a word, while
      * @return A Dictionary with the word of letters as the key, and the desired locations as the value
      */
-    public Dictionary<ArrayList<Letter>, ArrayList<String>> playerTurn()
+    public Dictionary<ArrayList<Letter>, ArrayList<String>> playerTurn(int userTurn)
     {
-        String userTurn; //stores the turn type the user wants to perform
         int numLettersToPlay; //stores the number of letters the user wants to play
         int letterToPlay; //stores the actual letters the user plays
         Dictionary<ArrayList<Letter>, ArrayList<String>> playerWord = new Hashtable<>(); //Stores the scrabble notation for where the user wants to add things to the board
-        ArrayList<Integer> usedValues = new ArrayList<>();
         ArrayList<Letter> letters = new ArrayList<>();
         ArrayList<String> locations = new ArrayList<>();
 
-        //printing the player's rack
-        System.out.print("Your rack: \n");
-        for(int i = 0; i<rack.size(); i++)
+        if(userTurn == 1) //The user wants to place letters on the board
         {
-            System.out.println(i+". "+rack.get(i).getLetter());
+            playerWord.put(playedLetters, playedLocations);
         }
-
-        System.out.println("1. Place Letters\n 2. Exchange Letters\n 3.Pass turn");
-        userTurn = scan.nextLine();
-
-        if(userTurn.equals("1")) //The user wants to place letters on the board
-        {
-            //Ask the user for a letter and placement
-            System.out.println("Please select the number of letters you would like to place on the board");
-            numLettersToPlay = scan.nextInt();
-            for(int i = 0; i < numLettersToPlay; i++) {
-                System.out.println("Please enter the index of the letter to play");
-                letterToPlay = scan.nextInt();
-                if(usedValues.contains(letterToPlay))
-                {
-                    System.out.println("Already used that letter. Try again\n");
-                    continue; //TO BE DONE: Place this entire thing in a try-catch loop, and then put that in a while loop
-                }
-                else
-                {
-                    letters.add(rack.get(letterToPlay));
-                    scan.nextLine(); //Clearing the buffer of newlines
-                    System.out.println("Using scrabble notation of [Row][Col], input the location of the letter (ex. a1)");
-                    locations.add(scan.nextLine().toLowerCase());
-                }
-
-                playerWord.put(letters, locations);
-            }
+        else if(userTurn == 2) { //The user wants to exchange letters with the letter bag
+           exchangeLetters();
         }
-        else if(userTurn.equals("2")) { //The user wants to exchange letters with the letter bag
-            System.out.print("Please enter the number of letters you would like to exchange: ");
-            numLettersToPlay = scan.nextInt();
-
-            //array to store all the values to be removed
-            Letter[] removal = new Letter[numLettersToPlay];
-            for (int i = 0; i < numLettersToPlay; i++) {
-
-                if(i != 0)
-                {
-                    //clearing buffer when necessary
-                    scan.nextLine();
-                }
-
-                System.out.println("Enter letter index to be exchanged: ");
-                letterToPlay = scan.nextInt();
-
-                //Need to get the letter, then add it all to the letterBag and THEN remove the letters all at once, from lowest index to highest
-                Letter tempLetter = rack.get(letterToPlay);
-                //Adding the letter to be removed
-                removal[i] = tempLetter;
-
-                LetterBag.addLetter(tempLetter);
-            }
-
-
-            for(Letter l: removal)
-            {
-                rack.remove(l);
-            }
-
-            pullFromBag();
-        }
-
-        //clearing the buffer
-        scan.nextLine();
 
         return playerWord;
+    }
+
+    /**
+     * placeLetter takes in and stores a letter and its location on the board in preparation for the player to submit their turn
+     * @param rackIndex the index of the letter on the player's rack
+     * @param i the row of the board the letter was placed on
+     * @param j the column of the board that the letter was placed on
+     */
+    public void placeLetter(int rackIndex, int i, int j)
+    {
+        playedLetters.add(rack.get(rackIndex));
+
+        //ensuring that the player's location on the board is valid
+        if(i >= 0 && j >= 0)
+        {
+            char rowLetter = (char)(i + 65); //turning the row number into the appropriate letter value
+            String location = String.valueOf(rowLetter) + j; //combining them into a singular string representation of the location
+            playedLocations.add(location); //adding the location
+        }
+    }
+
+
+    /**
+     * exchangeLetters takes all the letters the user indicated this round and exchanges them out with the bag
+     */
+    private void exchangeLetters()
+    {
+        for(Letter l: playedLetters)
+        {
+            rack.remove(l);
+        }
+
+        pullFromBag();
     }
 
     /**
      * Updates the player's score after they have played a round of scrabble, and officially removes the letters from the player's rack
      */
     public void updateScore(int turnScore)
-    {
-        score+= turnScore;
 
-        for(Letter l: playedLetters)
+    {
+        if(turnScore > 0)
         {
-            rack.remove(l);
+            score+= turnScore;
+
+            for(Letter l: playedLetters)
+            {
+                rack.remove(l);
+            }
+
+            //AT THE MOMENT, the player pulls from the bag in main. Need to send that somewhere else while also having a way to indicate
+            //that if the bag is empty, we should finish the game --> here?
+
+            //Now that the user has played all their letters, they need to clear them
+            playedLetters.clear();
+            playedLocations.clear();
         }
     }
 
