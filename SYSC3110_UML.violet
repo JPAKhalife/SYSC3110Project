@@ -247,7 +247,7 @@
     </void>
     <void property="name">
      <void property="text">
-      <string>View</string>
+      <string>ScrabbleView</string>
      </void>
     </void>
    </object>
