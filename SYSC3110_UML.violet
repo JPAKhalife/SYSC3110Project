@@ -228,8 +228,8 @@
      <void property="text">
       <string>- game: Game
 - boardButtons: JButton[15][15]
-- rackButtons: ArrayList&lt;JButton&gt;
-- turnButtons: ArrayList&lt;JButton&gt;
+- rackButtons: JButton[7]
+- turnButtons: JButton[3]
 - scoreTextPane: JTextPane
 - currentPlayerPane: JTextPane</string>
      </void>
