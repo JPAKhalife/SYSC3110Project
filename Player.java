@@ -22,6 +22,8 @@ public class Player {
         scan = new Scanner(System.in);
         playedLetters = new ArrayList<>();
         playedLocations = new ArrayList<>();
+
+        this.pullFromBag(); //The first thing a player does when they enter a game is fill their rack
     }
 
     /**
@@ -106,10 +108,14 @@ public class Player {
 
             //AT THE MOMENT, the player pulls from the bag in main. Need to send that somewhere else while also having a way to indicate
             //that if the bag is empty, we should finish the game --> here?
+            boolean gameNotOver = pullFromBag();
 
             //Now that the user has played all their letters, they need to clear them
             playedLetters.clear();
             playedLocations.clear();
+
+            //if the game is over, then return it?? Or else call the function right here??
+
         }
     }
 

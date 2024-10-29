@@ -23,6 +23,7 @@ public class Game {
         board = new Board();
         currentPlayer = 0;
         views = new ArrayList<>();
+        LetterBag.createBag();
     }
 
     /**
@@ -114,7 +115,6 @@ public class Game {
     }
 
     public static void main(String[] args) {
-        LetterBag.createBag();
         Game game = new Game();
         boolean success = false;
         boolean gameOn = true;
@@ -134,17 +134,6 @@ public class Game {
             }
         }
 
-        //Adding a standard 4 players
-        for (int i = 0; i < numPlayers; i++) {
-            game.addPlayer();
-            boolean working = game.getPlayer(i).pullFromBag();
-
-            if (!working) {
-                System.out.println("Failed to pull from bag");
-            }
-
-        }
-
         //Starting player
         Player currentPlayer = game.getPlayer(playerIndex);
 
@@ -152,26 +141,6 @@ public class Game {
         while (gameOn) {
             int turnPoints = 0;
             success = false;
-
-            //Displaying the board for the players
-            gui.displayBoard();
-
-            //Player can attempt over and over again to create a proper word
-            while (!success) {
-                System.out.println("It is player " + (playerIndex + 1) + "'s turn.");
-                Dictionary<ArrayList<Letter>, ArrayList<String>> word = currentPlayer.playerTurn();
-                turnPoints = game.addWord(word);
-                success = (turnPoints != 0);
-
-                if (!success) {
-                    System.out.println("Please try again.\n");
-                }
-            }
-
-            //Ensuring the player can never lose points
-            if (turnPoints < 0) {
-                turnPoints = 0;
-            }
 
             //Only update the score if the user's word is valid
             currentPlayer.updateScore(turnPoints);
