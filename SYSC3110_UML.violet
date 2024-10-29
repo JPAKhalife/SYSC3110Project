@@ -227,7 +227,7 @@
     <void property="attributes">
      <void property="text">
       <string>- game: Game
-- boardButtons: ArrayList&lt;JButton&gt;
+- boardButtons: JButton[15][15]
 - rackButtons: ArrayList&lt;JButton&gt;
 - turnButtons: ArrayList&lt;JButton&gt;
 - scoreTextPane: JTextPane
