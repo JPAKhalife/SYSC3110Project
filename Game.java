@@ -90,20 +90,103 @@ public class Game {
 
     /**
      * addView adds a GameObserver view to the list of views observing the game
+     *
      * @param view the view to be added
      */
-    public void addView(GameObserver view)
-    {
+    public void addView(GameObserver view) {
         this.views.add(view);
     }
 
     /**
      * removeView removes a view from the list of observers
+     *
      * @param view the view to be removed
      */
-    public void removeView(GameObserver view)
-    {
+    public void removeView(GameObserver view) {
         views.remove(view);
     }
 
+    public static void main(String[] args) {
+        LetterBag.createBag();
+        Game game = new Game();
+        boolean success = false;
+        boolean gameOn = true;
+        int playerIndex = 0;
+        Display gui = new Display(game);
+        Scanner scan = new Scanner(System.in);
+        int numPlayers = 0;
+
+        //Adding the number of players the user wants to the game
+        while (!success) {
+            System.out.print("Enter the number of players that will be playing (2 - 4): ");
+            numPlayers = scan.nextInt();
+
+            if ((numPlayers < 5) && (numPlayers > 1)) {
+                success = true;
+                scan.nextLine(); //clearing buffer
+            }
+        }
+
+        //Adding a standard 4 players
+        for (int i = 0; i < numPlayers; i++) {
+            game.addPlayer();
+            boolean working = game.getPlayer(i).pullFromBag();
+
+            if (!working) {
+                System.out.println("Failed to pull from bag");
+            }
+
+        }
+
+        //Starting player
+        Player currentPlayer = game.getPlayer(playerIndex);
+
+        //While there are still letters to pull from the bag, and no player's rack is empty, the game continues
+        while (gameOn) {
+            int turnPoints = 0;
+            success = false;
+
+            //Displaying the board for the players
+            gui.displayBoard();
+
+            //Player can attempt over and over again to create a proper word
+            while (!success) {
+                System.out.println("It is player " + (playerIndex + 1) + "'s turn.");
+                Dictionary<ArrayList<Letter>, ArrayList<String>> word = currentPlayer.playerTurn();
+                turnPoints = game.addWord(word);
+                success = (turnPoints != 0);
+
+                if (!success) {
+                    System.out.println("Please try again.\n");
+                }
+            }
+
+            //Ensuring the player can never lose points
+            if (turnPoints < 0) {
+                turnPoints = 0;
+            }
+
+            //Only update the score if the user's word is valid
+            currentPlayer.updateScore(turnPoints);
+
+            //player pulls from the bag until they have 7 letters in their rack
+            boolean bagNotEmpty = currentPlayer.pullFromBag();
+            //if the user's rack is empty, the game is over
+            if (currentPlayer.isRackEmpty() && !bagNotEmpty) {
+                gameOn = false;
+            }
+
+            //displaying the player's updated score to them
+            gui.showScores();
+
+            //updating which player is working
+            playerIndex = (playerIndex + 1) % numPlayers;
+
+            currentPlayer = game.getPlayer(playerIndex);
+        }
+
+        //Game is over, now must calculate the winner
+        Player winner = game.findWinner();
+
+    }
 }

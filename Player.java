@@ -104,6 +104,9 @@ public class Player {
                 rack.remove(l);
             }
 
+            //AT THE MOMENT, the player pulls from the bag in main. Need to send that somewhere else while also having a way to indicate
+            //that if the bag is empty, we should finish the game --> here?
+
             //Now that the user has played all their letters, they need to clear them
             playedLetters.clear();
             playedLocations.clear();
