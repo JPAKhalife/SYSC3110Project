@@ -76,6 +76,10 @@ public class Player {
         }
     }
 
+
+    /**
+     * exchangeLetters takes all the letters the user indicated this round and exchanges them out with the bag
+     */
     private void exchangeLetters()
     {
         for(Letter l: playedLetters)

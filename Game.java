@@ -16,8 +16,7 @@ public class Game {
     /**
      * Basic constructor for Game
      */
-    public Game()
-    {
+    public Game() {
         players = new ArrayList<>();
         board = new Board();
         currentPlayer = 0;
@@ -25,6 +24,7 @@ public class Game {
 
     /**
      * This method returns a desired player given their index
+     *
      * @param index The index of the player to be extracted
      * @return The player located at the appropriate index
      */
@@ -32,35 +32,33 @@ public class Game {
         return this.players.get(index);
     }
 
-    public ArrayList<Player> getPlayers(){ return new ArrayList<Player>(players);}
+    public ArrayList<Player> getPlayers() {
+        return new ArrayList<Player>(players);
+    }
 
-    public Board getBoard() {return this.board;}
+    public Board getBoard() {
+        return this.board;
+    }
 
-    public boolean addPlayer()
-    {
-        try
-        {
+    public boolean addPlayer() {
+        try {
             players.add(new Player());
             return true;
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             return false;
         }
     }
 
     /**
      * Using the known player scores, determines the winner at the end of the game
+     *
      * @return The Player who won
      */
-    public Player findWinner()
-    {
+    public Player findWinner() {
         Player winner = new Player();
         int winnerScore = 0;
-        for(Player player: players)
-        {
-            if(player.getScore() > winnerScore)
-            {
+        for (Player player : players) {
+            if (player.getScore() > winnerScore) {
                 winner = player;
                 winnerScore = player.getScore();
             }
@@ -70,16 +68,15 @@ public class Game {
     }
 
     /**
-     * This method is responsible for adding a word to the board. 
+     * This method is responsible for adding a word to the board.
      * It extracts the letters and locations specified by the player.
+     *
      * @param word - A dictionary that contains the letter and
-     * where it will be added to the board.
+     *             where it will be added to the board.
      * @return A boolean stating whether the word was successfully added to the board
      */
-    public int addWord(Dictionary<ArrayList<Letter>, ArrayList<String>> word)
-    {
-        if(word.isEmpty())
-        {
+    public int addWord(Dictionary<ArrayList<Letter>, ArrayList<String>> word) {
+        if (word.isEmpty()) {
             return -1;
         }
 
@@ -89,101 +86,4 @@ public class Game {
         return board.addWord(letters, locations);
     }
 
-    /**
-     * Main class for the project
-     * @param args Standard input for main class1
-     *
-     */
-    public static void main(String[] args) {
-        LetterBag.createBag();
-        Game game = new Game();
-        boolean success = false;
-        boolean gameOn = true;
-        int playerIndex = 0;
-        Display gui = new Display(game);
-        Scanner scan = new Scanner(System.in);
-        int numPlayers = 0;
-
-        //Adding the number of players the user wants to the game
-        while(!success)
-        {
-            System.out.print("Enter the number of players that will be playing (2 - 4): ");
-            numPlayers = scan.nextInt();
-
-            if((numPlayers < 5) && (numPlayers > 1))
-            {
-                success = true;
-                scan.nextLine(); //clearing buffer
-            }
-        }
-
-        //Adding a standard 4 players
-        for (int i = 0; i < numPlayers; i++) {
-            game.addPlayer();
-            boolean working = game.getPlayer(i).pullFromBag();
-
-            if(!working)
-            {
-                System.out.println("Failed to pull from bag");
-            }
-
-        }
-
-        //Starting player
-        Player currentPlayer = game.getPlayer(playerIndex);
-
-        //While there are still letters to pull from the bag, and no player's rack is empty, the game continues
-        while(gameOn)
-        {
-            int turnPoints = 0;
-            success = false;
-
-            //Displaying the board for the players
-            gui.displayBoard();
-
-            //Player can attempt over and over again to create a proper word
-            while(!success) {
-                System.out.println("It is player " + (playerIndex + 1) + "'s turn.");
-                Dictionary<ArrayList<Letter>, ArrayList<String>> word = currentPlayer.playerTurn();
-                turnPoints = game.addWord(word);
-                success = (turnPoints != 0);
-
-                if(! success)
-                {
-                    System.out.println("Please try again.\n");
-                }
-            }
-
-            //Ensuring the player can never lose points
-            if(turnPoints < 0)
-            {
-                turnPoints = 0;
-            }
-
-            //Only update the score if the user's word is valid
-            currentPlayer.updateScore(turnPoints);
-
-            //player pulls from the bag until they have 7 letters in their rack
-            boolean bagNotEmpty = currentPlayer.pullFromBag();
-            //if the user's rack is empty, the game is over
-            if(currentPlayer.isRackEmpty() && !bagNotEmpty)
-            {
-                gameOn = false;
-            }
-
-            //displaying the player's updated score to them
-            gui.showScores();
-
-            //updating which player is working
-            playerIndex = (playerIndex + 1) % numPlayers;
-
-            currentPlayer = game.getPlayer(playerIndex);
-        }
-
-        //Game is over, now must calculate the winner
-        Player winner = game.findWinner();
-
-        System.out.println("The winner is: Player " + game.getPlayers().indexOf(winner));
-
-    }
 }
