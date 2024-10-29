@@ -3,7 +3,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ScrabbleView implements ActionListener {
+public class ScrabbleView implements GameObserver {
+    //declare elements of Scrabble GUI
+
     public ScrabbleView(){
         Game game = new Game();
         JFrame frame = new JFrame("Scrabble"); //frame for game window
@@ -12,6 +14,8 @@ public class ScrabbleView implements ActionListener {
         JButton[] turnButtons = new JButton[3]; //holds the buttons used for a turn (submit, exchange, skip)
         JTextPane scorePane = new JTextPane();
         JTextPane currentPlayerPane = new JTextPane();
+        Container boardPane = new Container();
+        Container turnPane = new Container();
 
         //create board buttons
         char rowChar = 'a';
@@ -27,8 +31,11 @@ public class ScrabbleView implements ActionListener {
 
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
+    public void handleBoardUpdate(ErrorEvent e){
+
+    }
+
+    public void handleScore(){
 
     }
 }
