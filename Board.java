@@ -15,6 +15,7 @@ public class Board {
     private Letter[][] board;
     public static HashSet<String> words;
     private boolean firstTurn;
+    private ErrorEvent status;
 
     /**
      * Constructor for Board
@@ -24,6 +25,7 @@ public class Board {
         words = new HashSet<>();
         firstTurn = true;
         loadWords();
+        status = new ErrorEvent();
     }
 
     /**
@@ -126,15 +128,15 @@ public class Board {
 
         // check that each letter has a location
         if (word.size() != letterLocation.size()) {
-            System.out.println("Word size and location size are different.");
-            return 0;
+            this.status.setError(ErrorEvent.GameError.UNEQUAL_LIST_LENGTH);
+            return -1;
         }
 
         // check if letters can be placed in specified locations
         for (String l : letterLocation) {
             if (!isValidPlacement(l)) {
-                System.out.println("A letter does not have a valid placement.");
-                return 0;
+                this.status.setError(ErrorEvent.GameError.INVALID_PLACEMENT);
+                return -1;
 
             }
         }
@@ -143,8 +145,8 @@ public class Board {
         // check to make sure that there is a word being placed at the middle square
         if (firstTurn) {
             if (letterLocation.size() < 2) {
-                System.out.println("The first word placed must have 2 or more letters.");
-                return 0;
+                this.status.setError(ErrorEvent.GameError.FIRST_WORD_INVALID_LENGTH);
+                return -1;
             }
             boolean correctStart = false;
             for (String l : letterLocation) {
@@ -153,8 +155,8 @@ public class Board {
                 }
             }
             if (!correctStart) {
-                System.out.println("The first word must touch square H8.");
-                return 0;
+                this.status.setError(ErrorEvent.GameError.FIRST_WORD_NOT_TOUCHING_CENTER);
+                return -1;
             }
         } else {
             //If it is not the first turn, it needs to be verified
@@ -175,14 +177,14 @@ public class Board {
         //Ensure that direction is correct and there are no empty spaces
         if (!verifyDirection(direction,word,letterLocation)) {
             setWord(null,letterLocation); //unset letters from board
-            return 0;
+            return -1;
         };
 
         //Check primary direction for valid words
         if ((turnScore += verifyWordSlice(direction,letterLocation.get(0))) < 0) {
             setWord(null,letterLocation); //unset letters from board
-            System.out.println("The letters added do not form a word.");
-            return 0; // If any direction does not have a valid score, return 0
+            this.status.setError(ErrorEvent.GameError.INVALID_WORD);
+            return -1; // If any direction does not have a valid score, return -1
         };
 
         //Check secondary direction for valid words
@@ -191,8 +193,8 @@ public class Board {
             points = verifyWordSlice(direction^1, l);
             if (points < 0) {
                 setWord(null,letterLocation); //unset letters from board
-                System.out.println("One of the letters added intersects a word but does not create a new one.");
-                return 0;
+                this.status.setError(ErrorEvent.GameError.INVALID_INTERSECTION);
+                return -1;
             }
             turnScore += points;
         }
@@ -314,14 +316,6 @@ public class Board {
 
         ArrayList<Letter> scoreWord = new ArrayList<Letter>(boardSlice.subList(smallestCoord, largestCoord + 1));
         if (!isWord(scoreWord)) {
-            for (int i = 0 ; i < scoreWord.size() ; i++) {
-                if (scoreWord.get(i) == null) {
-                    System.out.print("_");
-                } else {
-                    System.out.print(scoreWord.get(i).getLetter());
-                }
-            }
-            System.out.println(" is not a word.");
             return -1;
         }
         //Tally the score of the score word
@@ -377,7 +371,7 @@ public class Board {
         int largestCoord = getCoordinateFromLocation(direction,letterLocation.get(0)); //These are the coordinates that are different for smallest and largest coordinate of letter
         for (int i = 1 ; i < letterLocation.size() ; i++) {
             if (getCoordinateFromLocation(direction ^ 1,letterLocation.get(i)) != getCoordinateFromLocation(direction ^ 1,letterLocation.get(i - 1))) {
-                System.out.println("The letters specified are not in the same axis.");
+                this.status.setError(ErrorEvent.GameError.LETTERS_NOT_STRAIGHT);
                 return false;
             }
             currentCoord = getCoordinateFromLocation(direction,letterLocation.get(i));
@@ -390,14 +384,14 @@ public class Board {
         if (direction == 1) {
             for (int i = smallestCoord ; i <= largestCoord  ; i++) {
                 if (board[i][unchangingCoordinate] == null) {
-                    System.out.println("The letters specified are not connected to each other.");
+                    this.status.setError(ErrorEvent.GameError.LETTERS_NOT_ADJACENT);
                     return false;
                 }
             }
         } else {
             for (int i = smallestCoord ; i <= largestCoord  ; i++) {
                 if (board[unchangingCoordinate][i] == null) {
-                    System.out.println("The letters specified are not connected to each other.");
+                    this.status.setError(ErrorEvent.GameError.LETTERS_NOT_ADJACENT);
                     return false;
                 }
             }
@@ -439,8 +433,16 @@ public class Board {
             }
         }
 
-        System.out.println("The letters played are not connected to another word.");
+        this.status.setError(ErrorEvent.GameError.WORD_NOT_CONNECTED);
         return false;
+    }
+
+    /**
+     * Returns result of the previous placement on the board.
+     * @return an error event that states if there was an error with the previous action and if so what type
+     */
+    public ErrorEvent getStatus() {
+        return status;
     }
 
 } //end class
