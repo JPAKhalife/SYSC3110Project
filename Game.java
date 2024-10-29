@@ -12,6 +12,7 @@ public class Game {
     private ArrayList<Player> players;
     private Board board;
     private int currentPlayer;
+    private ArrayList<GameObserver> views;
 
     /**
      * Basic constructor for Game
@@ -20,6 +21,7 @@ public class Game {
         players = new ArrayList<>();
         board = new Board();
         currentPlayer = 0;
+        views = new ArrayList<>();
     }
 
     /**
@@ -84,6 +86,24 @@ public class Game {
         ArrayList<String> locations = word.elements().nextElement(); //Extracting the locations
 
         return board.addWord(letters, locations);
+    }
+
+    /**
+     * addView adds a GameObserver view to the list of views observing the game
+     * @param view the view to be added
+     */
+    public void addView(GameObserver view)
+    {
+        this.views.add(view);
+    }
+
+    /**
+     * removeView removes a view from the list of observers
+     * @param view the view to be removed
+     */
+    public void removeView(GameObserver view)
+    {
+        views.remove(view);
     }
 
 }
