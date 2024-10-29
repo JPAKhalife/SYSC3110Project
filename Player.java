@@ -60,7 +60,7 @@ public class Player {
     }
 
     /**
-     * placeLetter takes in and stores a letter and its location on the board in preparation for the player to submit their turn
+     * placeLetter takes in and stores a letter in preparation for the player to submit their turn
      * @param rackIndex the index of the letter on the player's rack
      * @param i the row of the board the letter was placed on
      * @param j the column of the board that the letter was placed on
@@ -69,6 +69,15 @@ public class Player {
     {
         playedLetters.add(rack.get(rackIndex));
 
+    }
+
+    /**
+     * addCoordinate takes in and stores a coordinate on the board in preparation for a player to submit their turn
+     * @param i
+     * @param j
+     */
+    public void addCoordinate(int i, int j)
+    {
         //ensuring that the player's location on the board is valid
         if(i >= 0 && j >= 0)
         {

@@ -15,6 +15,7 @@ public class Game {
     private int currentPlayer;
     private ArrayList<GameObserver> views;
 
+
     /**
      * Basic constructor for Game
      */
@@ -119,19 +120,12 @@ public class Game {
         boolean success = false;
         boolean gameOn = true;
         int playerIndex = 0;
-        Display gui = new Display(game);
-        Scanner scan = new Scanner(System.in);
         int numPlayers = 0;
 
         //Adding the number of players the user wants to the game
         while (!success) {
             System.out.print("Enter the number of players that will be playing (2 - 4): ");
             numPlayers = scan.nextInt();
-
-            if ((numPlayers < 5) && (numPlayers > 1)) {
-                success = true;
-                scan.nextLine(); //clearing buffer
-            }
         }
 
         //Starting player
@@ -140,7 +134,6 @@ public class Game {
         //While there are still letters to pull from the bag, and no player's rack is empty, the game continues
         while (gameOn) {
             int turnPoints = 0;
-            success = false;
 
             //Only update the score if the user's word is valid
             currentPlayer.updateScore(turnPoints);
