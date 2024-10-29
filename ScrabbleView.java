@@ -7,7 +7,8 @@ public class ScrabbleView implements GameObserver {
     //declare elements of Scrabble GUI
 
     public ScrabbleView(){
-        Game game = new Game();
+        Game game = new Game(); //model
+        //GameController gameController = new GameController(); ADD WHEN JOHN FINISHES CLASS
         JFrame frame = new JFrame("Scrabble"); //frame for game window
         JButton[][] boardButtons = new JButton[15][15]; //holds the spaces on a board as buttons (occupied spaces disabled)
         JButton[] rackButtons = new JButton[7]; //holds the letters on a rack as buttons (placed letters, before sumbitted, are disabled)
