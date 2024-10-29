@@ -95,16 +95,19 @@ public class Player {
      */
     public void updateScore(int turnScore)
     {
-        score+= turnScore;
-
-        for(Letter l: playedLetters)
+        if(turnScore > 0)
         {
-            rack.remove(l);
-        }
+            score+= turnScore;
 
-        //Now that the user has played all their letters, they need to clear them
-        playedLetters.clear();
-        playedLocations.clear();
+            for(Letter l: playedLetters)
+            {
+                rack.remove(l);
+            }
+
+            //Now that the user has played all their letters, they need to clear them
+            playedLetters.clear();
+            playedLocations.clear();
+        }
     }
 
     /**
