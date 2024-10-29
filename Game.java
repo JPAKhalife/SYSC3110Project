@@ -5,6 +5,7 @@
  */
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class Game {
@@ -85,7 +86,13 @@ public class Game {
         ArrayList<Letter> letters = word.keys().nextElement(); //Extracting the letters
         ArrayList<String> locations = word.elements().nextElement(); //Extracting the locations
 
-        return board.addWord(letters, locations);
+        int wordScore = board.addWord(letters, locations);
+        if (wordScore < 0) {
+            for (int i = 0 ; i < views.size() ; i++) {
+                views.get(i).handleBoardUpdate(getBoard().getStatus());
+            }
+        }
+        return wordScore;
     }
 
     /**
