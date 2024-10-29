@@ -111,6 +111,7 @@ public class Game {
      */
     public void removeView(GameObserver view) {
         views.remove(view);
+
     }
 
     public static void main(String[] args) {
@@ -120,6 +121,7 @@ public class Game {
         boolean gameOn = true;
         int playerIndex = 0;
         Display gui = new Display(game);
+
         Scanner scan = new Scanner(System.in);
         int numPlayers = 0;
 
@@ -140,6 +142,7 @@ public class Game {
             boolean working = game.getPlayer(i).pullFromBag();
 
             if (!working) {
+
                 System.out.println("Failed to pull from bag");
             }
 
@@ -179,6 +182,7 @@ public class Game {
             //player pulls from the bag until they have 7 letters in their rack
             boolean bagNotEmpty = currentPlayer.pullFromBag();
             //if the user's rack is empty, the game is over
+
             if (currentPlayer.isRackEmpty() && !bagNotEmpty) {
                 gameOn = false;
             }

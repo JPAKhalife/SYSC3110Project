@@ -4,7 +4,7 @@
  * @date 08/10/2024
  */
 public class Display {
-    
+
     //Member variables
     Game game;
 
@@ -29,6 +29,7 @@ public class Display {
             for (int i = 0 ; i < this.game.getPlayers().size() ; i++) {
                 System.out.println("Player " + (i + 1) + ": " + this.game.getPlayers().get(i).getScore());
             }
+
     }
 
     /**
@@ -38,9 +39,9 @@ public class Display {
     public void showScore(int playerNum) {
         //This method should get the name of the player or the playe number
         System.out.println("Player " + playerNum + ", your score is: " + this.game.getPlayer(playerNum).getScore());
+
     }    
+
 }
-
-
 
 

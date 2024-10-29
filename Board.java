@@ -16,6 +16,7 @@ public class Board {
     public static HashSet<String> words;
     private boolean firstTurn;
     private ErrorEvent status;
+    
 
     /**
      * Constructor for Board
@@ -26,6 +27,7 @@ public class Board {
         firstTurn = true;
         loadWords();
         status = new ErrorEvent();
+
     }
 
     /**
@@ -57,6 +59,7 @@ public class Board {
      */
     private boolean isWord(ArrayList<Letter> letters) {
         String letterString = "";
+
         // convert ArrayList of Letters to a string
         for (Letter s : letters) {
             letterString += s.getLetter();
@@ -65,6 +68,7 @@ public class Board {
         if (words.contains(letterString)) {
             return true;
         }
+
         return false;
     }
 
@@ -74,6 +78,7 @@ public class Board {
      * @param location The square the letter is being placed on
      * @return whether the letter can be placed
      */
+
     private boolean isValidPlacement(String location) {
         // location is not a two-dimensional coordinate (number may be 2 digits)
         if (location.length() > 3) {
@@ -109,6 +114,7 @@ public class Board {
 
         // check is placement is taken already
         if (board[letter - 'a'][Integer.parseInt(number) - 1] != null) {
+
             return false;
         }
 

@@ -12,6 +12,7 @@ public class Player {
     private ArrayList<Letter> playedLetters;
     private ArrayList<String> playedLocations;
 
+
     /**
      * Constructor for the Player class
      */
@@ -35,6 +36,7 @@ public class Player {
 
     /**
      * Plays one turn of scrabble using the player's rack
+
      * @param userTurn Holds what the user wants to do with their turn. 1 = play a word, while
      * @return A Dictionary with the word of letters as the key, and the desired locations as the value
      */
@@ -94,6 +96,7 @@ public class Player {
      * Updates the player's score after they have played a round of scrabble, and officially removes the letters from the player's rack
      */
     public void updateScore(int turnScore)
+
     {
         if(turnScore > 0)
         {
