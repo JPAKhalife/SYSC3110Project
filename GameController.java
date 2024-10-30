@@ -26,10 +26,9 @@ public class GameController {
     //rack,<index> - index being a number from 0-6
     //turn,<keyword> - keyword being submit,pass,exchange
     /**
-     *
-     *
-     *
-     * @param e
+     * This method reads the actionEvent sent when the user interacts with the view,
+     * then interacts with the controller
+     * @param e - details about player's interaction with the GUI.
      */
     public void actionPerformed(ActionEvent e) {
         String[] command = e.getActionCommand().split(",");
@@ -39,24 +38,25 @@ public class GameController {
             char y = command[1].charAt(0); //This should be a single letter
             int x = Integer.valueOf(command[2]);
             //Add these to the addCoordinate method
-            game.getCurrentPlayer().addCoordinate(y,x); //This was written before currentplayer and addCoordinate methods existed
+            game.getCurrentPlayer().addCoordinate(y,x); //DNE
 
         } else if (command[0].equals("rack")) {
             //Grab + place the index
             int index = Integer.valueOf(command[1]);
-            game.getCurrentPlayer().placeLetter(index);
+            game.getCurrentPlayer().placeLetter(index); //DNE
 
         } else if (command[0].equals("turn")) {
             if (command[1].equals("submit")) {
-                if (game.addWord() < 0) {
-                    //going to need to update GUI
+                //Not entirely sure what method to call here
+                if (game.getCurrentPlayer.addWord() < 0) { //DNE
+                    //going to need to update GUI (since we temporarily place those letters on the board whenbselectintg)
                 }
 
             } else if (command[1].equals("exchange")) {
                 //put exchange behavior here
-                game.getCurrentPlayer().exchange()
+                game.getCurrentPlayer().exchange(); //DNE
             } else if (command[1].equals("pass")) {
-                game.incrementTurn()
+                game.incrementTurn(); //DNE
             }
 
         } else if (command[0].equals("menu")) {
