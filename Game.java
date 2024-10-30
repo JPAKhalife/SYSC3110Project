@@ -30,11 +30,10 @@ public class Game {
     /**
      * This method returns a desired player given their index
      *
-     * @param index The index of the player to be extracted
      * @return The player located at the appropriate index
      */
-    public Player getPlayer(int index) {
-        return this.players.get(index);
+    public Player getCurrentPlayer() {
+        return this.players.get(currentPlayer);
     }
 
     public ArrayList<Player> getPlayers() {
@@ -60,13 +59,19 @@ public class Game {
      * @return The Player who won
      */
     public Player findWinner() {
-        Player winner = new Player();
+        Player winner = null;
         int winnerScore = 0;
         for (Player player : players) {
             if (player.getScore() > winnerScore) {
                 winner = player;
                 winnerScore = player.getScore();
             }
+        }
+
+        //Tell the view to update the winner
+        for(GameObserver view: views)
+        {
+            view.handleScore(winner);
         }
 
         return winner;
@@ -115,47 +120,31 @@ public class Game {
         views.remove(view);
     }
 
+    public void handleNewTurn()
+    {
+        //Giving the next player a turn
+        currentPlayer ++;
+
+        //displaying the updated scores
+        for(GameObserver view: views)
+        {
+            view.handleScore(null);
+        }
+
+        //Other things that need to be done somewhere:
+            //1. Telling the player to update their score
+            //2. Checking if the game is over via the bag being empty
+            //3. If so, finding the winner
+            //4. Otherwise, call this function to make the next turn occur
+
+    }
+
     public static void main(String[] args) {
-        Game game = new Game();
-        boolean success = false;
-        boolean gameOn = true;
-        int playerIndex = 0;
-        int numPlayers = 0;
 
         //Adding the number of players the user wants to the game
         while (!success) {
             System.out.print("Enter the number of players that will be playing (2 - 4): ");
             numPlayers = scan.nextInt();
         }
-
-        //Starting player
-        Player currentPlayer = game.getPlayer(playerIndex);
-
-        //While there are still letters to pull from the bag, and no player's rack is empty, the game continues
-        while (gameOn) {
-            int turnPoints = 0;
-
-            //Only update the score if the user's word is valid
-            currentPlayer.updateScore(turnPoints);
-
-            //player pulls from the bag until they have 7 letters in their rack
-            boolean bagNotEmpty = currentPlayer.pullFromBag();
-            //if the user's rack is empty, the game is over
-            if (currentPlayer.isRackEmpty() && !bagNotEmpty) {
-                gameOn = false;
-            }
-
-            //displaying the player's updated score to them
-            gui.showScores();
-
-            //updating which player is working
-            playerIndex = (playerIndex + 1) % numPlayers;
-
-            currentPlayer = game.getPlayer(playerIndex);
-        }
-
-        //Game is over, now must calculate the winner
-        Player winner = game.findWinner();
-
     }
 }

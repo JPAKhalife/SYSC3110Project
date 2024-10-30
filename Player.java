@@ -107,7 +107,7 @@ public class Player {
     /**
      * Updates the player's score after they have played a round of scrabble, and officially removes the letters from the player's rack
      */
-    public void updateScore(int turnScore)
+    public boolean updateScore(int turnScore)
     {
         if(turnScore > 0)
         {
