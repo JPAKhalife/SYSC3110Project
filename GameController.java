@@ -7,7 +7,7 @@ import java.util.Hashtable;
 /**
  * The GameController class contains the event handling for ActionEvents.
  * These events are caused whenever the user interacts with the view.
- * @author Elyssa Grant, Gillian O'Connel, John Khalife, Sandy Alzabadani
+ * @author Elyssa Grant, John Khalife
  * @date 08/18/2024
  */
 public class GameController implements ActionListener {
@@ -52,6 +52,7 @@ public class GameController implements ActionListener {
             game.getCurrentPlayer().placeLetter(index); //DNE
 
         } else if (command[0].equals("turn")) {
+            int winner = -1; //Holds the winning player, if any
             if (command[1].equals("submit")) {
                 //Getting the combination of letters and locations
                 Dictionary<ArrayList<Letter>, ArrayList<String>> wordLocation = game.getCurrentPlayer().playerTurn(1);
@@ -60,19 +61,32 @@ public class GameController implements ActionListener {
 
                 //adding the combination of letters and locations to the board
                 if (score < 0) { //DNE
-                    game.getCurrentPlayer().updateScore(score);
                     //going to need to update GUI (since we temporarily place those letters on the board when selecting)
-                }
+                    game.handleBoardError();
 
-                //Changing turns to the next player
-                game.handleNewTurn();
+                    //Returning early so that the user can re-try their turn instead of it being passed to the next player
+                    return;
+                }
+                else
+                {
+                   boolean gameNotOver =  game.getCurrentPlayer().updateScore(score);
+
+                   if(!gameNotOver)
+                   {
+                       winner = game.findWinner();
+                       return; //Game is over --> don't need to move onto next turn
+                   }
+                }
 
             } else if (command[1].equals("exchange")) {
                 //put exchange behavior here
                 game.getCurrentPlayer().playerTurn(2); //DNE
             } else if (command[1].equals("pass")) {
-                game.handleNewTurn(); //DNE
+                //Don't need to do anything special here
             }
+
+            //changing to the next player's turn
+            game.handleNewTurn();
 
         } else if (command[0].equals("menu")) {
             if (command[1].equals("restart")) {

@@ -58,20 +58,20 @@ public class Game {
      *
      * @return The Player who won
      */
-    public Player findWinner() {
-        Player winner = null;
+    public int findWinner() {
+        int winner = -1;
         int winnerScore = 0;
-        for (Player player : players) {
-            if (player.getScore() > winnerScore) {
-                winner = player;
-                winnerScore = player.getScore();
+        for (int i = 0; i< players.size(); i++) {
+            if (players.get(i).getScore() > winnerScore) {
+                winner = i;
+                winnerScore = players.get(i).getScore();
             }
         }
 
         //Tell the view to update the winner
         for(GameObserver view: views)
         {
-            view.handleScore(winner);
+            view.handleScoreUpdate(winner);
         }
 
         return winner;
@@ -122,29 +122,31 @@ public class Game {
 
     public void handleNewTurn()
     {
+
         //Giving the next player a turn
         currentPlayer ++;
 
-        //displaying the updated scores
+        //displaying the updated scores and board statuses
         for(GameObserver view: views)
         {
-            view.handleScore(null);
+            view.handleScoreUpdate(-1);
         }
 
         //Other things that need to be done somewhere:
-            //1. Telling the player to update their score
             //2. Checking if the game is over via the bag being empty
             //3. If so, finding the winner
             //4. Otherwise, call this function to make the next turn occur
 
     }
 
-    public static void main(String[] args) {
-
-        //Adding the number of players the user wants to the game
-        while (!success) {
-            System.out.print("Enter the number of players that will be playing (2 - 4): ");
-            numPlayers = scan.nextInt();
+    /**
+     * handleBoardError handles what should occur when there was an error placing words on the board
+     */
+    public void handleBoardError()
+    {
+        for(GameObserver view: views)
+        {
+            view.handleBoardUpdate(board.getStatus());
         }
     }
 }

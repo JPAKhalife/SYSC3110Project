@@ -106,6 +106,7 @@ public class Player {
 
     /**
      * Updates the player's score after they have played a round of scrabble, and officially removes the letters from the player's rack
+     * @return A boolean describing whether the game should continue onto the next player
      */
     public boolean updateScore(int turnScore)
     {
@@ -126,9 +127,11 @@ public class Player {
             playedLetters.clear();
             playedLocations.clear();
 
-            //if the game is over, then return it?? Or else call the function right here??
+            return gameNotOver;
 
         }
+
+        return true;
     }
 
     /**
