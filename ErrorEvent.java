@@ -1,3 +1,8 @@
+/**
+ * The ErrorEvent communicates the nature of errors that occur when a user makes a play.
+ * @author Elyssa Grant, Gillian O'Connel, John Khalife, Sandy Alzabadani
+ * @date 08/18/2024
+ */
 public class ErrorEvent {
     private GameError error;
 
