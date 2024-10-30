@@ -62,10 +62,9 @@ public class Player {
     /**
      * placeLetter takes in and stores a letter in preparation for the player to submit their turn
      * @param rackIndex the index of the letter on the player's rack
-     * @param i the row of the board the letter was placed on
-     * @param j the column of the board that the letter was placed on
+     *
      */
-    public void placeLetter(int rackIndex, int i, int j)
+    public void placeLetter(int rackIndex)
     {
         playedLetters.add(rack.get(rackIndex));
 
@@ -73,18 +72,22 @@ public class Player {
 
     /**
      * addCoordinate takes in and stores a coordinate on the board in preparation for a player to submit their turn
-     * @param i
-     * @param j
+     * @param i The row of the board
+     * @param j the column of the board
+     * @return whether the coordinate was successfully added
      */
-    public void addCoordinate(int i, int j)
+    public boolean addCoordinate(int i, int j)
     {
         //ensuring that the player's location on the board is valid
-        if(i >= 0 && j >= 0)
+        if(i >= 0 && j >= 0 && i < 15 && j < 15)
         {
             char rowLetter = (char)(i + 65); //turning the row number into the appropriate letter value
             String location = String.valueOf(rowLetter) + j; //combining them into a singular string representation of the location
             playedLocations.add(location); //adding the location
+            return true;
         }
+
+        return false;
     }
 
 
