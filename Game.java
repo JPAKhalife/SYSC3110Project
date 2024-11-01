@@ -54,7 +54,8 @@ public class Game {
     }
 
     /**
-     * Using the known player scores, determines the winner at the end of the game
+     * Using the known player scores, determines the player with the highest score at the moment
+     * Intended to be used at the end of the game to find the winner
      *
      * @return The Player who won
      */
@@ -124,7 +125,7 @@ public class Game {
     {
 
         //Giving the next player a turn
-        currentPlayer ++;
+        currentPlayer = (currentPlayer + 1) % players.size();
 
         //displaying the updated scores and board statuses
         for(GameObserver view: views)
