@@ -1,8 +1,14 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
+import java.util.ArrayList;
 
 
 public class ScrabbleView extends JFrame implements GameObserver {
+
+    JButton[][] boardButtons;
+    JTextPane scorePane;
+    Game game;
 
     public ScrabbleView(){
         Game game = new Game();
@@ -12,10 +18,10 @@ public class ScrabbleView extends JFrame implements GameObserver {
         this.setLayout(new BorderLayout());
 
 
-        JButton[][] boardButtons = new JButton[15][15]; //holds the spaces on a board as buttons (occupied spaces disabled)
+        boardButtons = new JButton[15][15]; //holds the spaces on a board as buttons (occupied spaces disabled)
         JButton[] rackButtons = new JButton[7]; //holds the letters on a rack as buttons (placed letters, before sumbitted, are disabled)
         JButton[] turnButtons = new JButton[3]; //holds the buttons used for a turn (submit, exchange, skip)
-        JTextPane scorePane = new JTextPane();
+        scorePane = new JTextPane();
         JTextPane currentPlayerPane = new JTextPane();
         JPanel PlayerPanel = new JPanel();
 
@@ -27,9 +33,8 @@ public class ScrabbleView extends JFrame implements GameObserver {
             rackButtons[i].setActionCommand("RACK_" + i);
             rackPanel.add(rackButtons[i]);
 
-
-
         }
+
         String[] commands = {"Submit", "Exchange","Skip"};
         JPanel turnPanel = new JPanel(new GridLayout(1,3));
         for(int i = 0; i<3; i++){
@@ -38,6 +43,8 @@ public class ScrabbleView extends JFrame implements GameObserver {
             turnButtons[i].setActionCommand("TURN_"+ commands[i].toUpperCase());
             turnPanel.add(turnButtons[i]);
         }
+
+
 
         JPanel statusPanel = new JPanel(new GridLayout(2,1));
         scorePane.setEditable(false);
@@ -57,7 +64,27 @@ public class ScrabbleView extends JFrame implements GameObserver {
         this.setVisible(true);
     }
 
+    public void displayBoard(char[][] board) {
+        for(int i = 0; i < Board.BOARD_SIZE; i++){
+            for(int j = 0; j < Board.BOARD_SIZE; j++){
+                String text = (board[i][j] == '\0')? "": String.valueOf(board[i][j]);
+                boardButtons[i][j].setText(text);
+                boardButtons[i][j].setEnabled(text.isEmpty()); //If tile is occupied the button cannot be clicked
 
+            }
+        }
+    }
+
+    public void showScores(){
+        List<Player> players = game.getPlayers();
+        String scores = "";
+        for(int i = 0; i < players.size(); i++){
+            Player player = players.get(i);
+            scores = "Player" + String.valueOf(i)+ ":"+ player.getScore() + "\n";
+        }
+        scorePane.setText(scores);
+
+    }
 
     @Override
     public void handleBoardUpdate(ErrorEvent e) {
