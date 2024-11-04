@@ -127,7 +127,7 @@ public class Player {
             playedLetters.clear();
             playedLocations.clear();
 
-            return gameNotOver;
+            return gameNotOver && !isRackEmpty(); //want a false to say game is over --> if rack is empty, must return false for this to happen
 
         }
 

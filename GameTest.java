@@ -74,6 +74,7 @@ public class GameTest {
         ArrayList<Player> arr = game.getPlayers();
         for(int i = 1; i < arr.size(); i++)
         {
+            assertNotNull(arr.get(i));
             assertNotSame(arr.get(i - 1), arr.get(i));
         }
     }
@@ -128,6 +129,32 @@ public class GameTest {
 
     @Test
     public void handleNewTurn() {
+        Game game = new Game();
+        game.addPlayer();
+        game.addPlayer();
+        game.addPlayer();
+        GameObserver view = new ScrabbleView();
+
+        //Ensuring all the players are unique
+        Player p1 = game.getCurrentPlayer();
+        game.handleNewTurn();
+        Player p2 = game.getCurrentPlayer();
+
+        assertNotSame(p1, p2);
+        game.handleNewTurn();
+        Player p3 = game.getCurrentPlayer();
+
+        assertNotSame(p2, p3);
+        assertNotSame(p1, p3);
+
+        //Ensuring the player rolls over to the first player after the number of players has been met
+        game.handleNewTurn();
+        Player p4 = game.getCurrentPlayer();
+        assertSame(p1, p4);
+
+        //Ensure that the new view was updated
+        game.addView(view);
+        //INCOMPLETE
     }
 
     @Test
