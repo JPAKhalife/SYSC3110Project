@@ -113,7 +113,7 @@ public class Game {
         views.remove(view);
 
     }
-
+/**
     public static void main(String[] args) {
         LetterBag.createBag();
         Game game = new Game();
@@ -200,4 +200,5 @@ public class Game {
         Player winner = game.findWinner();
 
     }
+ */
 }
