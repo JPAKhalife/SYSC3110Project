@@ -1,4 +1,4 @@
 public interface GameObserver {
     public void handleBoardUpdate(ErrorEvent e);
-    public void handleScore();
+    public void handleScoreUpdate(int winner);
 }
