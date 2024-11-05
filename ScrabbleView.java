@@ -1,22 +1,26 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.List;
+import java.util.ArrayList;
+
 
 public class ScrabbleView extends JFrame implements GameObserver {
-    //declare elements of Scrabble GUI
+
     JButton[][] boardButtons;
     JTextPane scorePane;
     Game game;
+    Container turnElements;
 
     public ScrabbleView(){
-        Game game = new Game(); //model
-        JFrame frame = new JFrame("Scrabble"); //frame for game window
+        //Configure frame
+        super("Scrabble");
+        Game game = new Game();
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(800,800);
         this.setLayout(new BorderLayout());
 
-
+        //Create GUI elements in frame
+        turnElements = new Container(); //holds the current player's rack and the turn buttons
         boardButtons = new JButton[15][15]; //holds the spaces on a board as buttons (occupied spaces disabled)
         JButton[] rackButtons = new JButton[7]; //holds the letters on a rack as buttons (placed letters, before sumbitted, are disabled)
         JButton[] turnButtons = new JButton[3]; //holds the buttons used for a turn (submit, exchange, skip)
@@ -24,7 +28,24 @@ public class ScrabbleView extends JFrame implements GameObserver {
         JTextPane currentPlayerPane = new JTextPane();
         JPanel PlayerPanel = new JPanel();
 
+        //Create controller
         GameController gameController = new GameController(game);
+
+        //create board buttons
+        //char rowChar = 'a';
+        for(int i = 0; i < Board.BOARD_SIZE; i++) {
+            for (int j = 0; i <= Board.BOARD_SIZE; i++) {
+                boardButtons[i][j] = new JButton();
+                boardButtons[i][j].addActionListener(gameController);
+                //String buttonCoordinate = Character.toString(rowChar) + Integer.toString(j);
+                String buttonCoordinate = Integer.toString(i) + "," + Integer.toString(j);
+                boardButtons[i][j].setActionCommand(buttonCoordinate);
+            }
+            //rowChar++;
+        }
+
+
+
         JPanel rackPanel = new JPanel(new GridLayout(1,7));
         for(int i = 0; i < 7; i++){
             rackButtons[i] = new JButton(String.valueOf(LetterBag.getNextLetter().getLetter()));
@@ -37,7 +58,7 @@ public class ScrabbleView extends JFrame implements GameObserver {
         String[] commands = {"Submit", "Exchange","Skip"};
         JPanel turnPanel = new JPanel(new GridLayout(1,3));
         for(int i = 0; i<3; i++){
-            turnButtons[i] = new JButton("Submit");
+            turnButtons[i] = new JButton(commands[i]);
             turnButtons[i].addActionListener(gameController);
             turnButtons[i].setActionCommand("TURN_"+ commands[i].toUpperCase());
             turnPanel.add(turnButtons[i]);
@@ -63,11 +84,39 @@ public class ScrabbleView extends JFrame implements GameObserver {
         this.setVisible(true);
     }
 
-    public void handleBoardUpdate(ErrorEvent e){
+    public void displayBoard(char[][] board) {
+        for(int i = 0; i < Board.BOARD_SIZE; i++){
+            for(int j = 0; j < Board.BOARD_SIZE; j++){
+                String text = (board[i][j] == '\0')? "": String.valueOf(board[i][j]);
+                boardButtons[i][j].setText(text);
+                boardButtons[i][j].setEnabled(text.isEmpty()); //If tile is occupied the button cannot be clicked
+
+            }
+        }
+    }
+
+    public void showScores(){
+        List<Player> players = game.getPlayers();
+        String scores = "";
+        for(int i = 0; i < players.size(); i++){
+            Player player = players.get(i);
+            scores = "Player" + String.valueOf(i)+ ":"+ player.getScore() + "\n";
+        }
+        scorePane.setText(scores);
 
     }
 
-    public void handleScore(){
+    @Override
+    public void handleBoardUpdate(ErrorEvent e) {
 
+    }
+
+    @Override
+    public void handleScoreUpdate(int winner) {
+
+    }
+
+    public static void main(String[] args) {
+        ScrabbleView v = new ScrabbleView();
     }
 }
