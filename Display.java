@@ -25,11 +25,10 @@ public class Display {
      * This method is intended to reveal the score of all players
      */
     public void showScores() {
-            System.out.println("Player scores:");
-            for (int i = 0 ; i < this.game.getPlayers().size() ; i++) {
-                System.out.println("Player " + (i + 1) + ": " + this.game.getPlayers().get(i).getScore());
-            }
-
+        System.out.println("Player scores:");
+        for (int i = 0 ; i < this.game.getPlayers().size() ; i++) {
+            System.out.println("Player " + (i + 1) + ": " + this.game.getPlayers().get(i).getScore());
+        }
     }
 
     /**
@@ -39,9 +38,5 @@ public class Display {
     public void showScore(int playerNum) {
         //This method should get the name of the player or the playe number
         System.out.println("Player " + playerNum + ", your score is: " + this.game.getPlayer(playerNum).getScore());
-
-    }    
-
+    }
 }
-
-
