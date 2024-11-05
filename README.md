@@ -4,7 +4,7 @@ The authors of this project are John Khalife, Elyssa Grant, Sandy Alzabadani, an
 
 This repository presently contains Milestone 2 of the SYSC 3110 project. This deliverable is comprised of a standard Java GUI-based version of Scrabble. This Scrabble game implements the MVC design pattern. This game supports two to four players. On a player's turn, the player will be able to place letters onto the board to create words and will be awarded points based on the letters used in the completed word. A simplified version of the game is used, which does not include blank tiles or premium squares.
 
-Presently, this game contains an imperfect implementation of the game logic. When a player exchanges letters on his/her rack, exchanges must be made from the letter at the highest index to the lowest. If this is not adhered to, the indexes of the other letters will shift down, which may result in IndexOutOfBounds errors being thrown. Additionally, players are not limited to placing letters that connect to other words already on the board, nor is the first word expected to be placed in the middle of the board. 
+Presently, this game lacks certain features that are yet to be implemented. Checks for menu items that will restart or quit the game are present in the Controller, but do not exist in the actual implementation.
 
 The following is a breakdown of the details of future deliverables- outlining how the current implementation of the game will be expanded.
 
