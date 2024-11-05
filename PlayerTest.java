@@ -21,6 +21,29 @@ public class PlayerTest {
 
     @Test
     public void playerTurn() {
+        LetterBag.createBag();
+        Player player = new Player();
+
+        ArrayList<Letter> initialRack = player.getRack();
+
+        player.placeLetter(0);
+        player.addCoordinate(0, 0);
+        player.placeLetter(1);
+        player.addCoordinate(0,1);
+        player.placeLetter(2);
+        player.addCoordinate(0,2);
+
+        Dictionary<ArrayList<Letter>, ArrayList<String>> playerTurn = player.playerTurn(1);
+        ArrayList<Letter> playedLetters = playerTurn.keys().nextElement();
+        ArrayList<String> locations = playerTurn.elements().nextElement();
+
+        for(int i = 0; i < playedLetters.size(); i++)
+        {
+            assertTrue(initialRack.contains(playedLetters.get(i)));
+            //Assert the locations are correct as well
+        }
+
+        Dictionary<ArrayList<Letter>, ArrayList<String>> exchangedLetters = player.playerTurn(2);
 
     }
 

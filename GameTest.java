@@ -116,15 +116,8 @@ public class GameTest {
 
     @Test
     public void addWord() {
+        Game game = new Game();
 
-    }
-
-    @Test
-    public void addView() {
-    }
-
-    @Test
-    public void removeView() {
     }
 
     @Test

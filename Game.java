@@ -25,6 +25,11 @@ public class Game {
         currentPlayer = 0;
         views = new ArrayList<>();
         LetterBag.createBag();
+
+        for(int i = 0; i < 4; i++)
+        {
+            addPlayer();
+        }
     }
 
     /**
