@@ -27,11 +27,11 @@ public class PlayerTest {
         ArrayList<Letter> initialRack = player.getRack();
 
         player.placeLetter(0);
-        player.addCoordinate(0, 0);
+        player.addCoordinate('a', 0);
         player.placeLetter(1);
-        player.addCoordinate(0,1);
+        player.addCoordinate('a',1);
         player.placeLetter(2);
-        player.addCoordinate(0,2);
+        player.addCoordinate('a',2);
 
         Dictionary<ArrayList<Letter>, ArrayList<String>> playerTurn = player.playerTurn(1);
         ArrayList<Letter> playedLetters = playerTurn.keys().nextElement();
@@ -75,7 +75,7 @@ public class PlayerTest {
     public void addCoordinate() {
         Player player = new Player();
 
-        for(int i = 1; i < 16; i++){
+        for(char i = 'a'; i <= 'o'; i++){
             for(int j = 1; j < 16; j++){
                 player.addCoordinate(i, j);
             }
