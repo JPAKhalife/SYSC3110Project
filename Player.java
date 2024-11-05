@@ -8,7 +8,6 @@ import java.util.*;
 public class Player {
     private ArrayList <Letter> rack;
     private int score;
-    private Scanner scan;
     private ArrayList<Letter> playedLetters;
     private ArrayList<String> playedLocations;
 
