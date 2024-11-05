@@ -26,6 +26,19 @@ public class ScrabbleView extends JFrame implements GameObserver {
         JPanel PlayerPanel = new JPanel();
 
         GameController gameController = new GameController(game);
+        //create board buttons
+        char rowChar = 'a';
+        for(int i = 0; i < Board.BOARD_SIZE; i++) {
+            for (int j = 0; i <= Board.BOARD_SIZE; i++) {
+                boardButtons[i][j] = new JButton();
+                boardButtons[i][j].addActionListener(gameController);
+                String buttonCoordinate = Character.toString(rowChar) + Integer.toString(j);
+                boardButtons[i][j].setActionCommand(buttonCoordinate);
+            }
+            rowChar++;
+        }
+
+
         JPanel rackPanel = new JPanel(new GridLayout(1,7));
         for(int i = 0; i < 7; i++){
             rackButtons[i] = new JButton(String.valueOf(LetterBag.getNextLetter().getLetter()));
@@ -88,11 +101,14 @@ public class ScrabbleView extends JFrame implements GameObserver {
 
     @Override
     public void handleBoardUpdate(ErrorEvent e) {
+        
 
     }
 
     @Override
     public void handleScore() {
+        showScores();
+
 
     }
 }
