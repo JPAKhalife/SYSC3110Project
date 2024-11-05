@@ -180,7 +180,6 @@ public class BoardTest {
         locations.add("h12");
         locations.add("h13");
         //Make a new word.
-        System.out.println("GOGOGO");
         assertEquals(board.addWord(letters,locations), -1);
         //Make sure that the error code corresponds to this.
         assertEquals(ErrorEvent.GameError.INVALID_WORD,board.getStatus().getError());
