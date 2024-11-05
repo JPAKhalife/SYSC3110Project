@@ -110,6 +110,7 @@ public class Player {
      */
     public boolean updateScore(int turnScore)
     {
+        boolean gameNotOver = true;
         if(turnScore > 0)
         {
             score+= turnScore;
@@ -121,17 +122,15 @@ public class Player {
 
             //AT THE MOMENT, the player pulls from the bag in main. Need to send that somewhere else while also having a way to indicate
             //that if the bag is empty, we should finish the game --> here?
-            boolean gameNotOver = pullFromBag();
-
-            //Now that the user has played all their letters, they need to clear them
-            playedLetters.clear();
-            playedLocations.clear();
-
-            return gameNotOver && !isRackEmpty(); //want a false to say game is over --> if rack is empty, must return false for this to happen
-
+            gameNotOver = pullFromBag();
         }
 
-        return true;
+        //Now that the user has played all their letters, they need to clear them
+        playedLetters.clear();
+        playedLocations.clear();
+
+        return gameNotOver && !isRackEmpty(); //want a false to say game is over --> if rack is empty, must return false for this to happen
+
     }
 
     /**

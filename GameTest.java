@@ -118,6 +118,11 @@ public class GameTest {
     public void addWord() {
         Game game = new Game();
 
+        //The game returns the correct number of points for a singular letter placed on the board
+        ArrayList<Letter> rack = game.getCurrentPlayer().getRack();
+        game.getCurrentPlayer().placeLetter(0);
+        game.getCurrentPlayer().addCoordinate(0,0);
+        assertEquals(-1, game.addWord(game.getCurrentPlayer().playerTurn(1)));
     }
 
     @Test
