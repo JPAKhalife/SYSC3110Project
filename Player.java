@@ -18,7 +18,6 @@ public class Player {
     {
         rack = new ArrayList<>();
         score = 0;
-        scan = new Scanner(System.in);
         playedLetters = new ArrayList<>();
         playedLocations = new ArrayList<>();
 
