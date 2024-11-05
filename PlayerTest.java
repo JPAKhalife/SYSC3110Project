@@ -41,9 +41,12 @@ public class PlayerTest {
         {
             assertTrue(initialRack.contains(playedLetters.get(i)));
             //Assert the locations are correct as well
+            assertEquals("a"+i, locations.get(i));
         }
 
         Dictionary<ArrayList<Letter>, ArrayList<String>> exchangedLetters = player.playerTurn(2);
+        assertEquals(0, exchangedLetters.keys().nextElement().size()); //Should return an empty arraylist of letters if exchanging
+        assertEquals(0, exchangedLetters.elements().nextElement().size());
 
     }
 
