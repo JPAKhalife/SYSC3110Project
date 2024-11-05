@@ -16,7 +16,6 @@ public class Board {
     public static HashSet<String> words;
     private boolean firstTurn;
     private ErrorEvent status;
-    
 
     /**
      * Constructor for Board
@@ -27,7 +26,6 @@ public class Board {
         firstTurn = true;
         loadWords();
         status = new ErrorEvent();
-
     }
 
     /**
@@ -53,13 +51,12 @@ public class Board {
     /**
      * Checks if the word being placed on the board is a valid word in the game's
      * word bank
-     * 
+     *
      * @param letters The letters of the word being placed
      * @return whether the word can be placed on the board
      */
     private boolean isWord(ArrayList<Letter> letters) {
         String letterString = "";
-
         // convert ArrayList of Letters to a string
         for (Letter s : letters) {
             letterString += s.getLetter();
@@ -68,17 +65,15 @@ public class Board {
         if (words.contains(letterString)) {
             return true;
         }
-
         return false;
     }
 
     /**
      * Check if the placement of a particular letter is avalible on the board
-     * 
+     *
      * @param location The square the letter is being placed on
      * @return whether the letter can be placed
      */
-
     private boolean isValidPlacement(String location) {
         // location is not a two-dimensional coordinate (number may be 2 digits)
         if (location.length() > 3) {
@@ -114,7 +109,6 @@ public class Board {
 
         // check is placement is taken already
         if (board[letter - 'a'][Integer.parseInt(number) - 1] != null) {
-
             return false;
         }
 
@@ -212,7 +206,7 @@ public class Board {
      * Generate a String representation of the current status of the board including
      * all the letters that have been
      * placed on it.
-     * 
+     *
      * @return the String representation of the board
      */
     public String toString(){
@@ -256,7 +250,7 @@ public class Board {
         } else {
             return location.charAt(0) - 'a';
         }
-        
+
     }
 
     /**
