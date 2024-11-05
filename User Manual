@@ -8,7 +8,7 @@ The game accommodates four players. The user is displayed with a GUI consisting 
 
 Playing letters on the board:
 
-1.	The user can click a button on their rack, which will indicate that they want to use that letter this turn.
+1. The user can click a button on their rack, which will indicate that they want to use that letter this turn.
 
 2. Once a letter has been clicked, an empty location on the board can be clicked to indicate that the user wants to add the last letter clicked to that location on the board.
 
