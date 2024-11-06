@@ -8,7 +8,6 @@ import java.util.*;
 public class Player {
     private ArrayList <Letter> rack;
     private int score;
-    private Scanner scan;
     private ArrayList<Letter> playedLetters;
     private ArrayList<String> playedLocations;
 
@@ -19,7 +18,6 @@ public class Player {
     {
         rack = new ArrayList<>();
         score = 0;
-        scan = new Scanner(System.in);
         playedLetters = new ArrayList<>();
         playedLocations = new ArrayList<>();
 
@@ -76,13 +74,12 @@ public class Player {
      * @param j the column of the board
      * @return whether the coordinate was successfully added
      */
-    public boolean addCoordinate(int i, int j)
+    public boolean addCoordinate(char i, int j)
     {
         //ensuring that the player's location on the board is valid
-        if(i >= 0 && j >= 0 && i < 15 && j < 15)
+        if(i >= 'a' && j >= 0 && i < 'o' && j < 15)
         {
-            char rowLetter = (char)(i + 65); //turning the row number into the appropriate letter value
-            String location = String.valueOf(rowLetter) + j; //combining them into a singular string representation of the location
+            String location = String.valueOf(i) + j; //combining them into a singular string representation of the location
             playedLocations.add(location); //adding the location
             return true;
         }

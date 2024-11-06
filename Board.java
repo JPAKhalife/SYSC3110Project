@@ -161,7 +161,10 @@ public class Board {
         } else {
             //If it is not the first turn, it needs to be verified
             //that the word being added intersects another word.
-            if (!isConnected(letterLocation)) {return 0;}
+            if (!isConnected(letterLocation)) {
+                this.status.setError(ErrorEvent.GameError.WORD_NOT_CONNECTED);
+                return -1;
+            }
         }
 
         //Grab the primary direction - all letters must be placed on one axis
@@ -200,37 +203,6 @@ public class Board {
         }
         firstTurn = false; //if the check passes, it is never needed again.
         return turnScore;
-    }
-
-    /**
-     * Generate a String representation of the current status of the board including
-     * all the letters that have been
-     * placed on it.
-     *
-     * @return the String representation of the board
-     */
-    public String toString(){
-        String strBoard = "";
-        char letter = 'A';
-        strBoard += "   ";
-        for (int i = 1 ; i < BOARD_SIZE + 1 ; i++) {
-            strBoard += "{" + i + "}";
-        }
-        strBoard += "\n";
-        for(int i = 0; i < BOARD_SIZE; i++){
-            strBoard += letter + "  ";
-            letter++;
-            for(int j = 0; j < BOARD_SIZE; j++){
-                if(this.board[i][j] == null){
-                    strBoard += "[ ]";
-                }else{
-                    strBoard += "[" + this.board[i][j].getLetter() + "]";
-                }
-            }
-            strBoard += "\n";
-        }
-
-        return strBoard;
     }
 
     /**
@@ -304,14 +276,12 @@ public class Board {
         ArrayList<Letter> boardSlice = grabWordSlice(direction, location);
 
         //Now grab the smallest and largest coords of the full word formed
-        for (int i = 0 ; i <= smallestCoord ; i++) {
-            if (boardSlice.get(smallestCoord - i) == null) {break;}
-            smallestCoord = smallestCoord - i;
+        while (boardSlice.get(smallestCoord - 1) != null) {
+            smallestCoord--;
         }
 
-        for (int j = 0 ; j < (BOARD_SIZE-largestCoord) ; j++) {
-            if (boardSlice.get(largestCoord + j) == null) {break;}
-            largestCoord = largestCoord + j;
+        while (boardSlice.get(largestCoord + 1) != null) {
+            largestCoord++;
         }
 
         ArrayList<Letter> scoreWord = new ArrayList<Letter>(boardSlice.subList(smallestCoord, largestCoord + 1));

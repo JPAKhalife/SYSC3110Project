@@ -69,13 +69,13 @@ public class GameController implements ActionListener {
                 }
                 else
                 {
-                    boolean gameNotOver =  game.getCurrentPlayer().updateScore(score);
+                   boolean gameNotOver =  game.getCurrentPlayer().updateScore(score);
 
-                    if(!gameNotOver)
-                    {
-                        winner = game.findWinner();
-                        return; //Game is over --> don't need to move onto next turn
-                    }
+                   if(!gameNotOver)
+                   {
+                       winner = game.findWinner();
+                       return; //Game is over --> don't need to move onto next turn
+                   }
                 }
 
             } else if (command[1].equals("exchange")) {
@@ -97,6 +97,4 @@ public class GameController implements ActionListener {
             //insert checks for other menu buttons here
         }
     }
-
-
 }

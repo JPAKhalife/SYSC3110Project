@@ -4,12 +4,6 @@
  * @date 08/18/2024
  */
 
-/**
- * The Game class contains the current state of Scrabble and the main line of execution.
- * @author Elyssa Grant, Gillian O'Connel, John Khalife, Sandy Alzabadani
- * @date 08/18/2024
- */
-
 import java.io.File;
 import java.lang.reflect.Array;
 import java.util.*;
@@ -145,9 +139,9 @@ public class Game {
         }
 
         //Other things that need to be done somewhere:
-        //2. Checking if the game is over via the bag being empty
-        //3. If so, finding the winner
-        //4. Otherwise, call this function to make the next turn occur
+            //2. Checking if the game is over via the bag being empty
+            //3. If so, finding the winner
+            //4. Otherwise, call this function to make the next turn occur
 
     }
 
