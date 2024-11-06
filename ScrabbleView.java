@@ -18,6 +18,7 @@ public class ScrabbleView extends JFrame implements GameObserver {
         //Configure frame
         super("Scrabble");
         game = new Game();
+        game.addView(this);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(800,800);
         this.setLayout(new BorderLayout());
@@ -63,12 +64,12 @@ public class ScrabbleView extends JFrame implements GameObserver {
             rackPanel.add(rackButtons[i]);
         }
 
-        String[] commands = {"Submit", "Exchange","Skip"};
+        String[] commands = {"submit", "exchange","skip"};
         JPanel turnPanel = new JPanel(new GridLayout(3,1));
         for(int i = 0; i<3; i++){
             turnButtons[i] = new JButton(commands[i]);
             turnButtons[i].addActionListener(gameController);
-            turnButtons[i].setActionCommand("TURN_"+ commands[i].toUpperCase());
+            turnButtons[i].setActionCommand("turn,"+ commands[i].toLowerCase());
             turnPanel.add(turnButtons[i]);
         }
 
