@@ -86,10 +86,9 @@ public class ScrabbleView extends JFrame implements GameObserver {
         bottomDisplayPanel.add(playPanel, BorderLayout.CENTER);
 
         //Create current player score pane
-        JTextPane scorePane = new JTextPane();
         scorePane.setFont(new Font(null, Font.BOLD, 14));
         scorePane.setEditable(false);
-        scorePane.setText(currentScores());
+        this.handleScoreBoardUpdate();
 
         this.add(bottomDisplayPanel, BorderLayout.SOUTH);
 
@@ -111,7 +110,8 @@ public class ScrabbleView extends JFrame implements GameObserver {
         }
     }
 
-    public String currentScores(){
+    @Override
+    public void handleScoreBoardUpdate(){
         List<Player> players = game.getPlayers();
         String scores = "";
         scores += "Current Scores\n---------------------\n";
@@ -119,8 +119,7 @@ public class ScrabbleView extends JFrame implements GameObserver {
             Player player = players.get(i);
             scores += "Player " + String.valueOf(i + 1)+ " : "+ player.getScore() + "\n";
         }
-        return scores;
-
+        this.scorePane.setText(scores);
     }
 
     @Override
