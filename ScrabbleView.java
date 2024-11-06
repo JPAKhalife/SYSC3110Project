@@ -123,8 +123,17 @@ public class ScrabbleView extends JFrame implements GameObserver {
     }
 
     @Override
-    public void handleBoardUpdate(ErrorEvent e) {
+    public void handleLetterPlacement(char y, int x, char letter){
+        y = Character.toLowerCase(y); //make sure lower case
+        //JButton placement = this.boardButtons[y - 'a'][x];
+        boardButtons[y - 'a'][x].setBackground(TILE_COLOUR);
+        boardButtons[y - 'a'][x].setText(Character.toString(letter));
+        boardButtons[y - 'a'][x].setEnabled(false);
+    }
 
+    @Override
+    public void handleBoardUpdate(ErrorEvent e) {
+        //handle error if
     }
 
     @Override

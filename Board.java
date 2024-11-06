@@ -13,7 +13,7 @@ import java.lang.*;
 public class Board {
     public static final int BOARD_SIZE = 15;
     private Letter[][] board;
-    public static HashSet<String> words;
+    public static HashSet<String> words; //set of all valid words
     private boolean firstTurn;
     private ErrorEvent status;
 
