@@ -6,7 +6,7 @@ import java.util.*;
  * @date 08/10/2024
  */
 public class LetterBag {
-    private static Dictionary<Letter,Integer> letters;
+    private static Hashtable<Letter,Integer> letters = new Hashtable<Letter, Integer>();;
     private static List<Letter> letterList = new ArrayList<>(); // Maintain state across method calls
     private static Random random = new Random();
 
@@ -15,7 +15,6 @@ public class LetterBag {
      * Static method to create the letter bag's initial contents. Similar to a constructor, but static
      */
     public static void createBag(){
-        letters = new Hashtable<Letter, Integer>();
         Letter letterA = new Letter('a',1);
         Letter letterB = new Letter('b',3);
         Letter letterC = new Letter('c',3);
@@ -112,5 +111,13 @@ public class LetterBag {
      */
     public static void addLetter(Letter tempLetter) {
         letters.put(tempLetter, letters.get(tempLetter) + 1);
+    }
+
+    /**
+     * This method is used for testing and for restarting the game. It empties the bag.
+     */
+    public static void emptyBag() {
+        letters.clear();
+        letterList.clear();
     }
 }
