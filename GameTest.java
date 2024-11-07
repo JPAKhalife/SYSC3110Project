@@ -160,14 +160,10 @@ public class GameTest {
         game.handleNewTurn();
         Player p5 = game.getCurrentPlayer();
         assertSame(p1, p5);
-
-        //Ensure that the new view was updated
-        game.addView(view);
-        //INCOMPLETE
     }
 
     @Test
     public void handleBoardError() {
-
+        //This is simply an updating function --> unit testing does not work easily
     }
 }

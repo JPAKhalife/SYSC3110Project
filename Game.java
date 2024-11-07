@@ -136,6 +136,7 @@ public class Game {
         for(GameObserver view: views)
         {
             view.handleScoreUpdate(-1);
+            view.handleNewTurn(currentPlayer);
         }
 
         //Other things that need to be done somewhere:
@@ -143,16 +144,5 @@ public class Game {
             //3. If so, finding the winner
             //4. Otherwise, call this function to make the next turn occur
 
-    }
-
-    /**
-     * handleBoardError handles what should occur when there was an error placing words on the board
-     */
-    public void handleBoardError()
-    {
-        for(GameObserver view: views)
-        {
-            view.handleBoardUpdate(board.getStatus());
-        }
     }
 }

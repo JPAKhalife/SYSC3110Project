@@ -11,8 +11,10 @@ public class ScrabbleView extends JFrame implements GameObserver {
     JTextPane scorePane;
     Game game;
     Container turnElements;
+    JButton[] rackButtons;  //holds the letters on a rack as buttons (placed letters, before sumbitted, are disabled)
     Color TILE_COLOUR = new Color(240, 215, 149);
     Color BOARD_COLOUR = new Color(103, 128, 78);
+    JTextPane currentPlayerField;
 
     public ScrabbleView(){
         //Configure frame
@@ -27,11 +29,11 @@ public class ScrabbleView extends JFrame implements GameObserver {
         //Create GUI elements in frame
         turnElements = new Container(); //holds the current player's rack and the turn buttons
         boardButtons = new JButton[15][15]; //holds the spaces on a board as buttons (occupied spaces disabled)
-        JButton[] rackButtons = new JButton[7]; //holds the letters on a rack as buttons (placed letters, before sumbitted, are disabled)
         JButton[] turnButtons = new JButton[3]; //holds the buttons used for a turn (submit, exchange, skip)
         scorePane = new JTextPane();
         JTextPane currentPlayerPane = new JTextPane();
         JPanel PlayerPanel = new JPanel();
+        rackButtons = new JButton[7];
 
         //Create controller
         GameController gameController = new GameController(game);
@@ -45,7 +47,7 @@ public class ScrabbleView extends JFrame implements GameObserver {
                 boardButtons[i][j].setFont(new Font(null, Font.BOLD, 14));
                 boardButtons[i][j].setBackground(BOARD_COLOUR);
                 boardButtons[i][j].addActionListener(gameController);
-                String buttonCoordinate = "board," + Character.toString(rowChar) + "," + Integer.toString(j);
+                String buttonCoordinate = "board," + Character.toString(rowChar) + "," + Integer.toString(j + 1);
                 boardButtons[i][j].setActionCommand(buttonCoordinate);
                 boardPanel.add(boardButtons[i][j]); //add to panel to be placed in frame
             }
@@ -79,7 +81,7 @@ public class ScrabbleView extends JFrame implements GameObserver {
         playPanel.add(rackPanel);
         playPanel.add(turnPanel);
         JPanel bottomDisplayPanel = new JPanel(new BorderLayout());
-        JTextPane currentPlayerField = new JTextPane();
+        currentPlayerField = new JTextPane();
         currentPlayerField.setFont(new Font(null, Font.BOLD, 12));
         currentPlayerField.setEditable(false);
         currentPlayerField.setText("Player 1 Turn");
@@ -87,7 +89,6 @@ public class ScrabbleView extends JFrame implements GameObserver {
         bottomDisplayPanel.add(playPanel, BorderLayout.CENTER);
 
         //Create current player score pane
-        JTextPane scorePane = new JTextPane();
         scorePane.setFont(new Font(null, Font.BOLD, 14));
         scorePane.setEditable(false);
         scorePane.setText(currentScores());
@@ -101,10 +102,10 @@ public class ScrabbleView extends JFrame implements GameObserver {
         this.setVisible(true);
     }
 
-    public void displayBoard(char[][] board) {
+    public void displayBoard(Letter[][] board) {
         for(int i = 0; i < Board.BOARD_SIZE; i++){
             for(int j = 0; j < Board.BOARD_SIZE; j++){
-                String text = (board[i][j] == '\0')? "": String.valueOf(board[i][j]);
+                String text = (board[i][j].getLetter() == '\0')? "": String.valueOf(board[i][j]);
                 boardButtons[i][j].setText(text);
                 boardButtons[i][j].setEnabled(text.isEmpty()); //If tile is occupied the button cannot be clicked
 
@@ -127,11 +128,41 @@ public class ScrabbleView extends JFrame implements GameObserver {
     @Override
     public void handleBoardUpdate(ErrorEvent e) {
 
+        if(e.getError()!= ErrorEvent.GameError.NONE){
+            JOptionPane.showMessageDialog(null, e.getError().getErrorDescription());
+        }
+        else
+        {
+            //Update every button in the board to reflect what is in the Board class
+            Letter[][] boardClone = game.getBoard().getBoardAppearance();
+            displayBoard(boardClone);
+        }
+
     }
 
     @Override
     public void handleScoreUpdate(int winner) {
 
+        String scores = currentScores();
+
+        if(winner >= 0)
+        {
+            scores += "Player " + winner + " won!\n";
+        }
+
+        scorePane.setText(scores);
+    }
+
+    @Override
+    public void handleNewTurn(int playerNum) {
+        ArrayList<Letter> newPlayerRack = game.getCurrentPlayer().getRack();
+
+        for(int i = 0; i < 7; i++)
+        {
+            rackButtons[i].setText(Character.toString(newPlayerRack.get(i).getLetter()).toUpperCase());
+        }
+
+        currentPlayerField.setText("Player "+ playerNum+" Turn");
     }
 
     public static void main(String[] args) {

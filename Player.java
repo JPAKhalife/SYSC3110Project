@@ -65,6 +65,7 @@ public class Player {
     public void placeLetter(int rackIndex)
     {
         playedLetters.add(rack.get(rackIndex));
+        System.out.println("Letter added\n");
 
     }
 
@@ -81,6 +82,7 @@ public class Player {
         {
             String location = String.valueOf(i) + j; //combining them into a singular string representation of the location
             playedLocations.add(location); //adding the location
+            System.out.println("coordinate added\n");
             return true;
         }
 
@@ -99,6 +101,10 @@ public class Player {
         }
 
         pullFromBag();
+
+        //Now that the user has played all their letters, they need to clear them
+        playedLetters.clear();
+        playedLocations.clear();
     }
 
     /**

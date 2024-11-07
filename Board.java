@@ -415,4 +415,13 @@ public class Board {
         return status;
     }
 
+    /**
+     * Returns a copy of the board's physical appearance
+     * @return A copy array representing the board's current appearance
+     */
+    public Letter[][] getBoardAppearance()
+    {
+        return board.clone();
+    }
+
 } //end class
