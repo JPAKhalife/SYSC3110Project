@@ -45,30 +45,30 @@ public class LetterBag {
 
         letters.put(letterA,9);
         letters.put(letterB,2);
-        letters.put(letterC,3);
+        letters.put(letterC,2);
         letters.put(letterD,4);
-        letters.put(letterE,5);
-        letters.put(letterF,6);
-        letters.put(letterG,7);
-        letters.put(letterH,8);
+        letters.put(letterE,12);
+        letters.put(letterF,2);
+        letters.put(letterG,3);
+        letters.put(letterH,2);
         letters.put(letterI,9);
-        letters.put(letterJ,2);
-        letters.put(letterK,3);
+        letters.put(letterJ,1);
+        letters.put(letterK,1);
         letters.put(letterL,4);
-        letters.put(letterM,5);
+        letters.put(letterM,2);
         letters.put(letterN,6);
-        letters.put(letterO,7);
-        letters.put(letterP,8);
-        letters.put(letterQ,9);
-        letters.put(letterR,2);
-        letters.put(letterS,5);
+        letters.put(letterO,8);
+        letters.put(letterP,2);
+        letters.put(letterQ,1);
+        letters.put(letterR,6);
+        letters.put(letterS,4);
         letters.put(letterT,6);
-        letters.put(letterU,7);
-        letters.put(letterV,8);
-        letters.put(letterW,9);
-        letters.put(letterX,2);
-        letters.put(letterY,3);
-        letters.put(letterZ,4);
+        letters.put(letterU,4);
+        letters.put(letterV,2);
+        letters.put(letterW,2);
+        letters.put(letterX,1);
+        letters.put(letterY,2);
+        letters.put(letterZ,1);
 
 
         for(Enumeration<Letter> e = letters.keys();e.hasMoreElements();) {//loop through the enumeration of letter keys
@@ -114,7 +114,20 @@ public class LetterBag {
      * @param tempLetter The letter to be returned to the bag
      */
     public static void addLetter(Letter tempLetter) {
-        letters.put(tempLetter, letters.get(tempLetter) + 1);
+        try
+        {
+            letters.put(tempLetter, letters.get(tempLetter) + 1);
+
+        }
+        catch(NullPointerException e)
+        {
+            //not already in the Hashtable --> must add a single one
+            letters.put(tempLetter, 1);
+        }
+        finally
+        {
+            letterList.add(tempLetter);
+        }
     }
 
     /**

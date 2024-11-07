@@ -17,7 +17,7 @@ public class LetterBagTest {
 
         LetterBag.createBag();
 
-        for(int i = 0; i < 98; i++)
+        for(int i = 0; i < 98; i++) //Should have 99 letters in bag
         {
             assertNotNull(LetterBag.getNextLetter());
         }
