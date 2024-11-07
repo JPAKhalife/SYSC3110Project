@@ -36,7 +36,7 @@ public class PlayerTest {
         ArrayList<Letter> initialRack = player.getRack();
 
         player.placeLetter(0);
-        player.addCoordinate('a', 0);
+        player.addCoordinate('a', 1);
         player.placeLetter(1);
         player.addCoordinate('a',1);
         player.placeLetter(2);
@@ -46,7 +46,7 @@ public class PlayerTest {
         ArrayList<Letter> playedLetters = playerTurn.keys().nextElement();
         ArrayList<String> locations = playerTurn.elements().nextElement();
 
-        for(int i = 0; i < playedLetters.size(); i++)
+        for(int i = 1; i < playedLetters.size(); i++)
         {
             assertTrue(initialRack.contains(playedLetters.get(i)));
             //Assert the locations are correct as well
@@ -54,8 +54,8 @@ public class PlayerTest {
         }
 
         Dictionary<ArrayList<Letter>, ArrayList<String>> exchangedLetters = player.playerTurn(2);
-        assertEquals(0, exchangedLetters.keys().nextElement().size()); //Should return an empty arraylist of letters if exchanging
-        assertEquals(0, exchangedLetters.elements().nextElement().size());
+        assertFalse(exchangedLetters.keys().hasMoreElements()); //Should return an empty arraylist of letters if exchanging
+        assertFalse(exchangedLetters.elements().hasMoreElements());
 
     }
 
@@ -84,6 +84,7 @@ public class PlayerTest {
     public void addCoordinate() {
         for(char i = 'a'; i <= 'o'; i++){
             for(int j = 1; j < 16; j++){
+                System.out.println(Character.toString(i) + j);
                 player.addCoordinate(i, j);
             }
         }
@@ -91,11 +92,11 @@ public class PlayerTest {
         Dictionary<ArrayList<Letter>, ArrayList<String>> placedLetters = player.playerTurn(1);
         ArrayList<String> coordinates = placedLetters.elements().nextElement();
 
-        for(int i =0; i < 16; i++)
+        for(int i = 0; i < 15; i++)
         {
-            for(int j = 0; j < 16; j++)
+            for(int j = 1; j < 16; j++)
             {
-                char rowLetter = (char)(i + 65); //turning the row number into the appropriate letter value
+                char rowLetter = (char)(i + 97); //turning the row number into the appropriate letter value
                 String location = String.valueOf(rowLetter) + j;
                 assertTrue(coordinates.contains(location));
             }

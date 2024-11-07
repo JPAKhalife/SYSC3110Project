@@ -77,7 +77,7 @@ public class Player {
     public boolean addCoordinate(char i, int j)
     {
         //ensuring that the player's location on the board is valid
-        if(i >= 'a' && j >= 0 && i < 'o' && j < 15)
+        if(i >= 'a' && j >= 1 && i <= 'o' && j < 16)
         {
             String location = String.valueOf(i) + j; //combining them into a singular string representation of the location
             playedLocations.add(location); //adding the location
