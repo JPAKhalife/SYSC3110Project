@@ -11,6 +11,7 @@ public class LetterBag {
     private static Random random = new Random();
 
 
+
     /**
      * Static method to create the letter bag's initial contents. Similar to a constructor, but static
      */
@@ -69,6 +70,7 @@ public class LetterBag {
         letters.put(letterY,3);
         letters.put(letterZ,4);
 
+
         for(Enumeration<Letter> e = letters.keys();e.hasMoreElements();) {//loop through the enumeration of letter keys
             Letter letter = e.nextElement(); //get the next element
             int number = letters.get(letter); //get the count of the letter from the dictionary
@@ -79,10 +81,12 @@ public class LetterBag {
 
     }
 
+
     /**
      * Method to pull a single letter from the bag
      * @return A letter from the bag
      */
+
     public static Letter getNextLetter(){
         if (letterList.isEmpty()) {
             return null; // No letters in the bag
@@ -121,3 +125,4 @@ public class LetterBag {
         letterList.clear();
     }
 }
+

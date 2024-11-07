@@ -51,7 +51,7 @@ public class Board {
     /**
      * Checks if the word being placed on the board is a valid word in the game's
      * word bank
-     * 
+     *
      * @param letters The letters of the word being placed
      * @return whether the word can be placed on the board
      */
@@ -70,7 +70,7 @@ public class Board {
 
     /**
      * Check if the placement of a particular letter is avalible on the board
-     * 
+     *
      * @param location The square the letter is being placed on
      * @return whether the letter can be placed
      */
@@ -222,7 +222,7 @@ public class Board {
         } else {
             return location.charAt(0) - 'a';
         }
-        
+
     }
 
     /**

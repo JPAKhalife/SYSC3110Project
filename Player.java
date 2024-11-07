@@ -51,7 +51,7 @@ public class Player {
             playerWord.put(playedLetters, playedLocations);
         }
         else if(userTurn == 2) { //The user wants to exchange letters with the letter bag
-           exchangeLetters();
+            exchangeLetters();
         }
 
         return playerWord;
