@@ -111,19 +111,19 @@
      <string>x</string>
      <void method="set">
       <object idref="Point2D$Double2"/>
-      <double>700.0</double>
+      <double>730.0</double>
      </void>
     </void>
     <void class="java.awt.geom.Point2D$Double" method="getField">
      <string>y</string>
      <void method="set">
       <object idref="Point2D$Double2"/>
-      <double>710.0</double>
+      <double>720.0</double>
      </void>
     </void>
     <void method="setLocation">
-     <double>700.0</double>
-     <double>710.0</double>
+     <double>730.0</double>
+     <double>720.0</double>
     </void>
    </object>
   </void>
@@ -214,19 +214,19 @@
      <string>x</string>
      <void method="set">
       <object idref="Point2D$Double4"/>
-      <double>180.0</double>
+      <double>170.0</double>
      </void>
     </void>
     <void class="java.awt.geom.Point2D$Double" method="getField">
      <string>y</string>
      <void method="set">
       <object idref="Point2D$Double4"/>
-      <double>450.0</double>
+      <double>460.0</double>
      </void>
     </void>
     <void method="setLocation">
-     <double>180.0</double>
-     <double>450.0</double>
+     <double>170.0</double>
+     <double>460.0</double>
     </void>
    </object>
   </void>
@@ -291,7 +291,8 @@
      <void property="text">
       <string>+&lt;u&gt;createBag():void&lt;/u&gt;
 + &lt;u&gt;getNextLetter(): Letter &lt;/u&gt;
-+ &lt;u&gt; addLetter(Letter letter): void &lt;/u&gt;</string>
++ &lt;u&gt; addLetter(Letter letter): void &lt;/u&gt;
++ &lt;u&gt; emptyBag(): void&lt;/u&gt;</string>
      </void>
     </void>
     <void property="name">
