@@ -1,8 +1,15 @@
+import org.junit.After;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
 public class LetterBagTest {
+
+    @After
+    public void tearDown()
+    {
+        LetterBag.emptyBag();
+    }
 
     @Test
     public void createBag() {
@@ -33,5 +40,10 @@ public class LetterBagTest {
         LetterBag.addLetter(new Letter('a', 1));
         assertEquals('a', LetterBag.getNextLetter().getLetter());
         assertNull(LetterBag.getNextLetter()); //Ensuring the letter was removed from the bag
+    }
+
+    @Test
+    public void emptyBag() {
+
     }
 }
