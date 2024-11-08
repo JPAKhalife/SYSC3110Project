@@ -126,6 +126,9 @@ public class Board {
         int turnScore = 0; //represents score
         int direction; //0 is horizontal, 1 is vertical.
 
+        //Clearing the errors the board has so old errors don't cause issues
+        status.setError(ErrorEvent.GameError.NONE);
+
         // check that each letter has a location
         if (word.size() != letterLocation.size()) {
             this.status.setError(ErrorEvent.GameError.UNEQUAL_LIST_LENGTH);
