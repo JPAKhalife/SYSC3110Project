@@ -16,4 +16,5 @@ Overall, future deliverables aim to enhance the user experience by adding a more
 
 
 Known issues:
-- [insert known issues here]
+- Players can input a series of coordinates and then a series of letters if they want. The order they submit the coordinates must be the same order they submit the letters they want to add to those coordinates
+- Players cannot take back a submission of a letter or coordinate aside from submitting an invalid word and trying again from scratch
