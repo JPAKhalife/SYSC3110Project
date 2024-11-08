@@ -7,20 +7,34 @@ import java.awt.Color;
 
 public class ScrabbleView extends JFrame implements GameObserver {
 
-    JButton[][] boardButtons;
-    JTextPane scorePane;
-    Game game;
-    Container turnElements;
-    JButton[] rackButtons;  //holds the letters on a rack as buttons (placed letters, before sumbitted, are disabled)
-    Color TILE_COLOUR = new Color(240, 215, 149);
-    Color BOARD_COLOUR = new Color(103, 128, 78);
-    Color BOARD_CENTER = new Color(63, 146, 199);
-    JTextPane currentPlayerField;
+    private JButton[][] boardButtons;
+    private JTextPane scorePane;
+    private Game game;
+    private Container turnElements;
+    private JButton[] rackButtons;  //holds the letters on a rack as buttons (placed letters, before sumbitted, are disabled)
+    private final Color TILE_COLOUR = new Color(240, 215, 149);
+    private final Color BOARD_COLOUR = new Color(103, 128, 78);
+    private final Color BOARD_CENTER = new Color(63, 146, 199);
+    private JTextPane currentPlayerField;
 
+    /**
+     * The basic constructor for the ScrabbleView class
+     */
     public ScrabbleView(){
         //Configure frame
         super("Scrabble");
-        game = new Game();
+
+        int numPlayers = 0;
+        while(numPlayers < 2 || numPlayers > 4)
+        {
+            //Get the user's desired number of players
+            String playerInput = JOptionPane.showInputDialog("Please enter the number of players (2 - 4): ");
+
+            numPlayers = Integer.parseInt(playerInput);
+        }
+
+
+        game = new Game(numPlayers);
         game.addView(this);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(800,800);
@@ -105,7 +119,11 @@ public class ScrabbleView extends JFrame implements GameObserver {
         this.setVisible(true);
     }
 
-    public void displayBoard(Letter[][] board) {
+    /**
+     * displayBoard transforms the backend board configuration into a GUI representation
+     * @param board A copy of the backend board
+     */
+    private void displayBoard(Letter[][] board) {
         System.out.println("Entered displayBoard\n");
         for(int i = 0; i < Board.BOARD_SIZE; i++){
             for(int j = 0; j < Board.BOARD_SIZE; j++){
@@ -118,7 +136,11 @@ public class ScrabbleView extends JFrame implements GameObserver {
         }
     }
 
-    public String currentScores(){
+    /**
+     * currentScores builds the formatting for the scores of all players to be displayed
+     * @return A string representation of the player's current scores
+     */
+    private String currentScores(){
         List<Player> players = game.getPlayers();
         String scores = "";
         scores += "Current Scores\n---------------------\n";
@@ -130,6 +152,10 @@ public class ScrabbleView extends JFrame implements GameObserver {
 
     }
 
+    /**
+     * handleBoardUpdate handles how the GUI board should respond to all attempts at updating the board
+     * @param e the error thrown by the board. If none, use the NONE error
+     */
     @Override
     public void handleBoardUpdate(ErrorEvent e) {
 
@@ -146,6 +172,10 @@ public class ScrabbleView extends JFrame implements GameObserver {
 
     }
 
+    /**
+     * handleScoreUpdate handles how the GUI responds to changes in the player's scores
+     * @param winner The player's integer value. If no player won, use -1
+     */
     @Override
     public void handleScoreUpdate(int winner) {
 
@@ -159,6 +189,10 @@ public class ScrabbleView extends JFrame implements GameObserver {
         scorePane.setText(scores);
     }
 
+    /**
+     * handleNewTurn handles the GUI's response to it being a new plauer's turn to place letters
+     * @param playerNum The player whose turn it now is
+     */
     @Override
     public void handleNewTurn(int playerNum) {
         ArrayList<Letter> newPlayerRack = game.getCurrentPlayer().getRack();
@@ -168,7 +202,7 @@ public class ScrabbleView extends JFrame implements GameObserver {
             rackButtons[i].setText(Character.toString(newPlayerRack.get(i).getLetter()).toUpperCase());
         }
 
-        currentPlayerField.setText("Player "+ playerNum+" Turn");
+        currentPlayerField.setText("Player "+ (playerNum + 1) +" Turn");
     }
 
     public static void main(String[] args) {

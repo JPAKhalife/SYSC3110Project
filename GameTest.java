@@ -12,7 +12,7 @@ public class GameTest {
     @Before
     public void setUp() throws Exception
     {
-        game = new Game();
+        game = new Game(4);
     }
 
     @After
@@ -50,28 +50,27 @@ public class GameTest {
 
     @Test
     public void getPlayers() {
-        Game game1 = new Game();
-        Game game2 = new Game();
+        Game game2 = new Game(4);
 
         //ensuring that the players list is not null
-        assertNotNull(game1.getPlayers());
+        assertNotNull(game.getPlayers());
         assertNotNull(game2.getPlayers());
 
         //Initial should have 4 players
-        assertEquals(4, game1.getPlayers().size());
+        assertEquals(4, game.getPlayers().size());
 
         //adding different numbers of players to both games
-        game1.addPlayer();
-        game1.addPlayer();
-        game1.addPlayer();
+        game.addPlayer();
+        game.addPlayer();
+        game.addPlayer();
         game2.addPlayer();
         //checking the sizes have changed
-        assertEquals(game1.getPlayers().size(), 7);
+        assertEquals(game.getPlayers().size(), 7);
         assertEquals(game2.getPlayers().size(), 5);
 
         //Ensuring that the arraylist returned is a copy, not the same memory reference
-        ArrayList<Player> list1 = game1.getPlayers();
-        ArrayList<Player> list2 = game1.getPlayers();
+        ArrayList<Player> list1 = game.getPlayers();
+        ArrayList<Player> list2 = game.getPlayers();
         assertNotSame(list1, list2);
     }
 
@@ -138,8 +137,6 @@ public class GameTest {
 
     @Test
     public void handleNewTurn() {
-        GameObserver view = new ScrabbleView();
-
         //Ensuring all the players are unique
         Player p1 = game.getCurrentPlayer();
         game.handleNewTurn();

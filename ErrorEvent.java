@@ -19,13 +19,17 @@ public class ErrorEvent {
 
         private final String errorDescription;
 
+        /**
+         * This is the getter method to return the error description
+         * @return The error description
+         */
         public String getErrorDescription() {
             return errorDescription;
         }
 
         /**
          * This is the constructor for creating a new constant
-         * @param description
+         * @param description The description of the error
          */
         private GameError(String description) {
             errorDescription = description;

@@ -19,14 +19,14 @@ public class Game {
     /**
      * Basic constructor for Game
      */
-    public Game() {
+    public Game(int playerNum) {
         players = new ArrayList<>();
         board = new Board();
         currentPlayer = 0;
         views = new ArrayList<>();
         LetterBag.createBag();
 
-        for(int i = 0; i < 4; i++)
+        for(int i = 0; i < playerNum; i++)
         {
             addPlayer();
         }
@@ -131,6 +131,9 @@ public class Game {
         views.remove(view);
     }
 
+    /**
+     * handleNewTurn performs the necessary actions to change which player's turn it is
+     */
     public void handleNewTurn()
     {
 
@@ -151,6 +154,10 @@ public class Game {
 
     }
 
+    /**
+     * This method is called when the Board returns an error, and updates all the
+     * views accordingly
+     */
     public void handleBoardError()
     {
         for(GameObserver view: views)
