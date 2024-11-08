@@ -26,7 +26,8 @@
 - setWord(word: ArrayList&lt;Letter&gt;, letterLocation: ArrayList&lt;String&gt;): void)
 - verifyDirection(direction: int, word: ArrayList&lt;Letter&gt;, letterLocation: ArrayList&lt;String&gt;): boolean 
 - isConnected(letterLocation: ArrayList&lt;String&gt;): boolean
-+ getStatus(): ErrorEvent</string>
++ getStatus(): ErrorEvent
++getBoardAppearance(): Letter[][]</string>
      </void>
     </void>
     <void property="name">
@@ -143,12 +144,13 @@
 +getPlayers(): ArrayList&lt;Player&gt;
 + addPlayer(): boolean
 + getCurrentPlayer(): Player
-+findWinner(): Player
++findWinner(): int
 +getBoard(): Board
 +addWord(Dictionary&lt;ArrayList&lt;Letter&gt;, ArrayList&lt;String&gt;&gt;): int
 + addView(view: ScrabbleView): void
 + removeView(view: ScrabbleView): void
-+handleNewTurn(): void</string>
++handleNewTurn(): void
++handleBoardError(): void</string>
      </void>
     </void>
     <void property="name">
@@ -184,7 +186,6 @@
      <void property="text">
       <string>- rack: ArrayList&lt;Letter&gt; 
 - score: int
-- turnScore: int
 - playedLetters: ArrayList&lt;Letter&gt;
 - playedLocations: ArrayList&lt;String&gt;</string>
      </void>
@@ -237,17 +238,22 @@
       <string>- game: Game
 - boardButtons: JButton[15][15]
 - rackButtons: JButton[7]
-- turnButtons: JButton[3]
-- scoreTextPane: JTextPane
-- currentPlayerPane: JTextPane</string>
+- scorePane: JTextPane
+- currentPlayerField: JTextPane
+- turnElements: Container
+- TILE_COLOUR: Color
+- BOARD_COLOUR: Color
+- BOARD_CENTER: Color</string>
      </void>
     </void>
     <void property="methods">
      <void property="text">
-      <string>+ScrabbleView(game: Game)
-+displayBoard(): void
+      <string>+ScrabbleView()
+- currentScores(): String
+- displayBoard(board: Letter[][]): void
 + handleBoardUpdate(e: ErrorEvent): void
 +handleScoreUpdate(winner: int): void
++handleNewTurn(): void
 +&lt;u&gt;main(args: String[]): void &lt;/u&gt;</string>
      </void>
     </void>
@@ -432,12 +438,13 @@ So a player wanting to place a letter in the 1st column of the 2nd row would den
     <void property="attributes">
      <void property="text">
       <string>+ GameError: Enum&lt;String&gt;
-+ errorDescription: String</string>
+- errorDescription: String</string>
      </void>
     </void>
     <void property="methods">
      <void property="text">
       <string>+ getErrorDescription(): String
+- GameError(description: String)
 + ErrorEvent()
 +setError(error: GameError): void
 + getError(): GameError
@@ -455,7 +462,7 @@ So a player wanting to place a letter in the 1st column of the 2nd row would den
      <string>x</string>
      <void method="set">
       <object idref="Point2D$Double9"/>
-      <double>370.0</double>
+      <double>420.0</double>
      </void>
     </void>
     <void class="java.awt.geom.Point2D$Double" method="getField">
@@ -466,7 +473,7 @@ So a player wanting to place a letter in the 1st column of the 2nd row would den
      </void>
     </void>
     <void method="setLocation">
-     <double>370.0</double>
+     <double>420.0</double>
      <double>310.0</double>
     </void>
    </object>
@@ -476,7 +483,8 @@ So a player wanting to place a letter in the 1st column of the 2nd row would den
     <void property="methods">
      <void property="text">
       <string>+handleBoardUpdate(e: ErrorEvent): void
-+handleScoreUpdate(winner: int): void</string>
++handleScoreUpdate(winner: int): void
++handleNewTurn(): void</string>
      </void>
     </void>
     <void property="name">
@@ -491,19 +499,19 @@ GameObserver</string>
      <string>x</string>
      <void method="set">
       <object idref="Point2D$Double10"/>
-      <double>120.0</double>
+      <double>110.0</double>
      </void>
     </void>
     <void class="java.awt.geom.Point2D$Double" method="getField">
      <string>y</string>
      <void method="set">
       <object idref="Point2D$Double10"/>
-      <double>290.0</double>
+      <double>320.0</double>
      </void>
     </void>
     <void method="setLocation">
-     <double>120.0</double>
-     <double>290.0</double>
+     <double>110.0</double>
+     <double>320.0</double>
     </void>
    </object>
   </void>
