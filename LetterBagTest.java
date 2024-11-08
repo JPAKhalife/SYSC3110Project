@@ -1,8 +1,15 @@
+import org.junit.After;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
 public class LetterBagTest {
+
+    @After
+    public void tearDown()
+    {
+        LetterBag.emptyBag();
+    }
 
     @Test
     public void createBag() {
@@ -10,7 +17,7 @@ public class LetterBagTest {
 
         LetterBag.createBag();
 
-        for(int i = 0; i < 98; i++)
+        for(int i = 0; i < 98; i++) //Should have 99 letters in bag
         {
             assertNotNull(LetterBag.getNextLetter());
         }
@@ -33,5 +40,10 @@ public class LetterBagTest {
         LetterBag.addLetter(new Letter('a', 1));
         assertEquals('a', LetterBag.getNextLetter().getLetter());
         assertNull(LetterBag.getNextLetter()); //Ensuring the letter was removed from the bag
+    }
+
+    @Test
+    public void emptyBag() {
+
     }
 }

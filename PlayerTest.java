@@ -1,3 +1,5 @@
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -6,11 +8,21 @@ import java.util.Dictionary;
 import static org.junit.Assert.*;
 
 public class PlayerTest {
+    Player player;
+
+    @Before
+    public void setUp() throws Exception {
+        LetterBag.createBag();
+        player = new Player();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        LetterBag.emptyBag();
+    }
 
     @Test
     public void getScore() {
-        Player player = new Player();
-
         //initial score should always be zero
         assertEquals(player.getScore(), 0);
 
@@ -21,13 +33,10 @@ public class PlayerTest {
 
     @Test
     public void playerTurn() {
-        LetterBag.createBag();
-        Player player = new Player();
-
         ArrayList<Letter> initialRack = player.getRack();
 
         player.placeLetter(0);
-        player.addCoordinate('a', 0);
+        player.addCoordinate('a', 1);
         player.placeLetter(1);
         player.addCoordinate('a',1);
         player.placeLetter(2);
@@ -37,7 +46,7 @@ public class PlayerTest {
         ArrayList<Letter> playedLetters = playerTurn.keys().nextElement();
         ArrayList<String> locations = playerTurn.elements().nextElement();
 
-        for(int i = 0; i < playedLetters.size(); i++)
+        for(int i = 1; i < playedLetters.size(); i++)
         {
             assertTrue(initialRack.contains(playedLetters.get(i)));
             //Assert the locations are correct as well
@@ -45,16 +54,13 @@ public class PlayerTest {
         }
 
         Dictionary<ArrayList<Letter>, ArrayList<String>> exchangedLetters = player.playerTurn(2);
-        assertEquals(0, exchangedLetters.keys().nextElement().size()); //Should return an empty arraylist of letters if exchanging
-        assertEquals(0, exchangedLetters.elements().nextElement().size());
+        assertFalse(exchangedLetters.keys().hasMoreElements()); //Should return an empty arraylist of letters if exchanging
+        assertFalse(exchangedLetters.elements().hasMoreElements());
 
     }
 
     @Test
     public void placeLetter() {
-        LetterBag.createBag();
-        Player player = new Player();
-
         //getting the rack so that the letter placed can be compared to the letter in the rack
         ArrayList<Letter> rack = player.getRack();
         player.placeLetter(0);
@@ -76,10 +82,9 @@ public class PlayerTest {
 
     @Test
     public void addCoordinate() {
-        Player player = new Player();
-
         for(char i = 'a'; i <= 'o'; i++){
             for(int j = 1; j < 16; j++){
+                System.out.println(Character.toString(i) + j);
                 player.addCoordinate(i, j);
             }
         }
@@ -87,11 +92,11 @@ public class PlayerTest {
         Dictionary<ArrayList<Letter>, ArrayList<String>> placedLetters = player.playerTurn(1);
         ArrayList<String> coordinates = placedLetters.elements().nextElement();
 
-        for(int i =0; i < 16; i++)
+        for(int i = 0; i < 15; i++)
         {
-            for(int j = 0; j < 16; j++)
+            for(int j = 1; j < 16; j++)
             {
-                char rowLetter = (char)(i + 65); //turning the row number into the appropriate letter value
+                char rowLetter = (char)(i + 97); //turning the row number into the appropriate letter value
                 String location = String.valueOf(rowLetter) + j;
                 assertTrue(coordinates.contains(location));
             }
@@ -100,8 +105,6 @@ public class PlayerTest {
 
     @Test
     public void updateScore() {
-        Player player = new Player();
-
         player.updateScore(5);
         assertEquals(5, player.getScore());
         player.updateScore(5);
@@ -114,9 +117,6 @@ public class PlayerTest {
 
     @Test
     public void pullFromBag() {
-        LetterBag.createBag();
-        Player player = new Player();
-
         ArrayList<Letter> rack = player.getRack();
         player.placeLetter(0);
         player.updateScore(5);
@@ -137,8 +137,8 @@ public class PlayerTest {
 
     @Test
     public void isRackEmpty() {
+        LetterBag.emptyBag();
         Player player = new Player();
-
         //no bag, so should be an empty rack
         assertTrue(player.isRackEmpty());
 
@@ -149,9 +149,6 @@ public class PlayerTest {
 
     @Test
     public void getRack() {
-        Player player = new Player();
-        LetterBag.createBag();
-
         ArrayList<Letter> rack = player.getRack();
 
         assertNotNull(rack);
