@@ -92,7 +92,9 @@ public class Game {
      * @return A boolean stating whether the word was successfully added to the board
      */
     public int addWord(Dictionary<ArrayList<Letter>, ArrayList<String>> word) {
+
         if (word.isEmpty()) {
+            System.out.println("Error: never added word to the board\n");
             return -1;
         }
 
@@ -100,8 +102,11 @@ public class Game {
         ArrayList<String> locations = word.elements().nextElement(); //Extracting the locations
 
         int wordScore = board.addWord(letters, locations);
-        if (wordScore < 0) {
+        System.out.println("Added word to the board. Score: "+wordScore+"\n");
+
+        if (wordScore > 0) {
             for (int i = 0 ; i < views.size() ; i++) {
+                System.out.println("Handling the board update\n");
                 views.get(i).handleBoardUpdate(getBoard().getStatus());
             }
         }
@@ -144,5 +149,13 @@ public class Game {
             //3. If so, finding the winner
             //4. Otherwise, call this function to make the next turn occur
 
+    }
+
+    public void handleBoardError()
+    {
+        for(GameObserver view: views)
+        {
+            view.handleBoardUpdate(board.getStatus());
+        }
     }
 }

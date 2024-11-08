@@ -14,6 +14,7 @@ public class ScrabbleView extends JFrame implements GameObserver {
     JButton[] rackButtons;  //holds the letters on a rack as buttons (placed letters, before sumbitted, are disabled)
     Color TILE_COLOUR = new Color(240, 215, 149);
     Color BOARD_COLOUR = new Color(103, 128, 78);
+    Color BOARD_CENTER = new Color(63, 146, 199);
     JTextPane currentPlayerField;
 
     public ScrabbleView(){
@@ -53,6 +54,8 @@ public class ScrabbleView extends JFrame implements GameObserver {
             }
             rowChar++;
         }
+
+        boardButtons[7][7].setBackground(BOARD_CENTER);
 
         JPanel rackPanel = new JPanel(new GridLayout(1,7));
         Player currentPlayer= game.getCurrentPlayer();
@@ -103,9 +106,11 @@ public class ScrabbleView extends JFrame implements GameObserver {
     }
 
     public void displayBoard(Letter[][] board) {
+        System.out.println("Entered displayBoard\n");
         for(int i = 0; i < Board.BOARD_SIZE; i++){
             for(int j = 0; j < Board.BOARD_SIZE; j++){
-                String text = (board[i][j].getLetter() == '\0')? "": String.valueOf(board[i][j]);
+                String text = (board[i][j] == null)? "": Character.toString(board[i][j].getLetter());
+                System.out.println(text+ "\n");
                 boardButtons[i][j].setText(text);
                 boardButtons[i][j].setEnabled(text.isEmpty()); //If tile is occupied the button cannot be clicked
 
@@ -133,6 +138,7 @@ public class ScrabbleView extends JFrame implements GameObserver {
         }
         else
         {
+            System.out.println("Going to update the board\n");
             //Update every button in the board to reflect what is in the Board class
             Letter[][] boardClone = game.getBoard().getBoardAppearance();
             displayBoard(boardClone);
