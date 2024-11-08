@@ -127,7 +127,7 @@ public class ScrabbleView extends JFrame implements GameObserver {
         System.out.println("Entered displayBoard\n");
         for(int i = 0; i < Board.BOARD_SIZE; i++){
             for(int j = 0; j < Board.BOARD_SIZE; j++){
-                String text = (board[i][j] == null)? "": Character.toString(board[i][j].getLetter());
+                String text = (board[i][j] == null)? "": Character.toString(board[i][j].getLetter()).toUpperCase();
                 System.out.println(text+ "\n");
                 boardButtons[i][j].setText(text);
                 boardButtons[i][j].setEnabled(text.isEmpty()); //If tile is occupied the button cannot be clicked
