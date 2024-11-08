@@ -140,7 +140,7 @@
     </void>
     <void property="methods">
      <void property="text">
-      <string>+Game()
+      <string>+Game(playerNum: int)
 +getPlayers(): ArrayList&lt;Player&gt;
 + addPlayer(): boolean
 + getCurrentPlayer(): Player
