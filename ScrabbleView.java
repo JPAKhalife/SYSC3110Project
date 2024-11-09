@@ -124,11 +124,15 @@ public class ScrabbleView extends JFrame implements GameObserver {
 
     @Override
     public void handleLetterPlacement(char y, int x, char letter){
+        System.out.println("handleLetterPlacement - y: " + y + ", x: " + x + ", letter: " + letter);
         y = Character.toLowerCase(y); //make sure lower case
         //JButton placement = this.boardButtons[y - 'a'][x];
         boardButtons[y - 'a'][x].setBackground(TILE_COLOUR);
+        boardButtons[y - 'a'][x].setFont(new Font(null, Font.BOLD, 12));
+        boardButtons[y - 'a'][x].setForeground(Color.BLACK);
         boardButtons[y - 'a'][x].setText(Character.toString(letter));
         boardButtons[y - 'a'][x].setEnabled(false);
+
     }
 
     @Override
