@@ -108,7 +108,7 @@ public class ScrabbleView extends JFrame implements GameObserver {
         //Create current player score pane
         scorePane.setFont(new Font(null, Font.BOLD, 14));
         scorePane.setEditable(false);
-        this.handleScoreBoardUpdate();
+        this.handleBoardUpdate(new ErrorEvent());
 
         this.add(bottomDisplayPanel, BorderLayout.SOUTH);
 
@@ -147,7 +147,7 @@ public class ScrabbleView extends JFrame implements GameObserver {
             Player player = players.get(i);
             scores += "Player " + String.valueOf(i + 1)+ " : "+ player.getScore() + "\n";
         }
-        this.scorePane.setText(scores);
+        return scores;
     }
 
     @Override
@@ -155,11 +155,11 @@ public class ScrabbleView extends JFrame implements GameObserver {
         System.out.println("handleLetterPlacement - y: " + y + ", x: " + x + ", letter: " + letter);
         y = Character.toLowerCase(y); //make sure lower case
         //JButton placement = this.boardButtons[y - 'a'][x];
-        boardButtons[y - 'a'][x].setBackground(TILE_COLOUR);
-        boardButtons[y - 'a'][x].setFont(new Font(null, Font.BOLD, 12));
-        boardButtons[y - 'a'][x].setForeground(Color.BLACK);
-        boardButtons[y - 'a'][x].setText(Character.toString(letter).toUpperCase());
-        boardButtons[y - 'a'][x].setEnabled(false);
+        boardButtons[y - 'a'][x - 1].setBackground(TILE_COLOUR); //Board is indexed starting with 1 --> need to go down one
+        boardButtons[y - 'a'][x - 1].setFont(new Font(null, Font.BOLD, 12));
+        boardButtons[y - 'a'][x - 1].setForeground(Color.BLACK);
+        boardButtons[y - 'a'][x - 1].setText(Character.toString(letter).toUpperCase());
+        boardButtons[y - 'a'][x - 1].setEnabled(false);
 
     }
 
