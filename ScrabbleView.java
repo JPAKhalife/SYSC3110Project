@@ -132,6 +132,11 @@ public class ScrabbleView extends JFrame implements GameObserver {
                 boardButtons[i][j].setText(text);
                 boardButtons[i][j].setEnabled(text.isEmpty()); //If tile is occupied the button cannot be clicked
 
+                if(!text.isEmpty())
+                {
+                    boardButtons[i][j].setBackground(TILE_COLOUR);
+                }
+
             }
         }
     }
