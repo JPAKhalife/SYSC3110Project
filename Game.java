@@ -4,12 +4,6 @@
  * @date 08/18/2024
  */
 
-/**
- * The Game class contains the current state of Scrabble and the main line of execution.
- * @author Elyssa Grant, Gillian O'Connel, John Khalife, Sandy Alzabadani
- * @date 08/18/2024
- */
-
 import java.io.File;
 import java.lang.reflect.Array;
 import java.util.*;
@@ -25,14 +19,14 @@ public class Game {
     /**
      * Basic constructor for Game
      */
-    public Game() {
+    public Game(int playerNum) {
         players = new ArrayList<>();
         board = new Board();
         currentPlayer = 0;
         views = new ArrayList<>();
         LetterBag.createBag();
 
-        for(int i = 0; i < 4; i++)
+        for(int i = 0; i < playerNum; i++)
         {
             addPlayer();
         }
@@ -98,7 +92,9 @@ public class Game {
      * @return A boolean stating whether the word was successfully added to the board
      */
     public int addWord(Dictionary<ArrayList<Letter>, ArrayList<String>> word) {
+
         if (word.isEmpty()) {
+            System.out.println("Error: never added word to the board\n");
             return -1;
         }
 
@@ -106,8 +102,11 @@ public class Game {
         ArrayList<String> locations = word.elements().nextElement(); //Extracting the locations
 
         int wordScore = board.addWord(letters, locations);
-        if (wordScore < 0) {
+        System.out.println("Added word to the board. Score: "+wordScore+"\n");
+
+        if (wordScore > 0) {
             for (int i = 0 ; i < views.size() ; i++) {
+                System.out.println("Handling the board update\n");
                 views.get(i).handleBoardUpdate(getBoard().getStatus());
             }
         }
@@ -132,6 +131,9 @@ public class Game {
         views.remove(view);
     }
 
+    /**
+     * handleNewTurn performs the necessary actions to change which player's turn it is
+     */
     public void handleNewTurn()
     {
 
@@ -142,17 +144,19 @@ public class Game {
         for(GameObserver view: views)
         {
             view.handleScoreUpdate(-1);
+            view.handleNewTurn(currentPlayer);
         }
 
         //Other things that need to be done somewhere:
-        //2. Checking if the game is over via the bag being empty
-        //3. If so, finding the winner
-        //4. Otherwise, call this function to make the next turn occur
+            //2. Checking if the game is over via the bag being empty
+            //3. If so, finding the winner
+            //4. Otherwise, call this function to make the next turn occur
 
     }
 
     /**
-     * handleBoardError handles what should occur when there was an error placing words on the board
+     * This method is called when the Board returns an error, and updates all the
+     * views accordingly
      */
     public void handleBoardError()
     {

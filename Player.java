@@ -8,7 +8,6 @@ import java.util.*;
 public class Player {
     private ArrayList <Letter> rack;
     private int score;
-    private Scanner scan;
     private ArrayList<Letter> playedLetters;
     private ArrayList<String> playedLocations;
 
@@ -19,7 +18,6 @@ public class Player {
     {
         rack = new ArrayList<>();
         score = 0;
-        scan = new Scanner(System.in);
         playedLetters = new ArrayList<>();
         playedLocations = new ArrayList<>();
 
@@ -67,6 +65,7 @@ public class Player {
     public void placeLetter(int rackIndex)
     {
         playedLetters.add(rack.get(rackIndex));
+        System.out.println("Letter added\n");
 
     }
 
@@ -76,14 +75,14 @@ public class Player {
      * @param j the column of the board
      * @return whether the coordinate was successfully added
      */
-    public boolean addCoordinate(int i, int j)
+    public boolean addCoordinate(char i, int j)
     {
         //ensuring that the player's location on the board is valid
-        if(i >= 0 && j >= 0 && i < 15 && j < 15)
+        if(i >= 'a' && j >= 1 && i <= 'o' && j < 16)
         {
-            char rowLetter = (char)(i + 65); //turning the row number into the appropriate letter value
-            String location = String.valueOf(rowLetter) + j; //combining them into a singular string representation of the location
+            String location = String.valueOf(i) + j; //combining them into a singular string representation of the location
             playedLocations.add(location); //adding the location
+            System.out.println("coordinate added\n");
             return true;
         }
 
@@ -102,6 +101,10 @@ public class Player {
         }
 
         pullFromBag();
+
+        //Now that the user has played all their letters, they need to clear them
+        playedLetters.clear();
+        playedLocations.clear();
     }
 
     /**
