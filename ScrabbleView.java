@@ -18,6 +18,7 @@ public class ScrabbleView extends JFrame implements GameObserver {
         //Configure frame
         super("Scrabble");
         game = new Game();
+        game.addView(this);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(800,800);
         this.setLayout(new BorderLayout());
@@ -130,7 +131,7 @@ public class ScrabbleView extends JFrame implements GameObserver {
         boardButtons[y - 'a'][x].setBackground(TILE_COLOUR);
         boardButtons[y - 'a'][x].setFont(new Font(null, Font.BOLD, 12));
         boardButtons[y - 'a'][x].setForeground(Color.BLACK);
-        boardButtons[y - 'a'][x].setText(Character.toString(letter));
+        boardButtons[y - 'a'][x].setText(Character.toString(letter).toUpperCase());
         boardButtons[y - 'a'][x].setEnabled(false);
 
     }
