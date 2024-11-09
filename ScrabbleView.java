@@ -3,6 +3,7 @@ import java.awt.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.awt.Color;
+import javax.swing.plaf.ColorUIResource;
 
 
 public class ScrabbleView extends JFrame implements GameObserver {
@@ -206,6 +207,9 @@ public class ScrabbleView extends JFrame implements GameObserver {
     }
 
     public static void main(String[] args) {
+        //Makes placed letter text black when board buttons are disabled
+        UIManager.put("Button.disabledText", new ColorUIResource(Color.BLACK));
+
         ScrabbleView v = new ScrabbleView();
     }
 }
