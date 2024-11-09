@@ -174,4 +174,12 @@ public class Player {
     {
         return new ArrayList<Letter>(rack);
     }
+
+    /**
+     * @return A char representation of the most recent letter the player has placed on the board
+     */
+    public char getRecentLetterPlaced(){
+        //return char of last letter in arraylist
+        return this.playedLetters.get(playedLetters.size() -1 ).getLetter();
+    }
 }

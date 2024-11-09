@@ -165,4 +165,8 @@ public class Game {
             view.handleBoardUpdate(board.getStatus());
         }
     }
+
+    public ArrayList<GameObserver> getViews(){
+        return this.views;
+    }
 }
