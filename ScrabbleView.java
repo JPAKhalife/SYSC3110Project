@@ -1,6 +1,7 @@
 import javax.swing.*;
 import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
+import java.util.Dictionary;
 import java.util.List;
 import java.util.ArrayList;
 import java.awt.Color;
@@ -108,6 +109,7 @@ public class ScrabbleView extends JFrame implements GameObserver {
         //Create current player score pane
         scorePane.setFont(new Font(null, Font.BOLD, 14));
         scorePane.setEditable(false);
+        handleScoreUpdate(-1);
         this.handleBoardUpdate(new ErrorEvent());
 
         this.add(bottomDisplayPanel, BorderLayout.SOUTH);
@@ -127,10 +129,23 @@ public class ScrabbleView extends JFrame implements GameObserver {
         System.out.println("Entered displayBoard\n");
         for(int i = 0; i < Board.BOARD_SIZE; i++){
             for(int j = 0; j < Board.BOARD_SIZE; j++){
-                String text = (board[i][j] == null)? "": Character.toString(board[i][j].getLetter());
+                String text = (board[i][j] == null)? "": Character.toString(board[i][j].getLetter()).toUpperCase();
                 System.out.println(text+ "\n");
                 boardButtons[i][j].setText(text);
                 boardButtons[i][j].setEnabled(text.isEmpty()); //If tile is occupied the button cannot be clicked
+
+                if(text.isEmpty() && ((i != 7) || (j != 7)))
+                {
+                    boardButtons[i][j].setBackground(BOARD_COLOUR);
+                }
+                else if (!text.isEmpty())
+                {
+                    boardButtons[i][j].setBackground(TILE_COLOUR);
+                }
+                else
+                {
+                    boardButtons[i][j].setBackground(BOARD_CENTER);
+                }
 
             }
         }
@@ -151,16 +166,38 @@ public class ScrabbleView extends JFrame implements GameObserver {
     }
 
     @Override
-    public void handleLetterPlacement(char y, int x, char letter){
-        System.out.println("handleLetterPlacement - y: " + y + ", x: " + x + ", letter: " + letter);
-        y = Character.toLowerCase(y); //make sure lower case
-        //JButton placement = this.boardButtons[y - 'a'][x];
-        boardButtons[y - 'a'][x - 1].setBackground(TILE_COLOUR); //Board is indexed starting with 1 --> need to go down one
-        boardButtons[y - 'a'][x - 1].setFont(new Font(null, Font.BOLD, 12));
-        boardButtons[y - 'a'][x - 1].setForeground(Color.BLACK);
-        boardButtons[y - 'a'][x - 1].setText(Character.toString(letter).toUpperCase());
-        boardButtons[y - 'a'][x - 1].setEnabled(false);
+    public void handleLetterPlacement(Dictionary<ArrayList<Letter>, ArrayList<String>> word){
+        ArrayList<Letter> letters = word.keys().nextElement();
+        ArrayList<String> locations = word.elements().nextElement();
 
+        try {
+            int i = 0;
+            for (String location : locations) {
+                char y = location.charAt(0);
+                int x = Integer.parseInt(location.substring(1));
+                char letter = letters.get(i).getLetter();
+                System.out.println("handleLetterPlacement - y: " + y + ", x: " + x + ", letter: " + letter);
+                y = Character.toLowerCase(y); //make sure lower case
+                //JButton placement = this.boardButtons[y - 'a'][x];
+                boardButtons[y - 'a'][x - 1].setBackground(TILE_COLOUR); //Board is indexed starting with 1 --> need to go down one
+                boardButtons[y - 'a'][x - 1].setFont(new Font(null, Font.BOLD, 12));
+                boardButtons[y - 'a'][x - 1].setForeground(Color.BLACK);
+                boardButtons[y - 'a'][x - 1].setText(Character.toString(letter).toUpperCase());
+                boardButtons[y - 'a'][x - 1].setEnabled(false);
+
+                i++;
+            }
+        }
+        catch(IndexOutOfBoundsException e)
+        {
+            //Ensuring that the user clicking in the wrong order doesn't cause errors
+            JOptionPane.showMessageDialog(this, "Please ensure that you place a letter before placing a component");
+            return;
+        }
+        catch(Exception exception)
+        {
+            return;
+        }
     }
 
     /**
@@ -172,13 +209,11 @@ public class ScrabbleView extends JFrame implements GameObserver {
         if(e.getError()!= ErrorEvent.GameError.NONE){
             JOptionPane.showMessageDialog(null, e.getError().getErrorDescription());
         }
-        else
-        {
-            System.out.println("Going to update the board\n");
-            //Update every button in the board to reflect what is in the Board class
-            Letter[][] boardClone = game.getBoard().getBoardAppearance();
-            displayBoard(boardClone);
-        }
+
+        System.out.println("Going to update the board\n");
+        //Update every button in the board to reflect what is in the Board class
+        Letter[][] boardClone = game.getBoard().getBoardAppearance();
+        displayBoard(boardClone);
     }
 
     /**

@@ -48,11 +48,10 @@ public class GameController implements ActionListener {
 
             //HANDLE TEMPORARY VIEW (letter placed on board BEFORE submitted)
             //get most recent letter placed
-            char letterPlaced = game.getCurrentPlayer().getRecentLetterPlaced();
-            System.out.println("Letter Placed: " + letterPlaced);
+            Dictionary<ArrayList<Letter>, ArrayList<String>> word = game.getCurrentPlayer().playerTurn(1);
             //set the selected board tile to the letter
             for(GameObserver view: game.getViews()){
-                view.handleLetterPlacement(y, x, letterPlaced);
+                view.handleLetterPlacement(word);
             }
 
         } else if (command[0].equals("rack")) {
