@@ -166,6 +166,10 @@ public class Game {
         }
     }
 
+    /**
+     * Returns the current observers of this instance of Game
+     * @return An ArrayList of all the objects currently observing the Game
+     */
     public ArrayList<GameObserver> getViews(){
         return this.views;
     }
