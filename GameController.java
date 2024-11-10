@@ -59,6 +59,12 @@ public class GameController implements ActionListener {
             int index = Integer.valueOf(command[1]);
             game.getCurrentPlayer().placeLetter(index); //DNE
 
+            Dictionary<ArrayList<Letter>, ArrayList<String>> word = game.getCurrentPlayer().playerTurn(1);
+            //set the selected board tile to the letter
+            for(GameObserver view: game.getViews()){
+                view.handleLetterPlacement(word);
+            }
+
         } else if (command[0].equals("turn")) {
             int winner = -1; //Holds the winning player, if any
             if (command[1].equals("submit")) {

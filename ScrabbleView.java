@@ -191,7 +191,6 @@ public class ScrabbleView extends JFrame implements GameObserver {
         catch(IndexOutOfBoundsException e)
         {
             //Ensuring that the user clicking in the wrong order doesn't cause errors
-            JOptionPane.showMessageDialog(this, "Please ensure that you place a letter before placing a component");
             return;
         }
         catch(Exception exception)
