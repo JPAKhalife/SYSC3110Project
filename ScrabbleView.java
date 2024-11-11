@@ -109,6 +109,7 @@ public class ScrabbleView extends JFrame implements GameObserver {
         //Create current player score pane
         scorePane.setFont(new Font(null, Font.BOLD, 14));
         scorePane.setEditable(false);
+
         handleScoreUpdate(-1);
         this.handleBoardUpdate(new ErrorEvent());
 
@@ -197,6 +198,7 @@ public class ScrabbleView extends JFrame implements GameObserver {
         {
             return;
         }
+
     }
 
     /**
