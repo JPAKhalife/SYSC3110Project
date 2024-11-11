@@ -101,7 +101,6 @@ public class Player {
         {
             String location = String.valueOf(i) + j; //combining them into a singular string representation of the location
             playedLocations.add(location); //adding the location
-            System.out.println("coordinate added\n");
             return true;
         }
 
@@ -192,13 +191,5 @@ public class Player {
     public ArrayList<Letter> getRack()
     {
         return new ArrayList<Letter>(rack);
-    }
-
-    /**
-     * @return A char representation of the most recent letter the player has placed on the board
-     */
-    public char getRecentLetterPlaced(){
-        //return char of last letter in arraylist
-        return this.playedLetters.get(playedLetters.size() -1 ).getLetter();
     }
 }

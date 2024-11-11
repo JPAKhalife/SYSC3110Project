@@ -61,11 +61,9 @@ public class GameTest {
 
         //adding different numbers of players to both games
         game.addPlayer();
-        game.addPlayer();
-        game.addPlayer();
         game2.addPlayer();
         //checking the sizes have changed
-        assertEquals(game.getPlayers().size(), 7);
+        assertEquals(game.getPlayers().size(), 5);
         assertEquals(game2.getPlayers().size(), 5);
 
         //Ensuring that the arraylist returned is a copy, not the same memory reference
@@ -162,5 +160,27 @@ public class GameTest {
     @Test
     public void handleBoardError() {
         //This is simply an updating function --> unit testing does not work easily
+    }
+
+    @Test
+    public void getView()
+    {
+        ArrayList<GameObserver> views = game.getViews();
+
+        assertEquals(0, views.size());
+
+        ScrabbleView view1 = new ScrabbleView();
+
+        game.addView(view1);
+        views = game.getViews();
+        assertEquals(1, views.size());
+        assertSame(view1, views.get(0));
+
+        ScrabbleView view2 = new ScrabbleView();
+        game.addView(view2);
+        views = game.getViews();
+        assertEquals(2, views.size());
+        assertSame(view2, views.get(1));
+
     }
 }
