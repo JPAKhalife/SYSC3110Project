@@ -94,12 +94,15 @@ public class GameController implements ActionListener {
             } else if (command[1].equals("exchange")) {
                 //put exchange behavior here
                 game.getCurrentPlayer().playerTurn(2); //DNE
-                game.handleBoardError();
             } else if (command[1].equals("pass")) {
                 //Don't need to do anything special here
             }
 
             //changing to the next player's turn
+            for(GameObserver view: game.getViews())
+            {
+                view.handleBoardUpdate(new ErrorEvent());
+            }
             game.handleNewTurn();
 
         } else if (command[0].equals("menu")) {
