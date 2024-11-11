@@ -82,7 +82,6 @@ public class Player {
         {
             String location = String.valueOf(i) + j; //combining them into a singular string representation of the location
             playedLocations.add(location); //adding the location
-            System.out.println("coordinate added\n");
             return true;
         }
 
