@@ -1,9 +1,10 @@
 import javax.swing.*;
+import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
+import java.util.Dictionary;
 import java.util.List;
 import java.util.ArrayList;
 import java.awt.Color;
-import javax.swing.plaf.ColorUIResource;
 
 
 public class ScrabbleView extends JFrame implements GameObserver {
@@ -24,7 +25,6 @@ public class ScrabbleView extends JFrame implements GameObserver {
     public ScrabbleView(){
         //Configure frame
         super("Scrabble");
-
         int numPlayers = 0;
         while(numPlayers < 2 || numPlayers > 4)
         {
@@ -109,7 +109,9 @@ public class ScrabbleView extends JFrame implements GameObserver {
         //Create current player score pane
         scorePane.setFont(new Font(null, Font.BOLD, 14));
         scorePane.setEditable(false);
-        scorePane.setText(currentScores());
+
+        handleScoreUpdate(-1);
+        this.handleBoardUpdate(new ErrorEvent());
 
         this.add(bottomDisplayPanel, BorderLayout.SOUTH);
 
@@ -133,10 +135,22 @@ public class ScrabbleView extends JFrame implements GameObserver {
                 boardButtons[i][j].setText(text);
                 boardButtons[i][j].setEnabled(text.isEmpty()); //If tile is occupied the button cannot be clicked
 
+                if(text.isEmpty() && ((i != 7) || (j != 7)))
+                {
+                    boardButtons[i][j].setBackground(BOARD_COLOUR);
+                }
+                else if (!text.isEmpty())
+                {
+                    boardButtons[i][j].setBackground(TILE_COLOUR);
+                }
+                else
+                {
+                    boardButtons[i][j].setBackground(BOARD_CENTER);
+                }
+
             }
         }
     }
-
     /**
      * currentScores builds the formatting for the scores of all players to be displayed
      * @return A string representation of the player's current scores
@@ -150,6 +164,49 @@ public class ScrabbleView extends JFrame implements GameObserver {
             scores += "Player " + String.valueOf(i + 1)+ " : "+ player.getScore() + "\n";
         }
         return scores;
+    }
+
+    @Override
+    public void handleLetterPlacement(Dictionary<ArrayList<Letter>, ArrayList<String>> word){
+        ArrayList<Letter> letters = word.keys().nextElement();
+        ArrayList<String> locations = word.elements().nextElement();
+        ArrayList<Letter> rack = game.getCurrentPlayer().getRack();
+
+        try {
+            int i = 0;
+            for (String location : locations) {
+                char y = location.charAt(0);
+                int x = Integer.parseInt(location.substring(1));
+                char letter = letters.get(i).getLetter();
+                System.out.println("handleLetterPlacement - y: " + y + ", x: " + x + ", letter: " + letter);
+                y = Character.toLowerCase(y); //make sure lower case
+                //JButton placement = this.boardButtons[y - 'a'][x];
+                boardButtons[y - 'a'][x - 1].setBackground(TILE_COLOUR); //Board is indexed starting with 1 --> need to go down one
+                boardButtons[y - 'a'][x - 1].setFont(new Font(null, Font.BOLD, 12));
+                boardButtons[y - 'a'][x - 1].setForeground(Color.BLACK);
+                boardButtons[y - 'a'][x - 1].setText(Character.toString(letter).toUpperCase());
+                boardButtons[y - 'a'][x - 1].setEnabled(false);
+
+                for(int j = 0; j < rack.size(); j++)
+                {
+                    if(rack.get(j) == letters.get(i))
+                    {
+                        rackButtons[j].setEnabled(false);
+                    }
+                }
+
+                i++;
+            }
+        }
+        catch(IndexOutOfBoundsException e)
+        {
+            //Ensuring that the user clicking in the wrong order doesn't cause errors
+            return;
+        }
+        catch(Exception exception)
+        {
+            return;
+        }
 
     }
 
@@ -159,18 +216,19 @@ public class ScrabbleView extends JFrame implements GameObserver {
      */
     @Override
     public void handleBoardUpdate(ErrorEvent e) {
-
         if(e.getError()!= ErrorEvent.GameError.NONE){
             JOptionPane.showMessageDialog(null, e.getError().getErrorDescription());
         }
-        else
-        {
-            System.out.println("Going to update the board\n");
-            //Update every button in the board to reflect what is in the Board class
-            Letter[][] boardClone = game.getBoard().getBoardAppearance();
-            displayBoard(boardClone);
-        }
 
+        System.out.println("Going to update the board\n");
+        //Update every button in the board to reflect what is in the Board class
+        Letter[][] boardClone = game.getBoard().getBoardAppearance();
+        displayBoard(boardClone);
+
+        for(int i = 0; i < 7; i++)
+        {
+            rackButtons[i].setEnabled(true);
+        }
     }
 
     /**
@@ -201,6 +259,7 @@ public class ScrabbleView extends JFrame implements GameObserver {
         for(int i = 0; i < 7; i++)
         {
             rackButtons[i].setText(Character.toString(newPlayerRack.get(i).getLetter()).toUpperCase());
+            rackButtons[i].setEnabled(true);
         }
 
         currentPlayerField.setText("Player "+ (playerNum + 1) +" Turn");
@@ -209,7 +268,6 @@ public class ScrabbleView extends JFrame implements GameObserver {
     public static void main(String[] args) {
         //Makes placed letter text black when board buttons are disabled
         UIManager.put("Button.disabledText", new ColorUIResource(Color.BLACK));
-
         ScrabbleView v = new ScrabbleView();
     }
 }

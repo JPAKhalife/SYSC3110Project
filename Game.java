@@ -94,7 +94,6 @@ public class Game {
     public int addWord(Dictionary<ArrayList<Letter>, ArrayList<String>> word) {
 
         if (word.isEmpty()) {
-            System.out.println("Error: never added word to the board\n");
             return -1;
         }
 
@@ -102,11 +101,9 @@ public class Game {
         ArrayList<String> locations = word.elements().nextElement(); //Extracting the locations
 
         int wordScore = board.addWord(letters, locations);
-        System.out.println("Added word to the board. Score: "+wordScore+"\n");
 
         if (wordScore > 0) {
             for (int i = 0 ; i < views.size() ; i++) {
-                System.out.println("Handling the board update\n");
                 views.get(i).handleBoardUpdate(getBoard().getStatus());
             }
         }
@@ -164,5 +161,13 @@ public class Game {
         {
             view.handleBoardUpdate(board.getStatus());
         }
+    }
+
+    /**
+     * Returns the current observers of this instance of Game
+     * @return An ArrayList of all the objects currently observing the Game
+     */
+    public ArrayList<GameObserver> getViews(){
+        return this.views;
     }
 }
