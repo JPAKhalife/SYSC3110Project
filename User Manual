@@ -3,28 +3,18 @@ Group 8
 Sandy Alzabadani, Elyssa Grant, Gillian O'Connel, John Khalife
 Date: 20/10/2024
 
-The game accommodates four players. The user is displayed with a GUI consisting of a 15x15 grid of buttons (the board), as well as a row of 7 buttons below labeled as their rack. Each button on the rack will display a random letter. On the right is an uneditable text panel, and on the very bottom are three buttons that say "Submit", "Exchange", and "Pass turn".
+The game accommodates four players. The user is displayed with a random selection of 7 letters. The user is then prompted with the main menu consisting of three options; Place Letters, Exchange Letters, and Pass Turn. 
 
+1.	Place Letters option allows the user to select the number of letters they want to place on the board. 
+The user is then asked to enter the index of the letter they would like to start with based on the given rack of letters. 
+The user is then prompted to pick the location of where they want the letter to be placed on the board, based on the scrabble notation [Row][Column] ex. A1. 
+This is repeated for the number of letters selected, until all the selected letters are placed on the board. 
+If the word formed or the placement is invalid, a message is displayed to the user stating that its invalid and the main menu is redisplayed. 
+If the word placement and the formed word is valid, the letters and the locations of the letters selected are displayed to the user as well as a display of the board. 
+The main menu is then redisplayed.
 
-Playing letters on the board:
+2.	Exchange Letters option allows the user to exchange a letter from the rack with a letter from the bag. The user is prompted with a message asking how many letters the user would like to exchange and which letters from the rack the user would like to exchange. 
 
-1. The user can click a button on their rack, which will indicate that they want to use that letter this turn.
-
-2. Once a letter has been clicked, an empty location on the board can be clicked to indicate that the user wants to add the last letter clicked to that location on the board.
-
-3. Once the user has chosen all the letters and locations on the board they want, they click the "Submit" button, which will attempt to add their submitted letters to the correct locations on the board. If successful, their word will then display on the board in a non-editable form, their updated score will be shown, and the rack for the next player will be displayed.
-
-
-Exchanging letters with the bag:
-
-1. The user clicks any letters on their rack that they wish to exchange with the bag.
-
-2. Once they have selected all the letters they want to exchange, the user clicks the "Exchange" button. The scores of all players will be displayed, and the rack for the next player will be displayed
-
-
-Passing a turn:
-
-1. The user clicks "Pass turn", and their turn will be skipped. The scores will be displayed and the next player's rack will appear for them to play their turn. 
-
+3.	Pass turn option allows the user to pass the game to the next player and the main menu is redisplayed with a new rack to the next player.
 
 The game ends when the letter bag runs out of letters and at least one of the players’ racks runs out of letters. The player with the highest score wins.

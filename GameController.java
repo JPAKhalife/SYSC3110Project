@@ -46,24 +46,10 @@ public class GameController implements ActionListener {
             //Add these to the addCoordinate method
             game.getCurrentPlayer().addCoordinate(y, x); //DNE
 
-            //HANDLE TEMPORARY VIEW (letter placed on board BEFORE submitted)
-            //get most recent letter placed
-            Dictionary<ArrayList<Letter>, ArrayList<String>> word = game.getCurrentPlayer().playerTurn(1);
-            //set the selected board tile to the letter
-            for(GameObserver view: game.getViews()){
-                view.handleLetterPlacement(word);
-            }
-
         } else if (command[0].equals("rack")) {
             //Grab + place the index
             int index = Integer.valueOf(command[1]);
             game.getCurrentPlayer().placeLetter(index); //DNE
-
-            Dictionary<ArrayList<Letter>, ArrayList<String>> word = game.getCurrentPlayer().playerTurn(1);
-            //set the selected board tile to the letter
-            for(GameObserver view: game.getViews()){
-                view.handleLetterPlacement(word);
-            }
 
         } else if (command[0].equals("turn")) {
             int winner = -1; //Holds the winning player, if any
@@ -88,11 +74,11 @@ public class GameController implements ActionListener {
                 {
                     System.out.println("Updating scores\n");
 
-                   if(!gameNotOver)
-                   {
-                       winner = game.findWinner();
-                       return; //Game is over --> don't need to move onto next turn
-                   }
+                    if(!gameNotOver)
+                    {
+                        winner = game.findWinner();
+                        return; //Game is over --> don't need to move onto next turn
+                    }
                 }
 
             } else if (command[1].equals("exchange")) {

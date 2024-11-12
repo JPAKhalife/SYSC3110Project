@@ -43,11 +43,30 @@ public class Player {
         int numLettersToPlay; //stores the number of letters the user wants to play
         int letterToPlay; //stores the actual letters the user plays
         Dictionary<ArrayList<Letter>, ArrayList<String>> playerWord = new Hashtable<>(); //Stores the scrabble notation for where the user wants to add things to the board
-        ArrayList<Letter> letters = new ArrayList<>();
-        ArrayList<String> locations = new ArrayList<>();
 
         if(userTurn == 1) //The user wants to place letters on the board
         {
+            //Sorting the letters so players can add them in odd ways
+            for(int i = 0; i < playedLocations.size() - 1; i++)
+            {
+                int smallestIndex = i;
+                for(int j = 0; j < playedLocations.size(); j++)
+                {
+                    if(playedLocations.get(smallestIndex).charAt(0) > playedLocations.get(i).charAt(0) || playedLocations.get(smallestIndex).charAt(1) > playedLocations.get(i).charAt(1))
+                    {
+                        smallestIndex = i;
+                    }
+                }
+
+                playedLocations.add(i, playedLocations.get(smallestIndex));
+                playedLocations.remove(smallestIndex + 1); //Since the extra one was added in, this will be the new location of the duplicate
+
+                //Move the associated letter along with the index
+                playedLetters.add(i, playedLetters.get(smallestIndex));
+                playedLetters.remove(smallestIndex + 1);
+
+            }
+
             playerWord.put(playedLetters, playedLocations);
         }
         else if(userTurn == 2) { //The user wants to exchange letters with the letter bag
@@ -173,5 +192,13 @@ public class Player {
     public ArrayList<Letter> getRack()
     {
         return new ArrayList<Letter>(rack);
+    }
+
+    /**
+     * @return A char representation of the most recent letter the player has placed on the board
+     */
+    public char getRecentLetterPlaced(){
+        //return char of last letter in arraylist
+        return this.playedLetters.get(playedLetters.size() -1 ).getLetter();
     }
 }
