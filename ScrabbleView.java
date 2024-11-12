@@ -187,15 +187,6 @@ public class ScrabbleView extends JFrame implements GameObserver {
                 boardButtons[y - 'a'][x - 1].setText(Character.toString(letter).toUpperCase());
                 boardButtons[y - 'a'][x - 1].setEnabled(false);
 
-                for(int j = 0; j < rack.size(); j++)
-                {
-                    if(rack.get(j) == letters.get(i))
-                    {
-                        rackButtons[j].setEnabled(false);
-                        break;
-                    }
-                }
-
                 i++;
             }
         }
