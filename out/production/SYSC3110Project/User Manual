@@ -1,0 +1,20 @@
+User Manual
+Group 8
+Sandy Alzabadani, Elyssa Grant, Gillian O'Connel, John Khalife
+Date: 20/10/2024
+
+The game accommodates four players. The user is displayed with a random selection of 7 letters. The user is then prompted with the main menu consisting of three options; Place Letters, Exchange Letters, and Pass Turn. 
+
+1.	Place Letters option allows the user to select the number of letters they want to place on the board. 
+The user is then asked to enter the index of the letter they would like to start with based on the given rack of letters. 
+The user is then prompted to pick the location of where they want the letter to be placed on the board, based on the scrabble notation [Row][Column] ex. A1. 
+This is repeated for the number of letters selected, until all the selected letters are placed on the board. 
+If the word formed or the placement is invalid, a message is displayed to the user stating that its invalid and the main menu is redisplayed. 
+If the word placement and the formed word is valid, the letters and the locations of the letters selected are displayed to the user as well as a display of the board. 
+The main menu is then redisplayed.
+
+2.	Exchange Letters option allows the user to exchange a letter from the rack with a letter from the bag. The user is prompted with a message asking how many letters the user would like to exchange and which letters from the rack the user would like to exchange. 
+
+3.	Pass turn option allows the user to pass the game to the next player and the main menu is redisplayed with a new rack to the next player.
+
+The game ends when the letter bag runs out of letters and at least one of the players’ racks runs out of letters. The player with the highest score wins.
