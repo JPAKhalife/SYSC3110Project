@@ -170,6 +170,7 @@ public class ScrabbleView extends JFrame implements GameObserver {
     public void handleLetterPlacement(Dictionary<ArrayList<Letter>, ArrayList<String>> word){
         ArrayList<Letter> letters = word.keys().nextElement();
         ArrayList<String> locations = word.elements().nextElement();
+        ArrayList<Letter> rack = game.getCurrentPlayer().getRack();
 
         try {
             int i = 0;
@@ -185,6 +186,14 @@ public class ScrabbleView extends JFrame implements GameObserver {
                 boardButtons[y - 'a'][x - 1].setForeground(Color.BLACK);
                 boardButtons[y - 'a'][x - 1].setText(Character.toString(letter).toUpperCase());
                 boardButtons[y - 'a'][x - 1].setEnabled(false);
+
+                for(int j = 0; j < rack.size(); j++)
+                {
+                    if(rack.get(j) == letters.get(i))
+                    {
+                        rackButtons[j].setEnabled(false);
+                    }
+                }
 
                 i++;
             }
@@ -215,6 +224,11 @@ public class ScrabbleView extends JFrame implements GameObserver {
         //Update every button in the board to reflect what is in the Board class
         Letter[][] boardClone = game.getBoard().getBoardAppearance();
         displayBoard(boardClone);
+
+        for(int i = 0; i < 7; i++)
+        {
+            rackButtons[i].setEnabled(true);
+        }
     }
 
     /**
@@ -245,6 +259,7 @@ public class ScrabbleView extends JFrame implements GameObserver {
         for(int i = 0; i < 7; i++)
         {
             rackButtons[i].setText(Character.toString(newPlayerRack.get(i).getLetter()).toUpperCase());
+            rackButtons[i].setEnabled(true);
         }
 
         currentPlayerField.setText("Player "+ (playerNum + 1) +" Turn");
