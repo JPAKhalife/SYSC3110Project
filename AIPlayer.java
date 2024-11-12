@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.Hashtable;
 
 public class AIPlayer extends Player{
@@ -20,10 +22,6 @@ public class AIPlayer extends Player{
      */
     public void aiTurn()
     {
-        //Get the rack
-
-        //Get the board
-
         //Find all the valid locations in the board to place a word
 
         //For each valid line the AI can place in
@@ -39,6 +37,11 @@ public class AIPlayer extends Player{
      */
     private void decideWord()
     {
+        //Determine all the valid locations the AI can place a word and how large
+
+        //For each valid location/direction:
+            //attempt to find a valid word that includes the valid location letter + letters on its rack
+                //Ensure the validity of its placement
 
     }
 
@@ -103,5 +106,39 @@ public class AIPlayer extends Player{
         }
 
         return freeSpacesInDirection;
+    }
+
+    /**
+     * This method returns all the possible words that can be made from a particular location
+     * @param i The row of the location to be examined
+     * @param j The column of the location to be examined
+     * @return An arraylist that holds all the possible words that can be placed at one location on the board, sorted by score
+     */
+    public ArrayList<String> possibleWords(int i, int j)
+    {
+        char boardLetter = board.getBoardAppearance()[i][j].getLetter();
+        ArrayList<String> validWords = new ArrayList<>();
+
+        //Finding all the valid combinations of letters that form words
+        for(int k = 0; k < 8; k++)
+        {
+            for(int l = 0; l < 8; l++)
+            {
+                char[] testWord1 = {rack.get(k).getLetter(), boardLetter};
+                char[] testWord2 = {boardLetter, rack.get(k).getLetter()};
+                String testString = new String(testWord1);
+                String testString2 = new String(testWord2);
+                if(Board.words.contains(testString))
+                {
+                    validWords.add(testString);
+                }
+                if(Board.words.contains(testString2))
+                {
+                    validWords.add(testString2);
+                }
+            }
+        }
+
+        return validWords;
     }
 }
