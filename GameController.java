@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -58,6 +59,9 @@ public class GameController implements ActionListener {
             //Grab + place the index
             int index = Integer.valueOf(command[1]);
             game.getCurrentPlayer().placeLetter(index); //DNE
+
+            JButton buttonPressed = (JButton) e.getSource();
+            buttonPressed.setEnabled(false);
 
             Dictionary<ArrayList<Letter>, ArrayList<String>> word = game.getCurrentPlayer().playerTurn(1);
             //set the selected board tile to the letter
