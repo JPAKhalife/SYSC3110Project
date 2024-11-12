@@ -192,6 +192,7 @@ public class ScrabbleView extends JFrame implements GameObserver {
                     if(rack.get(j) == letters.get(i))
                     {
                         rackButtons[j].setEnabled(false);
+                        break;
                     }
                 }
 
