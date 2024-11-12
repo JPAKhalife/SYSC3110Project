@@ -46,15 +46,28 @@ public class GameController implements ActionListener {
             //Add these to the addCoordinate method
             game.getCurrentPlayer().addCoordinate(y, x); //DNE
 
+            //HANDLE TEMPORARY VIEW (letter placed on board BEFORE submitted)
+            //get most recent letter placed
+            Dictionary<ArrayList<Letter>, ArrayList<String>> word = game.getCurrentPlayer().playerTurn(1);
+            //set the selected board tile to the letter
+            for(GameObserver view: game.getViews()){
+                view.handleLetterPlacement(word);
+            }
+
         } else if (command[0].equals("rack")) {
             //Grab + place the index
             int index = Integer.valueOf(command[1]);
             game.getCurrentPlayer().placeLetter(index); //DNE
 
+            Dictionary<ArrayList<Letter>, ArrayList<String>> word = game.getCurrentPlayer().playerTurn(1);
+            //set the selected board tile to the letter
+            for(GameObserver view: game.getViews()){
+                view.handleLetterPlacement(word);
+            }
+
         } else if (command[0].equals("turn")) {
             int winner = -1; //Holds the winning player, if any
             if (command[1].equals("submit")) {
-                System.out.println("Submit called");
                 //Getting the combination of letters and locations
                 Dictionary<ArrayList<Letter>, ArrayList<String>> wordLocation = game.getCurrentPlayer().playerTurn(1);
 
@@ -65,15 +78,12 @@ public class GameController implements ActionListener {
 
                 //adding the combination of letters and locations to the board
                 if (score < 0) { //DNE
-                    System.out.println("No points obtained\n");
                     //Returning early so that the user can re-try their turn instead of it being passed to the next player
                     game.handleBoardError();
                     return;
                 }
                 else
                 {
-                    System.out.println("Updating scores\n");
-
                     if(!gameNotOver)
                     {
                         winner = game.findWinner();
@@ -84,12 +94,15 @@ public class GameController implements ActionListener {
             } else if (command[1].equals("exchange")) {
                 //put exchange behavior here
                 game.getCurrentPlayer().playerTurn(2); //DNE
-                System.out.println("exchange called\n");
             } else if (command[1].equals("pass")) {
                 //Don't need to do anything special here
             }
 
             //changing to the next player's turn
+            for(GameObserver view: game.getViews())
+            {
+                view.handleBoardUpdate(new ErrorEvent());
+            }
             game.handleNewTurn();
 
         } else if (command[0].equals("menu")) {
