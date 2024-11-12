@@ -8,15 +8,21 @@ import java.awt.Color;
 
 
 public class ScrabbleView extends JFrame implements GameObserver {
-
+    private static final String[] tripleWordSquares = {"0,0", "0,7", "0,14", "7,0", "7,14", "14,0", "14,7", "14,14"};
+    private static final String[] doubleWordSquares = {"1,1", "2,2", "3,3", "4,4", "1,13", "2,12", "3,11", "4,10", "14,1", "12,2", "12,3", "11,4", "14,14", "13,13", "12,12", "11,11", "7,7"};
+    private static final String[] tripleLetterSquares = {"1,5", "1,9", "5,1", "5,5", "5,9", "5,13", "9,1", "9,5", "9,13", "13,5", "13,9"};
+    private static final String[] doubleLetterSquares = {"0,3", "0,11", "2,6", "2,8", "3,7", "3,0", "3,14", "6,2", "6,6", "6,8", "6,12", "7,3", "7,11", "8,2", "8,6", "8,8", "8,12", "11,0", "11,7", "12,6", "12,8", "13,3", "13,11"};
     private JButton[][] boardButtons;
     private JTextPane scorePane;
     private Game game;
     private Container turnElements;
     private JButton[] rackButtons;  //holds the letters on a rack as buttons (placed letters, before sumbitted, are disabled)
-    private final Color TILE_COLOUR = new Color(240, 215, 149);
-    private final Color BOARD_COLOUR = new Color(103, 128, 78);
-    private final Color BOARD_CENTER = new Color(63, 146, 199);
+    private final Color TRIPLE_WORD_COLOUR = new Color(227, 79, 68);
+    private final Color DOUBLE_WORD_COLOUR = new Color(227, 145, 215);
+    private final Color TILE_COLOUR = new Color(237, 227, 199);
+    private final Color BOARD_COLOUR = new Color(214, 189, 124);
+    private final Color TRIPLE_LETTER_COLOUR = new Color(63, 146, 199);
+    private final Color DOUBLE_LETTER_COLOUR = new Color(117, 216, 230);
     private JTextPane currentPlayerField;
 
     /**
@@ -61,16 +67,28 @@ public class ScrabbleView extends JFrame implements GameObserver {
             for (int j = 0; j < Board.BOARD_SIZE; j++) {
                 boardButtons[i][j] = new JButton();
                 boardButtons[i][j].setFont(new Font(null, Font.BOLD, 14));
-                boardButtons[i][j].setBackground(BOARD_COLOUR);
                 boardButtons[i][j].addActionListener(gameController);
                 String buttonCoordinate = "board," + Character.toString(rowChar) + "," + Integer.toString(j + 1);
                 boardButtons[i][j].setActionCommand(buttonCoordinate);
                 boardPanel.add(boardButtons[i][j]); //add to panel to be placed in frame
+
+                //check if board square is a premium square
+                String boardLocation = Integer.toString(i) + "," + Integer.toString(j);
+                if(isTripleWordSquare(boardLocation)) {
+                    boardButtons[i][j].setBackground(TRIPLE_WORD_COLOUR);
+                }else if(isDoubleWordSquare(boardLocation)){
+                    boardButtons[i][j].setBackground(DOUBLE_WORD_COLOUR);
+                }else if(isTripleLetterSquare(boardLocation)){
+                    boardButtons[i][j].setBackground(TRIPLE_LETTER_COLOUR);
+                }else if(isDoubleLetterSquare(boardLocation)){
+                    boardButtons[i][j].setBackground(DOUBLE_LETTER_COLOUR);
+                }else{
+                   boardButtons[i][j].setBackground(BOARD_COLOUR);
+                }
+
             }
             rowChar++;
         }
-
-        boardButtons[7][7].setBackground(BOARD_CENTER);
 
         JPanel rackPanel = new JPanel(new GridLayout(1,7));
         Player currentPlayer= game.getCurrentPlayer();
@@ -120,6 +138,66 @@ public class ScrabbleView extends JFrame implements GameObserver {
         this.add(scorePane, BorderLayout.EAST);
 
         this.setVisible(true);
+    } //end constructor
+
+    /**
+     * @param location The location of the board square
+     * @return whether the square is a triple word premium square
+     */
+    private boolean isTripleWordSquare(String location){
+        for (String tripleWordSquare : tripleWordSquares) {
+            if (tripleWordSquare.equals(location)) {
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
+    /**
+     * @param location The location of the board square
+     * @return whether the square is a double word premium square
+     */
+    private boolean isDoubleWordSquare(String location){
+        for (String doubleWordSquare : doubleWordSquares) {
+            if (doubleWordSquare.equals(location)) {
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
+    /**
+     * @param location The location of the board square
+     * @return whether the square is a triple letter premium square
+     */
+    private boolean isTripleLetterSquare(String location){
+        for (String tripleLetterSquare : tripleLetterSquares) {
+            if (tripleLetterSquare.equals(location)) {
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
+    /**
+     * @param location The location of the board square
+     * @return whether the square is a triple letter premium square
+     */
+    private boolean isDoubleLetterSquare(String location){
+        for (String doubleLetterSquare : doubleLetterSquares) {
+            if (doubleLetterSquare.equals(location)) {
+                return true;
+            }
+        }
+
+        return false;
+
     }
 
     /**
@@ -135,18 +213,28 @@ public class ScrabbleView extends JFrame implements GameObserver {
                 boardButtons[i][j].setText(text);
                 boardButtons[i][j].setEnabled(text.isEmpty()); //If tile is occupied the button cannot be clicked
 
-                if(text.isEmpty() && ((i != 7) || (j != 7)))
+                if(text.isEmpty())
                 {
-                    boardButtons[i][j].setBackground(BOARD_COLOUR);
-                }
-                else if (!text.isEmpty())
-                {
-                    boardButtons[i][j].setBackground(TILE_COLOUR);
+                    String boardLocation = Integer.toString(i) + "," + Integer.toString(j);
+                    if(isTripleWordSquare(boardLocation)) {
+                        boardButtons[i][j].setBackground(TRIPLE_WORD_COLOUR);
+                    }else if(isDoubleWordSquare(boardLocation)){
+                        boardButtons[i][j].setBackground(DOUBLE_WORD_COLOUR);
+                    }else if(isTripleLetterSquare(boardLocation)){
+                        boardButtons[i][j].setBackground(TRIPLE_LETTER_COLOUR);
+                    }else if(isDoubleLetterSquare(boardLocation)){
+                        boardButtons[i][j].setBackground(DOUBLE_LETTER_COLOUR);
+                    }else{
+                        boardButtons[i][j].setBackground(BOARD_COLOUR);
+                    }
+
+
                 }
                 else
                 {
-                    boardButtons[i][j].setBackground(BOARD_CENTER);
+                    boardButtons[i][j].setBackground(TILE_COLOUR);
                 }
+
 
             }
         }
