@@ -8,10 +8,10 @@ import java.awt.Color;
 
 
 public class ScrabbleView extends JFrame implements GameObserver {
-    private static final String[] tripleWordSquares = {"0,0", "0,7", "0,14", "7,0", "7,14", "14,0", "14,7", "14,14"};
-    private static final String[] doubleWordSquares = {"1,1", "2,2", "3,3", "4,4", "1,13", "2,12", "3,11", "4,10", "14,1", "12,2", "12,3", "11,4", "14,14", "13,13", "12,12", "11,11", "7,7"};
-    private static final String[] tripleLetterSquares = {"1,5", "1,9", "5,1", "5,5", "5,9", "5,13", "9,1", "9,5", "9,13", "13,5", "13,9"};
-    private static final String[] doubleLetterSquares = {"0,3", "0,11", "2,6", "2,8", "3,7", "3,0", "3,14", "6,2", "6,6", "6,8", "6,12", "7,3", "7,11", "8,2", "8,6", "8,8", "8,12", "11,0", "11,7", "12,6", "12,8", "13,3", "13,11"};
+    public static final String[] TRIPLE_WORD_SQUARES = {"0,0", "0,7", "0,14", "7,0", "7,14", "14,0", "14,7", "14,14"};
+    public static final String[] DOUBLE_WORD_SQUARES = {"1,1", "2,2", "3,3", "4,4", "1,13", "2,12", "3,11", "4,10", "13,1", "12,2", "11,3", "10,4", "13,13", "12,12", "11,11", "10,10", "7,7"};
+    public static final String[] TRIPLE_LETTER_SQUARES = {"1,5", "1,9", "5,1", "5,5", "5,9", "5,13", "9,1", "9,5", "9,9", "9,13", "13,5", "13,9"};
+    private static final String[] DOUBLE_LETTER_SQUARES = {"0,3", "0,11", "2,6", "2,8", "3,7", "3,0", "3,14", "6,2", "6,6", "6,8", "6,12", "7,3", "7,11", "8,2", "8,6", "8,8", "8,12", "11,0", "11,7", "12,6", "12,8", "14,3", "14,11"};
     private JButton[][] boardButtons;
     private JTextPane scorePane;
     private Game game;
@@ -144,8 +144,8 @@ public class ScrabbleView extends JFrame implements GameObserver {
      * @param location The location of the board square
      * @return whether the square is a triple word premium square
      */
-    private boolean isTripleWordSquare(String location){
-        for (String tripleWordSquare : tripleWordSquares) {
+    public boolean isTripleWordSquare(String location){
+        for (String tripleWordSquare : TRIPLE_WORD_SQUARES) {
             if (tripleWordSquare.equals(location)) {
                 return true;
             }
@@ -159,8 +159,8 @@ public class ScrabbleView extends JFrame implements GameObserver {
      * @param location The location of the board square
      * @return whether the square is a double word premium square
      */
-    private boolean isDoubleWordSquare(String location){
-        for (String doubleWordSquare : doubleWordSquares) {
+    public boolean isDoubleWordSquare(String location){
+        for (String doubleWordSquare : DOUBLE_WORD_SQUARES) {
             if (doubleWordSquare.equals(location)) {
                 return true;
             }
@@ -174,8 +174,8 @@ public class ScrabbleView extends JFrame implements GameObserver {
      * @param location The location of the board square
      * @return whether the square is a triple letter premium square
      */
-    private boolean isTripleLetterSquare(String location){
-        for (String tripleLetterSquare : tripleLetterSquares) {
+    public boolean isTripleLetterSquare(String location){
+        for (String tripleLetterSquare : TRIPLE_LETTER_SQUARES) {
             if (tripleLetterSquare.equals(location)) {
                 return true;
             }
@@ -189,8 +189,8 @@ public class ScrabbleView extends JFrame implements GameObserver {
      * @param location The location of the board square
      * @return whether the square is a triple letter premium square
      */
-    private boolean isDoubleLetterSquare(String location){
-        for (String doubleLetterSquare : doubleLetterSquares) {
+    public boolean isDoubleLetterSquare(String location){
+        for (String doubleLetterSquare : DOUBLE_LETTER_SQUARES) {
             if (doubleLetterSquare.equals(location)) {
                 return true;
             }
@@ -213,6 +213,7 @@ public class ScrabbleView extends JFrame implements GameObserver {
                 boardButtons[i][j].setText(text);
                 boardButtons[i][j].setEnabled(text.isEmpty()); //If tile is occupied the button cannot be clicked
 
+                //board space colour for unoccupied spaces
                 if(text.isEmpty())
                 {
                     String boardLocation = Integer.toString(i) + "," + Integer.toString(j);
@@ -228,13 +229,12 @@ public class ScrabbleView extends JFrame implements GameObserver {
                         boardButtons[i][j].setBackground(BOARD_COLOUR);
                     }
 
-
                 }
+                //set to tile colour
                 else
                 {
                     boardButtons[i][j].setBackground(TILE_COLOUR);
                 }
-
 
             }
         }
