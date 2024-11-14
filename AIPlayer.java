@@ -1,3 +1,4 @@
+import java.sql.Array;
 import java.util.*;
 
 public class AIPlayer extends Player{
@@ -23,12 +24,7 @@ public class AIPlayer extends Player{
      */
     public void aiTurn()
     {
-        //Find all the valid locations in the board to place a word
-
-        //For each valid line the AI can place in
-            //Check if there exists a word made up of the board's letter and the letters on the rack
-            //If so, add into the AI's usedLetters and usedLocations
-                //Call addWord from the board
+        //Attempt to place words on the board
 
         //If made it through and no possible words, randomly exchange 3 letters on rack
     }
@@ -38,9 +34,9 @@ public class AIPlayer extends Player{
      */
     private void decideWord()
     {
-        //Hashmap that stores the valid placement on the board and the valid directions
-        HashMap<String, int[]> validWordPlacements = new HashMap<>();
-        HashMap<String, ArrayList<String>> validWordsAtLocation = new HashMap<>();
+        //HashMap of information about different valid ways to add words to the board
+        ArrayList<WordPlacementEvent> wordInfo = new ArrayList<>();
+
 
         //Determine all the valid locations the AI can place a word and how large
         for(int i = 0; i < Board.BOARD_SIZE; i++)
@@ -52,38 +48,29 @@ public class AIPlayer extends Player{
                 //Ensuring that only locations with at least one free space are added
                 for(int k = 0; k < 4; k++)
                 {
-                    if(wordSizes[k] > 0)
+                    //If there is room on the side we are adding the word AND the word is not being appended onto another word on the other side
+                    if(wordSizes[k] > 0 && wordSizes[k + 2 % 4] > 0)
                     {
                         String location = i + "," + j;
-                        validWordPlacements.put(location, wordSizes);
-                        validWordsAtLocation.put(location, new ArrayList<>());
-                        break;
+
+                        //Find the potential new words and add them to the list of words
+                        wordInfo.addAll(possibleWords(location, wordSizes[k], k));
                     }
                 }
             }
         }
 
-        //For each valid location/direction:
-        for(Iterator<String> iter = validWordPlacements.keySet().iterator(); iter.hasNext();)
+        //For all the words, attempt to add them to the board
+        for(WordPlacementEvent word: wordInfo)
         {
-            String location = iter.next();
-            //attempt to find a valid word that includes the valid location letter + letters on its rack
-            for(int i = 0; i < 4; i++)
+            int result = tryAddToBoard(word);
+
+            if(result > 0)
             {
-                int sizeInDirection = validWordPlacements.get(location)[i];
-                if(sizeInDirection > 0)
-                {
-                    String[] indices = location.split(",");
-                    int j = Integer.parseInt(indices[0]);
-                    int k = Integer.parseInt(indices[1]);
-                    validWordsAtLocation.put(location, possibleWords(j, k, Math.min(sizeInDirection, 8)));
-                }
+                updateScore(result);
+                break;
             }
         }
-
-        //Ensure the validity of its placement
-
-
 
     }
 
@@ -156,33 +143,53 @@ public class AIPlayer extends Player{
 
     /**
      * This method returns all the possible words that can be made from a particular location
-     * @param i The row of the location to be examined
-     * @param j The column of the location to be examined
-     * @param max_size The maximum size the word can be to fit on the board
+     * @param location the indexes of the main location, separated by commas
+     * @param max_size the maximum number of letters the word is allowed to be
+     * @param direction The cardinal direction the word will be going from the original location
      * @return An arraylist that holds all the possible words that can be placed at one location on the board, sorted by score
      */
-    public ArrayList<String> possibleWords(int i, int j, int max_size)
+    public ArrayList<WordPlacementEvent> possibleWords(String location, int max_size, int direction)
     {
-        Letter boardLetter = board.getBoardAppearance()[i][j];
-        ArrayList<String> validWords = new ArrayList<>();
+        String[] indices = location.split(",");
+        Letter boardLetter = board.getBoardAppearance()[Integer.parseInt(indices[0])][Integer.parseInt(indices[1])];
+        ArrayList<WordPlacementEvent> validWords = new ArrayList<>();
         int wordLength = 2;
         Random rand = new Random();
 
         while(wordLength < max_size)
         {
             ArrayList<Letter> unusedLetters = new ArrayList<>(rack); //Holds all the letters that the AI can still use
-            unusedLetters.add(boardLetter);
             StringBuffer wordBuilt =  new StringBuffer(8); //Need to re-initiate with new every cycle
+            ArrayList<Letter> addedLetters = new ArrayList<>(); //Holds all the added letters that the AI has used
 
-            for(int k = 0; k < wordLength; k++)
+            //if the direction is east or south, the first letter will be the one from the board
+            if(direction % 3 != 0)
             {
+                wordBuilt.append(boardLetter.getLetter());
+                addedLetters.add(boardLetter);
+            }
+
+            //The first letter will either be the first or last letter
+
+            for(int k = 0; k < wordLength - 1; k++)
+            {
+                Letter usedLetter = unusedLetters.remove(rand.nextInt(8));
                 //adding a random unused letter to the end of the word
-                wordBuilt.append(unusedLetters.remove(rand.nextInt(8)).getLetter());
+                wordBuilt.append(usedLetter.getLetter());
+                addedLetters.add(usedLetter);
+            }
+
+            //If the direction is north or west, the last letter must be the letter on the board
+            if(direction % 3 == 0)
+            {
+                wordBuilt.append(boardLetter.getLetter());
+                addedLetters.add(boardLetter);
             }
 
             if(Board.words.contains(wordBuilt.toString()))
             {
-                validWords.add(wordBuilt.toString());
+                //Creating a new placement
+                validWords.add(new WordPlacementEvent(location, direction, wordBuilt.toString(), addedLetters));
             }
 
             wordLength ++;
@@ -202,5 +209,29 @@ public class AIPlayer extends Player{
         char rowChar = (char) ('a' + i);
 
         return Character.toString(rowChar) + j;
+    }
+
+    /**
+     * This method translates all the information into language the board understands and attempts to add the word
+     * @param word The WordPlacementEvent with all the information about the word
+     * @return The score from adding the word to the board
+     */
+    private int tryAddToBoard(WordPlacementEvent word)
+    {
+        //Determine the places the word starts
+        String[] startingIndices = word.getLocation().split(",");
+        int startRow = Integer.parseInt(startingIndices[0]);
+        int startColumn = Integer.parseInt(startingIndices[1]);
+
+        //Getting all the locations the word crosses
+        for(int i = 0; i < word.wordLength(); i++)
+        {
+
+        }
+
+        //Translate each index location into scrabble notation and add to the board
+
+        //add the word to the board
+        return board.addWord(word.getLetters(), )
     }
 }
