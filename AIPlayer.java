@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.HashMap;
-import java.util.Hashtable;
+import java.util.*;
 
 public class AIPlayer extends Player{
     private Board board;
@@ -114,29 +111,31 @@ public class AIPlayer extends Player{
      * @param j The column of the location to be examined
      * @return An arraylist that holds all the possible words that can be placed at one location on the board, sorted by score
      */
-    public ArrayList<String> possibleWords(int i, int j)
+    public ArrayList<String> possibleWords(int i, int j, int max_size)
     {
-        char boardLetter = board.getBoardAppearance()[i][j].getLetter();
+        Letter boardLetter = board.getBoardAppearance()[i][j];
         ArrayList<String> validWords = new ArrayList<>();
+        int wordLength = 2;
+        Random rand = new Random();
 
-        //Finding all the valid combinations of letters that form words
-        for(int k = 0; k < 8; k++)
+        while(wordLength < max_size)
         {
-            for(int l = 0; l < 8; l++)
+            ArrayList<Letter> unusedLetters = new ArrayList<>(rack); //Holds all the letters that the AI can still use
+            unusedLetters.add(boardLetter);
+            StringBuffer wordBuilt =  new StringBuffer(8); //Need to re-initiate with new every cycle
+
+            for(int k = 0; k < wordLength; k++)
             {
-                char[] testWord1 = {rack.get(k).getLetter(), boardLetter};
-                char[] testWord2 = {boardLetter, rack.get(k).getLetter()};
-                String testString = new String(testWord1);
-                String testString2 = new String(testWord2);
-                if(Board.words.contains(testString))
-                {
-                    validWords.add(testString);
-                }
-                if(Board.words.contains(testString2))
-                {
-                    validWords.add(testString2);
-                }
+                //adding a random unused letter to the end of the word
+                wordBuilt.append(unusedLetters.remove(rand.nextInt(8)).getLetter());
             }
+
+            if(Board.words.contains(wordBuilt.toString()))
+            {
+                validWords.add(wordBuilt.toString());
+            }
+
+            wordLength ++;
         }
 
         return validWords;
