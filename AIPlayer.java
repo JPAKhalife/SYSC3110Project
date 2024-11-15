@@ -32,7 +32,7 @@ public class AIPlayer extends Player{
     /**
      * This function determines what word the player will place, and where
      */
-    private void decideWord()
+    private boolean decideWord()
     {
         //HashMap of information about different valid ways to add words to the board
         ArrayList<WordPlacementEvent> wordInfo = new ArrayList<>();
@@ -150,8 +150,13 @@ public class AIPlayer extends Player{
      */
     public ArrayList<WordPlacementEvent> possibleWords(String location, int max_size, int direction)
     {
+        //Obtaining the indices for the letter the word is built around
         String[] indices = location.split(",");
-        Letter boardLetter = board.getBoardAppearance()[Integer.parseInt(indices[0])][Integer.parseInt(indices[1])];
+        int i = Integer.parseInt(indices[0]);
+        int j = Integer.parseInt(indices[1]);
+        char boardLetter = board.getBoardAppearance()[i][j].getLetter();
+
+        //Declaring variables
         ArrayList<WordPlacementEvent> validWords = new ArrayList<>();
         int wordLength = 2;
         Random rand = new Random();
@@ -162,15 +167,7 @@ public class AIPlayer extends Player{
             StringBuffer wordBuilt =  new StringBuffer(8); //Need to re-initiate with new every cycle
             ArrayList<Letter> addedLetters = new ArrayList<>(); //Holds all the added letters that the AI has used
 
-            //if the direction is east or south, the first letter will be the one from the board
-            if(direction % 3 != 0)
-            {
-                wordBuilt.append(boardLetter.getLetter());
-                addedLetters.add(boardLetter);
-            }
-
-            //The first letter will either be the first or last letter
-
+            //The first letter will either be the first or last letter, so can build the rest without worrying about sub-permutations
             for(int k = 0; k < wordLength - 1; k++)
             {
                 Letter usedLetter = unusedLetters.remove(rand.nextInt(8));
@@ -179,14 +176,8 @@ public class AIPlayer extends Player{
                 addedLetters.add(usedLetter);
             }
 
-            //If the direction is north or west, the last letter must be the letter on the board
-            if(direction % 3 == 0)
-            {
-                wordBuilt.append(boardLetter.getLetter());
-                addedLetters.add(boardLetter);
-            }
-
-            if(Board.words.contains(wordBuilt.toString()))
+            //The board letter needs to be at the START of the word if the word goes east or south, and at the END of the word if the word goes north or west
+            if((direction % 3 != 0 && Board.words.contains(boardLetter + wordBuilt.toString())) || (direction %3 == 0 && Board.words.contains(wordBuilt.toString() + boardLetter)))
             {
                 //Creating a new placement
                 validWords.add(new WordPlacementEvent(location, direction, wordBuilt.toString(), addedLetters));
@@ -208,7 +199,8 @@ public class AIPlayer extends Player{
     {
         char rowChar = (char) ('a' + i);
 
-        return Character.toString(rowChar) + j;
+        //Need to add the +1 because the columns begin at 1
+        return Character.toString(rowChar) + (j + 1);
     }
 
     /**
@@ -226,12 +218,28 @@ public class AIPlayer extends Player{
         //Getting all the locations the word crosses
         for(int i = 0; i < word.wordLength(); i++)
         {
-
+            if(word.getDirection() == SOUTH)
+            {
+                //Need to start 1 after the starting index, since that is already on the board
+                playedLocations.add(translateIndexToScrabbleNotation(startRow + i + 1, startColumn));
+            }
+            else if(word.getDirection() == EAST)
+            {
+                playedLocations.add(translateIndexToScrabbleNotation(startRow, startColumn + i + 1));
+            }
+            else if(word.getDirection() == NORTH)
+            {
+                //Since the letters are in order, we need to start from the topmost one, hence the subtraction
+                playedLocations.add(translateIndexToScrabbleNotation(Math.abs(startRow - (word.wordLength() - i)), startColumn));
+            }
+            else //WEST
+            {
+                //Since the letters are in order, their positions need to start with the leftmost one and move towards the "starting index"
+                playedLocations.add(translateIndexToScrabbleNotation(startRow, Math.abs(startColumn - (word.wordLength() - i))));
+            }
         }
 
-        //Translate each index location into scrabble notation and add to the board
-
         //add the word to the board
-        return board.addWord(word.getLetters(), )
+        return board.addWord(word.getLetters(), playedLocations);
     }
 }
