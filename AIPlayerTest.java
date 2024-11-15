@@ -5,16 +5,18 @@ import static org.junit.Assert.*;
 
 public class AIPlayerTest {
     private AIPlayer player;
+    private Board board;
+
     @Before
     public void setUp()
     {
-        Board board = new Board();
+        board = new Board();
         player = new AIPlayer(board);
     }
 
     @Test
     public void aiTurn()
     {
-
+        player.aiTurn();
     }
 }

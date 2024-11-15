@@ -34,7 +34,7 @@ public class AIPlayer extends Player{
         {
             for(int i = 0; i < 3; i++)
             {
-                playedLetters.add(rack.get(rand.nextInt(rack.size())));
+                playedLetters.add(rack.get(rand.nextInt(rack.size()) + 1));
             }
 
             playerTurn(2);
