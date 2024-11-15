@@ -28,13 +28,15 @@ public class AIPlayer extends Player{
     {
         //Attempt to place words on the board
         boolean placedWord = decideWord();
+        System.out.println(board.getStatus().getError().getErrorDescription());
 
         //If made it through and no possible words, randomly exchange 3 letters on rack
         if(!placedWord)
         {
+            System.out.println("Failed to find a valid word\n");
             for(int i = 0; i < 3; i++)
             {
-                playedLetters.add(rack.get(rand.nextInt(rack.size()) + 1));
+                playedLetters.add(rack.get(rand.nextInt(rack.size())));
             }
 
             playerTurn(2);
@@ -50,8 +52,9 @@ public class AIPlayer extends Player{
         ArrayList<WordPlacementEvent> wordInfo = new ArrayList<>();
         if(board.isFirstTurn())
         {
+            System.out.println("First turn");
             //The AI will always play a south-facing word when it starts out
-            wordInfo.addAll(possibleWords("7,7", 7, SOUTH));
+            wordInfo.addAll(possibleWords("6,7", 7, SOUTH));
         }
         else {
             //Determine all the valid locations the AI can place a word and how large
@@ -62,11 +65,18 @@ public class AIPlayer extends Player{
                     //Ensuring that only locations with at least one free space are added
                     for (int k = 0; k < 4; k++) {
                         //If there is room on the side we are adding the word AND the word is not being appended onto another word on the other side
-                        if (wordSizes[k] > 0 && wordSizes[k + 2 % 4] > 0) {
+                        if (wordSizes[k] > 0 && wordSizes[(k + 2) % 4] > 0) {
                             String location = i + "," + j;
+                            System.out.println(location);
 
                             //Find the potential new words and add them to the list of words
                             wordInfo.addAll(possibleWords(location, wordSizes[k], k));
+
+                            //DEBUGGING FOR LOOP
+                            for(int h = 0; h < wordInfo.size(); h++)
+                            {
+                                System.out.println(wordInfo.get(i));
+                            }
                         }
                     }
                 }
@@ -80,12 +90,18 @@ public class AIPlayer extends Player{
 
             if(result > 0)
             {
+                System.out.println("Adding score");
                 updateScore(result);
                 return true;
+            }
+            else
+            {
+                playedLocations.clear();
             }
         }
 
         //Went through all the generated words and none worked
+        System.out.println("Did not find a word");
         return false;
     }
 
@@ -98,14 +114,25 @@ public class AIPlayer extends Player{
     private int[] validWordSize(int i, int j)
     {
         int[] freeSpacesInDirection = new int[4];
+        for(int k = 0; k < freeSpacesInDirection.length; k++)
+        {
+            freeSpacesInDirection[k] = 0;
+        }
+
         Letter[][] boardAppearance = board.getBoardAppearance();
+        if(boardAppearance[i][j] == null)
+        {
+            return freeSpacesInDirection;
+        }
+
+
         int offsetFromInput = 0;
 
         //North
-        if(boardAppearance[i - 1][j] == null)
+        if((i - 1) >= 0 && boardAppearance[i - 1][j] == null)
         {
 
-            while((boardAppearance[i - offsetFromInput][j]) == null && ((i - offsetFromInput) >= 0))
+            while(((i - offsetFromInput) >= 0) && (boardAppearance[i - offsetFromInput][j]) == null)
             {
                 offsetFromInput ++;
             }
@@ -114,11 +141,11 @@ public class AIPlayer extends Player{
             freeSpacesInDirection[NORTH] = offsetFromInput - 1;
         }
         //East
-        if(boardAppearance[i][j + 1] == null)
+        if((j + 1) < Board.BOARD_SIZE && boardAppearance[i][j + 1] == null)
         {
             offsetFromInput = 1;
 
-            while((boardAppearance[i][j + offsetFromInput] == null) && ((j + offsetFromInput) < Board.BOARD_SIZE))
+            while(((j + offsetFromInput) < Board.BOARD_SIZE)&& (boardAppearance[i][j + offsetFromInput] == null))
             {
                 offsetFromInput ++;
             }
@@ -127,11 +154,11 @@ public class AIPlayer extends Player{
             freeSpacesInDirection[EAST] = offsetFromInput - 1;
         }
         //This is one row down, aka South
-        if(boardAppearance[i + 1][j] == null)
+        if((i + 1) <= Board.BOARD_SIZE && boardAppearance[i + 1][j] == null)
         {
             offsetFromInput = 1;
 
-            while((boardAppearance[i + offsetFromInput][j] == null) && ((i + offsetFromInput) < Board.BOARD_SIZE))
+            while(((i + offsetFromInput) < Board.BOARD_SIZE) && (boardAppearance[i + offsetFromInput][j] == null))
             {
                 offsetFromInput ++;
             }
@@ -140,11 +167,11 @@ public class AIPlayer extends Player{
             freeSpacesInDirection[SOUTH] = offsetFromInput - 1;
         }
         //West
-        if(boardAppearance[i][j - 1] == null)
+        if((j - 1) >= 0 && boardAppearance[i][j - 1] == null)
         {
             offsetFromInput = 1;
 
-            while((boardAppearance[i][j - offsetFromInput] == null) && ((j - offsetFromInput) >= 0))
+            while(((j - offsetFromInput) >= 0) && (boardAppearance[i][j - offsetFromInput] == null))
             {
                 offsetFromInput ++;
             }
@@ -170,6 +197,7 @@ public class AIPlayer extends Player{
         int i = Integer.parseInt(indices[0]);
         int j = Integer.parseInt(indices[1]);
         char boardLetter = ' ';
+
         if(!board.isFirstTurn())
         {
             boardLetter = board.getBoardAppearance()[i][j].getLetter();
@@ -191,14 +219,16 @@ public class AIPlayer extends Player{
                 //The first letter will either be the first or last letter, so can build the rest without worrying about sub-permutations
                 for (int k = 0; k < wordLength - 1; k++)
                 {
-                    Letter usedLetter = unusedLetters.remove(rand.nextInt(8));
+                    Letter usedLetter = unusedLetters.remove(rand.nextInt(unusedLetters.size()));
                     //adding a random unused letter to the end of the word
                     wordBuilt.append(usedLetter.getLetter());
                     addedLetters.add(usedLetter);
                 }
 
+                System.out.println(wordBuilt);
+
                 //The board letter needs to be at the START of the word if the word goes east or south, and at the END of the word if the word goes north or west
-                if(board.isFirstTurn() && Board.words.contains(wordBuilt.toString()))
+                if(Board.words.contains(wordBuilt.toString()))
                 {
                     //yes, this is duplicate code, but the if statement was getting way too difficult to maintain
                     validWords.add(new WordPlacementEvent(location, direction, wordBuilt.toString(), addedLetters));
@@ -263,6 +293,9 @@ public class AIPlayer extends Player{
                 playedLocations.add(translateIndexToScrabbleNotation(startRow, Math.abs(startColumn - (word.wordLength() - i))));
             }
         }
+
+        System.out.println("Number of locations: " + playedLocations.size());
+        System.out.println("Number of letters: " + word.getLetters().size());
 
         //add the word to the board
         return board.addWord(word.getLetters(), playedLocations);
