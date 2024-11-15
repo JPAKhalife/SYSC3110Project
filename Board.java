@@ -13,10 +13,9 @@ import java.lang.*;
 public class Board {
     public static final int BOARD_SIZE = 15;
     private Letter[][] board;
-    public static HashSet<String> words;
+    public static HashSet<String> words; //set of all valid words
     private boolean firstTurn;
     private ErrorEvent status;
-    
 
     /**
      * Constructor for Board
@@ -27,7 +26,6 @@ public class Board {
         firstTurn = true;
         loadWords();
         status = new ErrorEvent();
-
     }
 
     /**
@@ -53,13 +51,12 @@ public class Board {
     /**
      * Checks if the word being placed on the board is a valid word in the game's
      * word bank
-     * 
+     *
      * @param letters The letters of the word being placed
      * @return whether the word can be placed on the board
      */
     private boolean isWord(ArrayList<Letter> letters) {
         String letterString = "";
-
         // convert ArrayList of Letters to a string
         for (Letter s : letters) {
             letterString += s.getLetter();
@@ -68,17 +65,15 @@ public class Board {
         if (words.contains(letterString)) {
             return true;
         }
-
         return false;
     }
 
     /**
      * Check if the placement of a particular letter is avalible on the board
-     * 
+     *
      * @param location The square the letter is being placed on
      * @return whether the letter can be placed
      */
-
     private boolean isValidPlacement(String location) {
         // location is not a two-dimensional coordinate (number may be 2 digits)
         if (location.length() > 3) {
@@ -114,7 +109,6 @@ public class Board {
 
         // check is placement is taken already
         if (board[letter - 'a'][Integer.parseInt(number) - 1] != null) {
-
             return false;
         }
 
@@ -131,6 +125,9 @@ public class Board {
     public int addWord(ArrayList<Letter> word, ArrayList<String> letterLocation) {
         int turnScore = 0; //represents score
         int direction; //0 is horizontal, 1 is vertical.
+
+        //Clearing the errors the board has so old errors don't cause issues
+        status.setError(ErrorEvent.GameError.NONE);
 
         // check that each letter has a location
         if (word.size() != letterLocation.size()) {
@@ -167,7 +164,10 @@ public class Board {
         } else {
             //If it is not the first turn, it needs to be verified
             //that the word being added intersects another word.
-            if (!isConnected(letterLocation)) {return 0;}
+            if (!isConnected(letterLocation)) {
+                this.status.setError(ErrorEvent.GameError.WORD_NOT_CONNECTED);
+                return -1;
+            }
         }
 
         //Grab the primary direction - all letters must be placed on one axis
@@ -209,37 +209,6 @@ public class Board {
     }
 
     /**
-     * Generate a String representation of the current status of the board including
-     * all the letters that have been
-     * placed on it.
-     * 
-     * @return the String representation of the board
-     */
-    public String toString(){
-        String strBoard = "";
-        char letter = 'A';
-        strBoard += "   ";
-        for (int i = 1 ; i < BOARD_SIZE + 1 ; i++) {
-            strBoard += "{" + i + "}";
-        }
-        strBoard += "\n";
-        for(int i = 0; i < BOARD_SIZE; i++){
-            strBoard += letter + "  ";
-            letter++;
-            for(int j = 0; j < BOARD_SIZE; j++){
-                if(this.board[i][j] == null){
-                    strBoard += "[ ]";
-                }else{
-                    strBoard += "[" + this.board[i][j].getLetter() + "]";
-                }
-            }
-            strBoard += "\n";
-        }
-
-        return strBoard;
-    }
-
-    /**
      * Take the string representation of a board location and return the numeric coordinate
      * @param location The loaction on the board
      * @param axis
@@ -256,7 +225,7 @@ public class Board {
         } else {
             return location.charAt(0) - 'a';
         }
-        
+
     }
 
     /**
@@ -310,14 +279,12 @@ public class Board {
         ArrayList<Letter> boardSlice = grabWordSlice(direction, location);
 
         //Now grab the smallest and largest coords of the full word formed
-        for (int i = 0 ; i <= smallestCoord ; i++) {
-            if (boardSlice.get(smallestCoord - i) == null) {break;}
-            smallestCoord = smallestCoord - i;
+        while (boardSlice.get(smallestCoord - 1) != null) {
+            smallestCoord--;
         }
 
-        for (int j = 0 ; j < (BOARD_SIZE-largestCoord) ; j++) {
-            if (boardSlice.get(largestCoord + j) == null) {break;}
-            largestCoord = largestCoord + j;
+        while (boardSlice.get(largestCoord + 1) != null) {
+            largestCoord++;
         }
 
         ArrayList<Letter> scoreWord = new ArrayList<Letter>(boardSlice.subList(smallestCoord, largestCoord + 1));
@@ -449,6 +416,15 @@ public class Board {
      */
     public ErrorEvent getStatus() {
         return status;
+    }
+
+    /**
+     * Returns a copy of the board's physical appearance
+     * @return A copy array representing the board's current appearance
+     */
+    public Letter[][] getBoardAppearance()
+    {
+        return board.clone();
     }
 
 } //end class

@@ -11,28 +11,41 @@ import java.util.*;
 public class Game {
 
     private ArrayList<Player> players;
+    private ArrayList<AIPlayer> AIplayers;
     private Board board;
     private int currentPlayer;
     private ArrayList<GameObserver> views;
 
+
     /**
      * Basic constructor for Game
      */
-    public Game() {
+    public Game(int playerNum, int AIplayerNum) {
         players = new ArrayList<>();
+        AIplayers = new ArrayList<>();
         board = new Board();
         currentPlayer = 0;
         views = new ArrayList<>();
+        LetterBag.createBag();
+
+        for(int i = 0; i < playerNum; i++)
+        {
+            addPlayer();
+        }
+
+        for(int i = 0; i< AIplayerNum; i++)
+        {
+            addAIplayer();
+        }
     }
 
     /**
      * This method returns a desired player given their index
      *
-     * @param index The index of the player to be extracted
      * @return The player located at the appropriate index
      */
-    public Player getPlayer(int index) {
-        return this.players.get(index);
+    public Player getCurrentPlayer() {
+        return this.players.get(currentPlayer);
     }
 
     public ArrayList<Player> getPlayers() {
@@ -52,19 +65,35 @@ public class Game {
         }
     }
 
+    public boolean addAIplayer(){
+        try{
+            AIplayers.add(new AIPlayer(board));
+            return true;
+        } catch (Exception e){
+            return false;
+        }
+    }
+
     /**
-     * Using the known player scores, determines the winner at the end of the game
+     * Using the known player scores, determines the player with the highest score at the moment
+     * Intended to be used at the end of the game to find the winner
      *
      * @return The Player who won
      */
-    public Player findWinner() {
-        Player winner = new Player();
+    public int findWinner() {
+        int winner = -1;
         int winnerScore = 0;
-        for (Player player : players) {
-            if (player.getScore() > winnerScore) {
-                winner = player;
-                winnerScore = player.getScore();
+        for (int i = 0; i< players.size(); i++) {
+            if (players.get(i).getScore() > winnerScore) {
+                winner = i;
+                winnerScore = players.get(i).getScore();
             }
+        }
+
+        //Tell the view to update the winner
+        for(GameObserver view: views)
+        {
+            view.handleScoreUpdate(winner);
         }
 
         return winner;
@@ -79,6 +108,7 @@ public class Game {
      * @return A boolean stating whether the word was successfully added to the board
      */
     public int addWord(Dictionary<ArrayList<Letter>, ArrayList<String>> word) {
+
         if (word.isEmpty()) {
             return -1;
         }
@@ -87,7 +117,8 @@ public class Game {
         ArrayList<String> locations = word.elements().nextElement(); //Extracting the locations
 
         int wordScore = board.addWord(letters, locations);
-        if (wordScore < 0) {
+
+        if (wordScore > 0) {
             for (int i = 0 ; i < views.size() ; i++) {
                 views.get(i).handleBoardUpdate(getBoard().getStatus());
             }
@@ -111,94 +142,48 @@ public class Game {
      */
     public void removeView(GameObserver view) {
         views.remove(view);
+    }
+
+    /**
+     * handleNewTurn performs the necessary actions to change which player's turn it is
+     */
+    public void handleNewTurn()
+    {
+
+        //Giving the next player a turn
+        currentPlayer = (currentPlayer + 1) % players.size();
+
+        //displaying the updated scores and board statuses
+        for(GameObserver view: views)
+        {
+            view.handleScoreUpdate(-1);
+            view.handleNewTurn(currentPlayer);
+        }
+
+        //Other things that need to be done somewhere:
+        //2. Checking if the game is over via the bag being empty
+        //3. If so, finding the winner
+        //4. Otherwise, call this function to make the next turn occur
 
     }
-/**
-    public static void main(String[] args) {
-        LetterBag.createBag();
-        Game game = new Game();
-        boolean success = false;
-        boolean gameOn = true;
-        int playerIndex = 0;
-        Display gui = new Display(game);
 
-        Scanner scan = new Scanner(System.in);
-        int numPlayers = 0;
-
-        //Adding the number of players the user wants to the game
-        while (!success) {
-            System.out.print("Enter the number of players that will be playing (2 - 4): ");
-            numPlayers = scan.nextInt();
-
-            if ((numPlayers < 5) && (numPlayers > 1)) {
-                success = true;
-                scan.nextLine(); //clearing buffer
-            }
+    /**
+     * This method is called when the Board returns an error, and updates all the
+     * views accordingly
+     */
+    public void handleBoardError()
+    {
+        for(GameObserver view: views)
+        {
+            view.handleBoardUpdate(board.getStatus());
         }
-
-        //Adding a standard 4 players
-        for (int i = 0; i < numPlayers; i++) {
-            game.addPlayer();
-            boolean working = game.getPlayer(i).pullFromBag();
-
-            if (!working) {
-
-                System.out.println("Failed to pull from bag");
-            }
-
-        }
-
-        //Starting player
-        Player currentPlayer = game.getPlayer(playerIndex);
-
-        //While there are still letters to pull from the bag, and no player's rack is empty, the game continues
-        while (gameOn) {
-            int turnPoints = 0;
-            success = false;
-
-            //Displaying the board for the players
-            gui.displayBoard();
-
-            //Player can attempt over and over again to create a proper word
-            while (!success) {
-                System.out.println("It is player " + (playerIndex + 1) + "'s turn.");
-                Dictionary<ArrayList<Letter>, ArrayList<String>> word = currentPlayer.playerTurn();
-                turnPoints = game.addWord(word);
-                success = (turnPoints != 0);
-
-                if (!success) {
-                    System.out.println("Please try again.\n");
-                }
-            }
-
-            //Ensuring the player can never lose points
-            if (turnPoints < 0) {
-                turnPoints = 0;
-            }
-
-            //Only update the score if the user's word is valid
-            currentPlayer.updateScore(turnPoints);
-
-            //player pulls from the bag until they have 7 letters in their rack
-            boolean bagNotEmpty = currentPlayer.pullFromBag();
-            //if the user's rack is empty, the game is over
-
-            if (currentPlayer.isRackEmpty() && !bagNotEmpty) {
-                gameOn = false;
-            }
-
-            //displaying the player's updated score to them
-            gui.showScores();
-
-            //updating which player is working
-            playerIndex = (playerIndex + 1) % numPlayers;
-
-            currentPlayer = game.getPlayer(playerIndex);
-        }
-
-        //Game is over, now must calculate the winner
-        Player winner = game.findWinner();
-
     }
- */
+
+    /**
+     * Returns the current observers of this instance of Game
+     * @return An ArrayList of all the objects currently observing the Game
+     */
+    public ArrayList<GameObserver> getViews(){
+        return this.views;
+    }
 }
