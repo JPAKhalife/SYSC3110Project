@@ -3,6 +3,7 @@ import java.util.*;
 
 public class AIPlayer extends Player{
     private Board board;
+    Random rand;
     public static final int NORTH = 0;
     public static final int EAST = 1;
     public static final int SOUTH = 2;
@@ -17,6 +18,7 @@ public class AIPlayer extends Player{
         super();
 
         this.board = board;
+        rand = new Random();
     }
 
     /**
@@ -25,8 +27,18 @@ public class AIPlayer extends Player{
     public void aiTurn()
     {
         //Attempt to place words on the board
+        boolean placedWord = decideWord();
 
         //If made it through and no possible words, randomly exchange 3 letters on rack
+        if(!placedWord)
+        {
+            for(int i = 0; i < 3; i++)
+            {
+                playedLetters.add(rack.get(rand.nextInt(rack.size())));
+            }
+
+            playerTurn(2);
+        }
     }
 
     /**
@@ -68,10 +80,12 @@ public class AIPlayer extends Player{
             if(result > 0)
             {
                 updateScore(result);
-                break;
+                return true;
             }
         }
 
+        //Went through all the generated words and none worked
+        return false;
     }
 
     /**
@@ -159,31 +173,32 @@ public class AIPlayer extends Player{
         //Declaring variables
         ArrayList<WordPlacementEvent> validWords = new ArrayList<>();
         int wordLength = 2;
-        Random rand = new Random();
 
-        while(wordLength < max_size)
-        {
-            ArrayList<Letter> unusedLetters = new ArrayList<>(rack); //Holds all the letters that the AI can still use
-            StringBuffer wordBuilt =  new StringBuffer(8); //Need to re-initiate with new every cycle
-            ArrayList<Letter> addedLetters = new ArrayList<>(); //Holds all the added letters that the AI has used
+        while(wordLength < max_size) {
 
-            //The first letter will either be the first or last letter, so can build the rest without worrying about sub-permutations
-            for(int k = 0; k < wordLength - 1; k++)
+            //We will make an average of 7 attempts to create a valid word for each size
+            for(int t = 0; t < rack.size(); t++)
             {
-                Letter usedLetter = unusedLetters.remove(rand.nextInt(8));
-                //adding a random unused letter to the end of the word
-                wordBuilt.append(usedLetter.getLetter());
-                addedLetters.add(usedLetter);
-            }
+                ArrayList<Letter> unusedLetters = new ArrayList<>(rack); //Holds all the letters that the AI can still use
+                StringBuffer wordBuilt = new StringBuffer(8); //Need to re-initiate with new every cycle
+                ArrayList<Letter> addedLetters = new ArrayList<>(); //Holds all the added letters that the AI has used
 
-            //The board letter needs to be at the START of the word if the word goes east or south, and at the END of the word if the word goes north or west
-            if((direction % 3 != 0 && Board.words.contains(boardLetter + wordBuilt.toString())) || (direction %3 == 0 && Board.words.contains(wordBuilt.toString() + boardLetter)))
-            {
-                //Creating a new placement
-                validWords.add(new WordPlacementEvent(location, direction, wordBuilt.toString(), addedLetters));
-            }
+                //The first letter will either be the first or last letter, so can build the rest without worrying about sub-permutations
+                for (int k = 0; k < wordLength - 1; k++)
+                {
+                    Letter usedLetter = unusedLetters.remove(rand.nextInt(8));
+                    //adding a random unused letter to the end of the word
+                    wordBuilt.append(usedLetter.getLetter());
+                    addedLetters.add(usedLetter);
+                }
 
-            wordLength ++;
+                //The board letter needs to be at the START of the word if the word goes east or south, and at the END of the word if the word goes north or west
+                if ((direction % 3 != 0 && Board.words.contains(boardLetter + wordBuilt.toString())) || (direction % 3 == 0 && Board.words.contains(wordBuilt.toString() + boardLetter))) {
+                    //Creating a new placement
+                    validWords.add(new WordPlacementEvent(location, direction, wordBuilt.toString(), addedLetters));
+                }
+            }
+            wordLength++;
         }
 
         return validWords;
