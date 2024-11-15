@@ -162,7 +162,7 @@ public class AIPlayer extends Player{
      * @param direction The cardinal direction the word will be going from the original location
      * @return An arraylist that holds all the possible words that can be placed at one location on the board, sorted by score
      */
-    public ArrayList<WordPlacementEvent> possibleWords(String location, int max_size, int direction)
+    private ArrayList<WordPlacementEvent> possibleWords(String location, int max_size, int direction)
     {
         //Obtaining the indices for the letter the word is built around
         String[] indices = location.split(",");
