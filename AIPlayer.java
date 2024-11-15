@@ -48,25 +48,26 @@ public class AIPlayer extends Player{
     {
         //HashMap of information about different valid ways to add words to the board
         ArrayList<WordPlacementEvent> wordInfo = new ArrayList<>();
-
-
-        //Determine all the valid locations the AI can place a word and how large
-        for(int i = 0; i < Board.BOARD_SIZE; i++)
+        if(board.isFirstTurn())
         {
-            for(int j = 0; j < Board.BOARD_SIZE; j++)
-            {
-                int[] wordSizes = validWordSize(i, j);
+            //The AI will always play a south-facing word when it starts out
+            wordInfo.addAll(possibleWords("7,7", 7, SOUTH));
+        }
+        else {
+            //Determine all the valid locations the AI can place a word and how large
+            for (int i = 0; i < Board.BOARD_SIZE; i++) {
+                for (int j = 0; j < Board.BOARD_SIZE; j++) {
+                    int[] wordSizes = validWordSize(i, j);
 
-                //Ensuring that only locations with at least one free space are added
-                for(int k = 0; k < 4; k++)
-                {
-                    //If there is room on the side we are adding the word AND the word is not being appended onto another word on the other side
-                    if(wordSizes[k] > 0 && wordSizes[k + 2 % 4] > 0)
-                    {
-                        String location = i + "," + j;
+                    //Ensuring that only locations with at least one free space are added
+                    for (int k = 0; k < 4; k++) {
+                        //If there is room on the side we are adding the word AND the word is not being appended onto another word on the other side
+                        if (wordSizes[k] > 0 && wordSizes[k + 2 % 4] > 0) {
+                            String location = i + "," + j;
 
-                        //Find the potential new words and add them to the list of words
-                        wordInfo.addAll(possibleWords(location, wordSizes[k], k));
+                            //Find the potential new words and add them to the list of words
+                            wordInfo.addAll(possibleWords(location, wordSizes[k], k));
+                        }
                     }
                 }
             }
@@ -168,7 +169,11 @@ public class AIPlayer extends Player{
         String[] indices = location.split(",");
         int i = Integer.parseInt(indices[0]);
         int j = Integer.parseInt(indices[1]);
-        char boardLetter = board.getBoardAppearance()[i][j].getLetter();
+        char boardLetter = ' ';
+        if(!board.isFirstTurn())
+        {
+            boardLetter = board.getBoardAppearance()[i][j].getLetter();
+        }
 
         //Declaring variables
         ArrayList<WordPlacementEvent> validWords = new ArrayList<>();
@@ -193,7 +198,12 @@ public class AIPlayer extends Player{
                 }
 
                 //The board letter needs to be at the START of the word if the word goes east or south, and at the END of the word if the word goes north or west
-                if ((direction % 3 != 0 && Board.words.contains(boardLetter + wordBuilt.toString())) || (direction % 3 == 0 && Board.words.contains(wordBuilt.toString() + boardLetter))) {
+                if(board.isFirstTurn() && Board.words.contains(wordBuilt.toString()))
+                {
+                    //yes, this is duplicate code, but the if statement was getting way too difficult to maintain
+                    validWords.add(new WordPlacementEvent(location, direction, wordBuilt.toString(), addedLetters));
+                }
+                else if (!board.isFirstTurn() && (direction % 3 != 0 && Board.words.contains(boardLetter + wordBuilt.toString())) || (direction % 3 == 0 && Board.words.contains(wordBuilt.toString() + boardLetter))) {
                     //Creating a new placement
                     validWords.add(new WordPlacementEvent(location, direction, wordBuilt.toString(), addedLetters));
                 }
