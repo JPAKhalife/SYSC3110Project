@@ -39,7 +39,6 @@ public class GameController implements ActionListener {
      */
     public void actionPerformed(ActionEvent e) {
         String[] command = e.getActionCommand().split(",");
-
         if (command[0].equals("board")) {
             //Grab the x and y coordinates
             char y = command[1].charAt(0); //This should be a single letter

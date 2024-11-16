@@ -5,7 +5,6 @@
  * @date 2024/10/08
  */
 
-import javax.imageio.stream.ImageInputStream;
 import java.io.File;
 import java.util.*;
 import java.lang.*;
@@ -13,6 +12,8 @@ import java.lang.*;
 public class Board {
     public static final int BOARD_SIZE = 15;
     private Letter[][] board;
+    public static final int[][] PREMIUM_TILES = new int[BOARD_SIZE][BOARD_SIZE];
+
     public static HashSet<String> words; //set of all valid words
     private boolean firstTurn;
     private ErrorEvent status;
@@ -26,6 +27,44 @@ public class Board {
         firstTurn = true;
         loadWords();
         status = new ErrorEvent();
+        initializeTiles();
+    }
+
+    public static void initializeTiles() {
+        //Fill all squares with 1.
+        for (int i = 0 ; i < BOARD_SIZE ; i++) {
+            for (int j = 0 ; j < BOARD_SIZE ; j++) {
+                PREMIUM_TILES[i][j] = 1;
+            }
+        }
+        //Add all double word tiles (2)
+        PREMIUM_TILES[7][7] = 2;//center
+        for (int i = 0 ; i < 4 ; i++) {
+            mirrorTileCoordinates(1 + i,1 + i,2);
+        }
+        //Add all triple word tiles (3)
+        mirrorTileCoordinates(0,0,3);
+        flipTileCoordinates(0,7,3);
+        //Add all double letter tiles (-2)
+        flipTileCoordinates(0,3,-2);
+        flipTileCoordinates(2,6,-2);
+        flipTileCoordinates(3,7,-2);
+
+        //Add all triple letter tiles (-3)
+        flipTileCoordinates(1,5,-3);
+        mirrorTileCoordinates(5,5,-3);
+    }
+
+    private static void mirrorTileCoordinates(int x , int y, int v) {
+        PREMIUM_TILES[BOARD_SIZE - x - 1][BOARD_SIZE - y - 1] = v;
+        PREMIUM_TILES[x][y] = v;
+        PREMIUM_TILES[BOARD_SIZE - x - 1][y] = v;
+        PREMIUM_TILES[x][BOARD_SIZE - y - 1] = v;
+    }
+
+    private static void flipTileCoordinates(int x , int y, int v) {
+        mirrorTileCoordinates(x,y,v);
+        mirrorTileCoordinates(y,x,v);
     }
 
     /**
@@ -277,6 +316,17 @@ public class Board {
         int smallestCoord = getCoordinateFromLocation(direction,location);
         int largestCoord = getCoordinateFromLocation(direction,location);
         ArrayList<Letter> boardSlice = grabWordSlice(direction, location);
+        int[] tileSlice;
+
+        if (direction == 1) {
+            tileSlice = new int[BOARD_SIZE];
+            for (int i = 0 ; i < BOARD_SIZE ; i++) {
+                tileSlice[i] = PREMIUM_TILES[i][getCoordinateFromLocation(direction,location)];
+            }
+        } else {
+            tileSlice = PREMIUM_TILES[getCoordinateFromLocation(direction,location)];
+        }
+
 
         //Now grab the smallest and largest coords of the full word formed
         while (boardSlice.get(smallestCoord - 1) != null) {
@@ -297,8 +347,21 @@ public class Board {
         // A single word will never be entered here, as the minimum word size must be 2 on the first turn.
         // Afterwards, if one letter is placed it must be intersecting so more than one letter will be passed here.
         if (scoreWord.size() > 1) {
+            //This holds all the word multipliers
+            ArrayList<Integer> multipliers = new ArrayList<>();
             for (int i = 0; i < scoreWord.size(); i++) {
-                points += scoreWord.get(i).getPoints();
+                //Check whether it is a word or letter multiplier
+                if (tileSlice[i + smallestCoord] < 0) {
+                    //multiply the letter
+                    points += scoreWord.get(i).getPoints()*Math.abs(tileSlice[i + smallestCoord]);
+                } else {
+                    //add to list of post multipliers
+                    multipliers.add(tileSlice[i + smallestCoord]);
+                }
+            }
+            //letter points have been tallied, multiply the word score.
+            for (int i : multipliers) {
+                points = points*Math.abs(i);
             }
 
         }
@@ -425,6 +488,14 @@ public class Board {
     public Letter[][] getBoardAppearance()
     {
         return board.clone();
+    }
+
+    /**
+     * Returns a copy of the board's tiles
+     * @return an integer array representing all the tiles in the board.
+     */
+    public int[][] getBoardTiles() {
+        return PREMIUM_TILES;
     }
 
 } //end class

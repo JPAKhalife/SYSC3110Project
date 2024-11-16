@@ -17,6 +17,10 @@ public class ScrabbleView extends JFrame implements GameObserver {
     private final Color TILE_COLOUR = new Color(240, 215, 149);
     private final Color BOARD_COLOUR = new Color(103, 128, 78);
     private final Color BOARD_CENTER = new Color(63, 146, 199);
+    private final Color TRIPLE_WORD_COLOUR = new Color(227, 79, 68);
+    private final Color DOUBLE_WORD_COLOUR = new Color(227, 145, 215);
+    private final Color TRIPLE_LETTER_COLOUR = new Color(63, 146, 199);
+    private final Color DOUBLE_LETTER_COLOUR = new Color(117, 216, 230);
     private JTextPane currentPlayerField;
 
     /**
@@ -61,7 +65,7 @@ public class ScrabbleView extends JFrame implements GameObserver {
             for (int j = 0; j < Board.BOARD_SIZE; j++) {
                 boardButtons[i][j] = new JButton();
                 boardButtons[i][j].setFont(new Font(null, Font.BOLD, 14));
-                boardButtons[i][j].setBackground(BOARD_COLOUR);
+                boardButtons[i][j].setBackground(getTileColor(Board.PREMIUM_TILES[i][j]));
                 boardButtons[i][j].addActionListener(gameController);
                 String buttonCoordinate = "board," + Character.toString(rowChar) + "," + Integer.toString(j + 1);
                 boardButtons[i][j].setActionCommand(buttonCoordinate);
@@ -123,6 +127,26 @@ public class ScrabbleView extends JFrame implements GameObserver {
     }
 
     /**
+     * Returns the colour constant associated with a tile score
+     * @param tileNum
+     * @return a color object
+     */
+    private Color getTileColor(int tileNum) {
+        switch (tileNum) {
+            case 2:
+                return DOUBLE_WORD_COLOUR;
+            case 3:
+                return TRIPLE_WORD_COLOUR;
+            case -2:
+                return DOUBLE_LETTER_COLOUR;
+            case -3:
+                return TRIPLE_LETTER_COLOUR;
+            default:
+                return BOARD_COLOUR;
+        }
+    }
+
+    /**
      * displayBoard transforms the backend board configuration into a GUI representation
      * @param board A copy of the backend board
      */
@@ -137,7 +161,7 @@ public class ScrabbleView extends JFrame implements GameObserver {
 
                 if(text.isEmpty() && ((i != 7) || (j != 7)))
                 {
-                    boardButtons[i][j].setBackground(BOARD_COLOUR);
+                    boardButtons[i][j].setBackground(getTileColor(Board.PREMIUM_TILES[i][j]));
                 }
                 else if (!text.isEmpty())
                 {
