@@ -163,12 +163,9 @@ public class Game {
 
         //Giving the next player a turn (including AI players)
         //turn order priority favours real players. Once all real players have finished, the AI players will play
-        currentPlayer = (currentPlayer + 1) % (players.size() + AIplayers.size());
-        /*
-        if(currentPlayer > players.size()){
-            //next player is AI
-        }
-         */
+
+        currentPlayer = (currentPlayer + 1) % (getPlayers().size());
+
         //displaying the updated scores and board statuses
         for(GameObserver view: views)
         {
