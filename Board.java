@@ -427,4 +427,6 @@ public class Board {
         return board.clone();
     }
 
+    public boolean isFirstTurn() {return firstTurn;};
+
 } //end class
