@@ -93,10 +93,11 @@ public class Game {
     public int findWinner() {
         int winner = -1;
         int winnerScore = 0;
-        for (int i = 0; i < players.size(); i++) {
-            if (players.get(i).getScore() > winnerScore) {
+        ArrayList<Player> allPlayers = getPlayers();
+        for (int i = 0; i < allPlayers.size(); i++) {
+            if (allPlayers.get(i).getScore() > winnerScore) {
                 winner = i;
-                winnerScore = players.get(i).getScore();
+                winnerScore = allPlayers.get(i).getScore();
             }
         }
 
