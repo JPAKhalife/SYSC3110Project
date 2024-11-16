@@ -65,7 +65,7 @@ public class ScrabbleView extends JFrame implements GameObserver {
             for (int j = 0; j < Board.BOARD_SIZE; j++) {
                 boardButtons[i][j] = new JButton();
                 boardButtons[i][j].setFont(new Font(null, Font.BOLD, 14));
-                boardButtons[i][j].setBackground(getTileColor(Board.PREMIUM_TILES[i][j]));
+                boardButtons[i][j].setBackground(getTileColor(game.getBoard().getBoardTiles()[i][j]));
                 boardButtons[i][j].addActionListener(gameController);
                 String buttonCoordinate = "board," + Character.toString(rowChar) + "," + Integer.toString(j + 1);
                 boardButtons[i][j].setActionCommand(buttonCoordinate);
@@ -150,18 +150,17 @@ public class ScrabbleView extends JFrame implements GameObserver {
      * displayBoard transforms the backend board configuration into a GUI representation
      * @param board A copy of the backend board
      */
-    private void displayBoard(Letter[][] board) {
-        System.out.println("Entered displayBoard\n");
+    private void displayBoard(Letter[][] board, int[][] tiles) {
+
         for(int i = 0; i < Board.BOARD_SIZE; i++){
             for(int j = 0; j < Board.BOARD_SIZE; j++){
                 String text = (board[i][j] == null)? "": Character.toString(board[i][j].getLetter()).toUpperCase();
-                System.out.println(text+ "\n");
                 boardButtons[i][j].setText(text);
                 boardButtons[i][j].setEnabled(text.isEmpty()); //If tile is occupied the button cannot be clicked
 
                 if(text.isEmpty() && ((i != 7) || (j != 7)))
                 {
-                    boardButtons[i][j].setBackground(getTileColor(Board.PREMIUM_TILES[i][j]));
+                    boardButtons[i][j].setBackground(getTileColor(tiles[i][j]));
                 }
                 else if (!text.isEmpty())
                 {
@@ -202,7 +201,6 @@ public class ScrabbleView extends JFrame implements GameObserver {
                 char y = location.charAt(0);
                 int x = Integer.parseInt(location.substring(1));
                 char letter = letters.get(i).getLetter();
-                System.out.println("handleLetterPlacement - y: " + y + ", x: " + x + ", letter: " + letter);
                 y = Character.toLowerCase(y); //make sure lower case
                 //JButton placement = this.boardButtons[y - 'a'][x];
                 boardButtons[y - 'a'][x - 1].setBackground(TILE_COLOUR); //Board is indexed starting with 1 --> need to go down one
@@ -236,10 +234,9 @@ public class ScrabbleView extends JFrame implements GameObserver {
             JOptionPane.showMessageDialog(null, e.getError().getErrorDescription());
         }
 
-        System.out.println("Going to update the board\n");
         //Update every button in the board to reflect what is in the Board class
         Letter[][] boardClone = game.getBoard().getBoardAppearance();
-        displayBoard(boardClone);
+        displayBoard(boardClone, game.getBoard().getBoardTiles());
 
         for(int i = 0; i < 7; i++)
         {

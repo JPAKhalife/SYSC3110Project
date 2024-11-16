@@ -12,7 +12,7 @@ import java.lang.*;
 public class Board {
     public static final int BOARD_SIZE = 15;
     private Letter[][] board;
-    public static final int[][] PREMIUM_TILES = new int[BOARD_SIZE][BOARD_SIZE];
+    private static int[][] PREMIUM_TILES = new int[BOARD_SIZE][BOARD_SIZE];
 
     public static HashSet<String> words; //set of all valid words
     private boolean firstTurn;
@@ -49,6 +49,7 @@ public class Board {
         flipTileCoordinates(0,3,-2);
         flipTileCoordinates(2,6,-2);
         flipTileCoordinates(3,7,-2);
+        mirrorTileCoordinates(6,6,-2);
 
         //Add all triple letter tiles (-3)
         flipTileCoordinates(1,5,-3);
@@ -244,6 +245,7 @@ public class Board {
             turnScore += points;
         }
         firstTurn = false; //if the check passes, it is never needed again.
+        deactivateTiles(letterLocation); //deactivate the tiles of the letters placed
         return turnScore;
     }
 
@@ -319,12 +321,13 @@ public class Board {
         int[] tileSlice;
 
         if (direction == 1) {
+            tileSlice = PREMIUM_TILES[getCoordinateFromLocation(direction ^ 1,location)];
+
+        } else {
             tileSlice = new int[BOARD_SIZE];
             for (int i = 0 ; i < BOARD_SIZE ; i++) {
-                tileSlice[i] = PREMIUM_TILES[i][getCoordinateFromLocation(direction,location)];
+                tileSlice[i] = PREMIUM_TILES[i][getCoordinateFromLocation(direction ^ 1,location)];
             }
-        } else {
-            tileSlice = PREMIUM_TILES[getCoordinateFromLocation(direction,location)];
         }
 
 
@@ -345,19 +348,22 @@ public class Board {
         //Reason for checking the size: if we are checking a single letter,
         // it is likely perpendicular with no intercepts, and should not be counted for points.
         // A single word will never be entered here, as the minimum word size must be 2 on the first turn.
-        // Afterwards, if one letter is placed it must be intersecting so more than one letter will be passed here.
+        // Afterward, if one letter is placed it must be intersecting so more than one letter will be passed here.
         if (scoreWord.size() > 1) {
             //This holds all the word multipliers
             ArrayList<Integer> multipliers = new ArrayList<>();
             for (int i = 0; i < scoreWord.size(); i++) {
                 //Check whether it is a word or letter multiplier
-                if (tileSlice[i + smallestCoord] < 0) {
+                if (tileSlice[i + smallestCoord] < 2) {
                     //multiply the letter
                     points += scoreWord.get(i).getPoints()*Math.abs(tileSlice[i + smallestCoord]);
                 } else {
                     //add to list of post multipliers
+                    points += scoreWord.get(i).getPoints();
                     multipliers.add(tileSlice[i + smallestCoord]);
                 }
+
+
             }
             //letter points have been tallied, multiply the word score.
             for (int i : multipliers) {
@@ -367,6 +373,17 @@ public class Board {
         }
         return points;
 
+    }
+
+    /**
+     * This method is used after a letter has been placed on a tile to deactivate any premium square
+     * it might have. This is because a premium square can only be used on one turn.
+     * @param locations - an arraylist of locations to disable
+     */
+    public void deactivateTiles(ArrayList<String> locations) {
+        for (String l : locations) {
+            PREMIUM_TILES[getCoordinateFromLocation(0, l)][getCoordinateFromLocation(1,l)] = 1;
+        }
     }
 
     /**
