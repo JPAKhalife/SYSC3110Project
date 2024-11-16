@@ -11,6 +11,7 @@ import java.util.*;
 public class Game {
 
     private ArrayList<Player> players;
+    private ArrayList<AIPlayer> AIplayers;
     private Board board;
     private int currentPlayer;
     private ArrayList<GameObserver> views;
@@ -19,8 +20,9 @@ public class Game {
     /**
      * Basic constructor for Game
      */
-    public Game(int playerNum) {
+    public Game(int playerNum, int AIplayerNum) {
         players = new ArrayList<>();
+        AIplayers = new ArrayList<>();
         board = new Board();
         currentPlayer = 0;
         views = new ArrayList<>();
@@ -29,6 +31,11 @@ public class Game {
         for(int i = 0; i < playerNum; i++)
         {
             addPlayer();
+        }
+
+        for(int i = 0; i< AIplayerNum; i++)
+        {
+            addAIplayer();
         }
     }
 
@@ -57,6 +64,16 @@ public class Game {
             return false;
         }
     }
+
+    public boolean addAIplayer(){
+        try{
+            AIplayers.add(new AIPlayer(board));
+            return true;
+        } catch (Exception e){
+            return false;
+        }
+    }
+
 
     /**
      * Using the known player scores, determines the player with the highest score at the moment
