@@ -32,6 +32,7 @@ public class ScrabbleView extends JFrame implements GameObserver {
         //Configure frame
         super("Scrabble");
         int numPlayers = 0;
+        int numAIplayers = -1;
         while(numPlayers < 2 || numPlayers > 4)
         {
             //Get the user's desired number of players
@@ -39,9 +40,13 @@ public class ScrabbleView extends JFrame implements GameObserver {
 
             numPlayers = Integer.parseInt(playerInput);
         }
+        while(numAIplayers < 4 || numAIplayers >= 0) {
+            String AIplayerInput = JOptionPane.showInputDialog("Please enter the number of AI players: ");
 
+            numAIplayers = Integer.parseInt(AIplayerInput);
+        }
 
-        game = new Game(numPlayers);
+        game = new Game(numPlayers,numAIplayers);
         game.addView(this);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(800,800);

@@ -25,8 +25,10 @@ public class AIPlayer extends Player{
     public void aiTurn()
     {
         //Attempt to place words on the board
+        //call decide word
 
         //If made it through and no possible words, randomly exchange 3 letters on rack
+        //decide returned false ==> exchange
     }
 
     /**
