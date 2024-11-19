@@ -6,10 +6,10 @@
 import java.util.*;
 
 public class Player {
-    private ArrayList <Letter> rack;
+    protected ArrayList <Letter> rack;
     private int score;
-    private ArrayList<Letter> playedLetters;
-    private ArrayList<String> playedLocations;
+    protected ArrayList<Letter> playedLetters;
+    protected ArrayList<String> playedLocations;
 
     /**
      * Constructor for the Player class
@@ -111,7 +111,7 @@ public class Player {
     /**
      * exchangeLetters takes all the letters the user indicated this round and exchanges them out with the bag
      */
-    private void exchangeLetters()
+    protected void exchangeLetters()
     {
         for(Letter l: playedLetters)
         {
