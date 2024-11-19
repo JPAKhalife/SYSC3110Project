@@ -77,6 +77,7 @@ public class ScrabbleView extends JFrame implements GameObserver {
             }
             rowChar++;
         }
+        boardButtons[7][7].setBackground(BOARD_CENTER);
 
         JPanel rackPanel = new JPanel(new GridLayout(1,7));
         Player currentPlayer= game.getCurrentPlayer();
