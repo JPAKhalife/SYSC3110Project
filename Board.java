@@ -331,11 +331,11 @@ public class Board {
 
 
         //Now grab the smallest and largest coords of the full word formed
-        while (boardSlice.get(smallestCoord - 1) != null) {
+        while (smallestCoord > 0 && boardSlice.get(smallestCoord - 1) != null) {
             smallestCoord--;
         }
 
-        while (boardSlice.get(largestCoord + 1) != null) {
+        while (largestCoord < BOARD_SIZE - 1 && boardSlice.get(largestCoord + 1) != null) {
             largestCoord++;
         }
 
@@ -381,7 +381,7 @@ public class Board {
      */
     public void deactivateTiles(ArrayList<String> locations) {
         for (String l : locations) {
-            PREMIUM_TILES[getCoordinateFromLocation(0, l)][getCoordinateFromLocation(1,l)] = 1;
+            PREMIUM_TILES[getCoordinateFromLocation(1, l)][getCoordinateFromLocation(0,l)] = 1;
         }
     }
 

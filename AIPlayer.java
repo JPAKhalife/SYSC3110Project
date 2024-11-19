@@ -1,6 +1,9 @@
 import java.sql.Array;
 import java.util.*;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
 public class AIPlayer extends Player{
     private Board board;
     Random rand;
@@ -42,6 +45,8 @@ public class AIPlayer extends Player{
 
             playerTurn(2);
         }
+
+        pullFromBag();
     }
 
     /**
@@ -76,7 +81,7 @@ public class AIPlayer extends Player{
                             //DEBUGGING FOR LOOP
                             for(int h = 0; h < wordInfo.size(); h++)
                             {
-                                System.out.println(wordInfo.get(i));
+                                System.out.println(wordInfo.get(h));
                             }
                         }
                     }
@@ -155,7 +160,7 @@ public class AIPlayer extends Player{
             freeSpacesInDirection[EAST] = offsetFromInput - 1;
         }
         //This is one row down, aka South
-        if((i + 1) <= Board.BOARD_SIZE && boardAppearance[i + 1][j] == null)
+        if((i + 1) < Board.BOARD_SIZE && boardAppearance[i + 1][j] == null)
         {
             offsetFromInput = 1;
 
@@ -220,7 +225,7 @@ public class AIPlayer extends Player{
                 //The first letter will either be the first or last letter, so can build the rest without worrying about sub-permutations
                 for (int k = 0; k < wordLength - 1; k++)
                 {
-                    Letter usedLetter = unusedLetters.remove(rand.nextInt(unusedLetters.size()));
+                    Letter usedLetter = unusedLetters.remove(rand.nextInt(max(unusedLetters.size(), 1)));
                     //adding a random unused letter to the end of the word
                     wordBuilt.append(usedLetter.getLetter());
                     addedLetters.add(usedLetter);
