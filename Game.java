@@ -11,7 +11,6 @@ import java.util.*;
 public class Game {
 
     private ArrayList<Player> players;
-    private ArrayList<AIPlayer> AIplayers;
     private Board board;
     private int currentPlayer;
     private ArrayList<GameObserver> views;
@@ -22,7 +21,6 @@ public class Game {
      */
     public Game(int playerNum, int AIplayerNum) {
         players = new ArrayList<>();
-        AIplayers = new ArrayList<>();
         board = new Board();
         currentPlayer = 0;
         views = new ArrayList<>();
@@ -48,15 +46,13 @@ public class Game {
         if(currentPlayer < this.players.size()){
             return this.players.get(currentPlayer);
         }else{
-            return this.AIplayers.get(currentPlayer - this.players.size());
+            return this.players.get(currentPlayer - this.players.size());
         }
     }
 
     public ArrayList<Player> getPlayers() {
         //create new list of players to hold all players in game (including AI)
         ArrayList<Player> allPlayers = new ArrayList<Player>(players);
-        //add AIPlayers to list of all players
-        allPlayers.addAll(this.AIplayers);
 
         return allPlayers;
     }
@@ -76,7 +72,7 @@ public class Game {
 
     public boolean addAIplayer(){
         try{
-            AIplayers.add(new AIPlayer(board));
+            players.add(new AIPlayer(board));
             return true;
         } catch (Exception e){
             return false;
@@ -91,11 +87,11 @@ public class Game {
     public int findWinner() {
         int winner = -1;
         int winnerScore = 0;
-        ArrayList<Player> allPlayers = getPlayers();
-        for (int i = 0; i < allPlayers.size(); i++) {
-            if (allPlayers.get(i).getScore() > winnerScore) {
+
+        for (int i = 0; i < players.size(); i++) {
+            if (players.get(i).getScore() > winnerScore) {
                 winner = i;
-                winnerScore = allPlayers.get(i).getScore();
+                winnerScore = players.get(i).getScore();
             }
         }
 
@@ -161,7 +157,7 @@ public class Game {
 
         //Giving the next player a turn (including AI players)
         //turn order priority favours real players. Once all real players have finished, the AI players will play
-        currentPlayer = (currentPlayer + 1) % (getPlayers().size());
+        currentPlayer = (currentPlayer + 1) % (players.size());
 
         //displaying the updated scores and board statuses
         for(GameObserver view: views)
