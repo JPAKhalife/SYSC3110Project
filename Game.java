@@ -1,6 +1,6 @@
 /**
  * The Game class contains the current state of Scrabble and the main line of execution.
- * @author Elyssa Grant, Gillian O'Connel, John Khalife, Sandy Alzabadani 
+ * @author Elyssa Grant, Gillian O'Connel, John Khalife, Sandy Alzabadani
  * @date 08/18/2024
  */
 
@@ -11,6 +11,7 @@ import java.util.*;
 public class Game {
 
     private ArrayList<Player> players;
+    private ArrayList<AIPlayer> AIplayers;
     private Board board;
     private int currentPlayer;
     private ArrayList<GameObserver> views;
@@ -19,8 +20,9 @@ public class Game {
     /**
      * Basic constructor for Game
      */
-    public Game(int playerNum) {
+    public Game(int playerNum, int AIplayerNum) {
         players = new ArrayList<>();
+        AIplayers = new ArrayList<>();
         board = new Board();
         currentPlayer = 0;
         views = new ArrayList<>();
@@ -30,6 +32,11 @@ public class Game {
         {
             addPlayer();
         }
+
+        for(int i = 0; i< AIplayerNum; i++)
+        {
+            addAIplayer();
+        }
     }
 
     /**
@@ -38,11 +45,20 @@ public class Game {
      * @return The player located at the appropriate index
      */
     public Player getCurrentPlayer() {
-        return this.players.get(currentPlayer);
+        if(currentPlayer < this.players.size()){
+            return this.players.get(currentPlayer);
+        }else{
+            return this.AIplayers.get(currentPlayer - this.players.size());
+        }
     }
 
     public ArrayList<Player> getPlayers() {
-        return new ArrayList<Player>(players);
+        //create new list of players to hold all players in game (including AI)
+        ArrayList<Player> allPlayers = new ArrayList<Player>(players);
+        //add AIPlayers to list of all players
+        allPlayers.addAll(this.AIplayers);
+
+        return allPlayers;
     }
 
     public Board getBoard() {
@@ -58,6 +74,16 @@ public class Game {
         }
     }
 
+    public boolean addAIplayer(){
+        try{
+            AIplayers.add(new AIPlayer(board));
+            return true;
+        } catch (Exception e){
+            return false;
+        }
+    }
+
+
     /**
      * Using the known player scores, determines the player with the highest score at the moment
      * Intended to be used at the end of the game to find the winner
@@ -67,10 +93,11 @@ public class Game {
     public int findWinner() {
         int winner = -1;
         int winnerScore = 0;
-        for (int i = 0; i< players.size(); i++) {
-            if (players.get(i).getScore() > winnerScore) {
+        ArrayList<Player> allPlayers = getPlayers();
+        for (int i = 0; i < allPlayers.size(); i++) {
+            if (allPlayers.get(i).getScore() > winnerScore) {
                 winner = i;
-                winnerScore = players.get(i).getScore();
+                winnerScore = allPlayers.get(i).getScore();
             }
         }
 
@@ -134,8 +161,10 @@ public class Game {
     public void handleNewTurn()
     {
 
-        //Giving the next player a turn
-        currentPlayer = (currentPlayer + 1) % players.size();
+        //Giving the next player a turn (including AI players)
+        //turn order priority favours real players. Once all real players have finished, the AI players will play
+
+        currentPlayer = (currentPlayer + 1) % (getPlayers().size());
 
         //displaying the updated scores and board statuses
         for(GameObserver view: views)
@@ -145,9 +174,9 @@ public class Game {
         }
 
         //Other things that need to be done somewhere:
-            //2. Checking if the game is over via the bag being empty
-            //3. If so, finding the winner
-            //4. Otherwise, call this function to make the next turn occur
+        //2. Checking if the game is over via the bag being empty
+        //3. If so, finding the winner
+        //4. Otherwise, call this function to make the next turn occur
 
     }
 

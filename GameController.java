@@ -87,11 +87,11 @@ public class GameController implements ActionListener {
                 }
                 else
                 {
-                   if(!gameNotOver)
-                   {
-                       winner = game.findWinner();
-                       return; //Game is over --> don't need to move onto next turn
-                   }
+                    if(!gameNotOver)
+                    {
+                        winner = game.findWinner();
+                        return; //Game is over --> don't need to move onto next turn
+                    }
                 }
 
             } else if (command[1].equals("exchange")) {

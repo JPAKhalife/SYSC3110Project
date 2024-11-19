@@ -84,9 +84,9 @@ public class AIPlayer extends Player{
         }
 
         //For all the words, attempt to add them to the board
-        for(int i = wordInfo.size() - 1; i >= 0; i--)
+        for(WordPlacementEvent word: wordInfo)
         {
-            int result = tryAddToBoard(wordInfo.get(i));
+            int result = tryAddToBoard(word);
 
             if(result > 0)
             {

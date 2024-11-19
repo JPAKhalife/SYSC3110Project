@@ -8,7 +8,6 @@ import java.awt.Color;
 
 
 public class ScrabbleView extends JFrame implements GameObserver {
-
     private JButton[][] boardButtons;
     private JTextPane scorePane;
     private Game game;
@@ -30,6 +29,7 @@ public class ScrabbleView extends JFrame implements GameObserver {
         //Configure frame
         super("Scrabble");
         int numPlayers = 0;
+        int numAIplayers = -1;
         while(numPlayers < 2 || numPlayers > 4)
         {
             //Get the user's desired number of players
@@ -37,9 +37,13 @@ public class ScrabbleView extends JFrame implements GameObserver {
 
             numPlayers = Integer.parseInt(playerInput);
         }
+        while(numAIplayers < 4 || numAIplayers >= 0) {
+            String AIplayerInput = JOptionPane.showInputDialog("Please enter the number of AI players: ");
 
+            numAIplayers = Integer.parseInt(AIplayerInput);
+        }
 
-        game = new Game(numPlayers);
+        game = new Game(numPlayers,numAIplayers);
         game.addView(this);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(800,800);
@@ -70,11 +74,24 @@ public class ScrabbleView extends JFrame implements GameObserver {
                 String buttonCoordinate = "board," + Character.toString(rowChar) + "," + Integer.toString(j + 1);
                 boardButtons[i][j].setActionCommand(buttonCoordinate);
                 boardPanel.add(boardButtons[i][j]); //add to panel to be placed in frame
+
+                //check if board square is a premium square
+                String boardLocation = Integer.toString(i) + "," + Integer.toString(j);
+                if(isTripleWordSquare(boardLocation)) {
+                    boardButtons[i][j].setBackground(TRIPLE_WORD_COLOUR);
+                }else if(isDoubleWordSquare(boardLocation)){
+                    boardButtons[i][j].setBackground(DOUBLE_WORD_COLOUR);
+                }else if(isTripleLetterSquare(boardLocation)){
+                    boardButtons[i][j].setBackground(TRIPLE_LETTER_COLOUR);
+                }else if(isDoubleLetterSquare(boardLocation)){
+                    boardButtons[i][j].setBackground(DOUBLE_LETTER_COLOUR);
+                }else{
+                   boardButtons[i][j].setBackground(BOARD_COLOUR);
+                }
+
             }
             rowChar++;
         }
-
-        boardButtons[7][7].setBackground(BOARD_CENTER);
 
         JPanel rackPanel = new JPanel(new GridLayout(1,7));
         Player currentPlayer= game.getCurrentPlayer();
@@ -124,6 +141,66 @@ public class ScrabbleView extends JFrame implements GameObserver {
         this.add(scorePane, BorderLayout.EAST);
 
         this.setVisible(true);
+    } //end constructor
+
+    /**
+     * @param location The location of the board square
+     * @return whether the square is a triple word premium square
+     */
+    public boolean isTripleWordSquare(String location){
+        for (String tripleWordSquare : TRIPLE_WORD_SQUARES) {
+            if (tripleWordSquare.equals(location)) {
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
+    /**
+     * @param location The location of the board square
+     * @return whether the square is a double word premium square
+     */
+    public boolean isDoubleWordSquare(String location){
+        for (String doubleWordSquare : DOUBLE_WORD_SQUARES) {
+            if (doubleWordSquare.equals(location)) {
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
+    /**
+     * @param location The location of the board square
+     * @return whether the square is a triple letter premium square
+     */
+    public boolean isTripleLetterSquare(String location){
+        for (String tripleLetterSquare : TRIPLE_LETTER_SQUARES) {
+            if (tripleLetterSquare.equals(location)) {
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
+    /**
+     * @param location The location of the board square
+     * @return whether the square is a triple letter premium square
+     */
+    public boolean isDoubleLetterSquare(String location){
+        for (String doubleLetterSquare : DOUBLE_LETTER_SQUARES) {
+            if (doubleLetterSquare.equals(location)) {
+                return true;
+            }
+        }
+
+        return false;
+
     }
 
     /**
@@ -158,7 +235,8 @@ public class ScrabbleView extends JFrame implements GameObserver {
                 boardButtons[i][j].setText(text);
                 boardButtons[i][j].setEnabled(text.isEmpty()); //If tile is occupied the button cannot be clicked
 
-                if(text.isEmpty() && ((i != 7) || (j != 7)))
+                //board space colour for unoccupied spaces
+                if(text.isEmpty())
                 {
                     boardButtons[i][j].setBackground(getTileColor(tiles[i][j]));
                 }
@@ -166,9 +244,10 @@ public class ScrabbleView extends JFrame implements GameObserver {
                 {
                     boardButtons[i][j].setBackground(TILE_COLOUR);
                 }
+                //set to tile colour
                 else
                 {
-                    boardButtons[i][j].setBackground(BOARD_CENTER);
+                    boardButtons[i][j].setBackground(TILE_COLOUR);
                 }
 
             }

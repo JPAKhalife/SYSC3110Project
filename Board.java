@@ -508,6 +508,8 @@ public class Board {
     }
 
     public boolean isFirstTurn() {return firstTurn;};
+
+
     /**
      * Returns a copy of the board's tiles
      * @return an integer array representing all the tiles in the board.
@@ -517,3 +519,4 @@ public class Board {
     }
 
 } //end class
+

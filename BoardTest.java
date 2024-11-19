@@ -38,7 +38,7 @@ public class BoardTest {
         //Make sure that the score returned by add word is 2.
         assertEquals(board.addWord(letters,locations), 2);
         assertEquals(ErrorEvent.GameError.NONE,board.getStatus().getError());
-     }
+    }
 
 
     /**
