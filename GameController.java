@@ -45,7 +45,6 @@ public class GameController implements ActionListener {
             int x = Integer.valueOf(command[2]);
             //Add these to the addCoordinate method
             game.getCurrentPlayer().addCoordinate(y, x); //DNE
-
             //HANDLE TEMPORARY VIEW (letter placed on board BEFORE submitted)
             //get most recent letter placed
             Dictionary<ArrayList<Letter>, ArrayList<String>> word = game.getCurrentPlayer().playerTurn(1);
@@ -53,12 +52,10 @@ public class GameController implements ActionListener {
             for(GameObserver view: game.getViews()){
                 view.handleLetterPlacement(word);
             }
-
         } else if (command[0].equals("rack")) {
             //Grab + place the index
             int index = Integer.valueOf(command[1]);
             game.getCurrentPlayer().placeLetter(index); //DNE
-
             JButton buttonPressed = (JButton) e.getSource();
             buttonPressed.setEnabled(false);
 
