@@ -9,8 +9,7 @@
 - board; Letter [15][15]
 + &lt;u&gt; words: HashSet&lt;String&gt;&lt;/u&gt;
 - firstTurn: boolean
-- status: ErrorEvent
-- &lt;u&gt;PREMIUM_VALUES: int[15][15] &lt;/u&gt;</string>
+- status: ErrorEvent</string>
      </void>
     </void>
     <void property="methods">
@@ -42,7 +41,7 @@
      <string>x</string>
      <void method="set">
       <object idref="Point2D$Double0"/>
-      <double>890.0</double>
+      <double>900.0</double>
      </void>
     </void>
     <void class="java.awt.geom.Point2D$Double" method="getField">
@@ -53,7 +52,7 @@
      </void>
     </void>
     <void method="setLocation">
-     <double>890.0</double>
+     <double>900.0</double>
      <double>340.0</double>
     </void>
    </object>
@@ -120,12 +119,12 @@
      <string>y</string>
      <void method="set">
       <object idref="Point2D$Double2"/>
-      <double>740.0</double>
+      <double>720.0</double>
      </void>
     </void>
     <void method="setLocation">
      <double>730.0</double>
-     <double>740.0</double>
+     <double>720.0</double>
     </void>
    </object>
   </void>
@@ -179,10 +178,10 @@
    <object class="com.horstmann.violet.ClassNode" id="ClassNode4">
     <void property="attributes">
      <void property="text">
-      <string># rack: ArrayList&lt;Letter&gt; 
+      <string>- rack: ArrayList&lt;Letter&gt; 
 - score: int
-# playedLetters: ArrayList&lt;Letter&gt;
-# playedLocations: ArrayList&lt;String&gt;</string>
+- playedLetters: ArrayList&lt;Letter&gt;
+- playedLocations: ArrayList&lt;String&gt;</string>
      </void>
     </void>
     <void property="methods">
@@ -193,7 +192,7 @@
 + playerTurn(userTurn: int): Dictionary &lt;ArrayList&lt;Letter&gt;, ArrayList&lt;String&gt;&gt;
 + placeLetter(rackIndex): void
 + addCoordinate( int, i: int, j: int): void
-# exchangeLetters(): void
+- exchangeLetters(): void
 + pullFromBag(): boolean
 + isRackEmpty(): boolean
 + getRack(): ArrayList&lt;Letter&gt;</string>
@@ -217,12 +216,12 @@
      <string>y</string>
      <void method="set">
       <object idref="Point2D$Double4"/>
-      <double>510.0</double>
+      <double>580.0</double>
      </void>
     </void>
     <void method="setLocation">
      <double>150.0</double>
-     <double>510.0</double>
+     <double>580.0</double>
     </void>
    </object>
   </void>
@@ -230,11 +229,7 @@
    <object class="com.horstmann.violet.ClassNode" id="ClassNode5">
     <void property="attributes">
      <void property="text">
-      <string>&lt;u&gt; + TRIPLE_WORD_SQUARES: String[]
- +DOUBLE_WORD_SQUARES: String[]
-+ TRIPLE_LETTER_SQUARES: String[]
-+ DOUBLE_LETTER_SQUARES: String[]&lt;/u&gt;
-- game: Game
+      <string>- game: Game
 - boardButtons: JButton[15][15]
 - rackButtons: JButton[7]
 - scorePane: JTextPane
@@ -254,11 +249,6 @@
 +handleScoreUpdate(winner: int): void
 +handleNewTurn(): void
 +handleLetterPlacement(word: Dictionary&lt;ArrayList&lt;Letter&gt;, ArrayList&lt;String&gt;&gt;): void
-+handleBlankTile(): void
-+ isTripleWordSquare(location: String): boolean
-+ isDoubleWordSquare(location: String): boolean
-+ isTripleLetterSquare(location: String): boolean
-+ isDoubleWordSquare(location: String): boolean
 +&lt;u&gt;main(args: String[]): void &lt;/u&gt;</string>
      </void>
     </void>
@@ -268,9 +258,16 @@
      </void>
     </void>
    </object>
-   <object class="java.awt.geom.Point2D$Double">
+   <object class="java.awt.geom.Point2D$Double" id="Point2D$Double5">
+    <void class="java.awt.geom.Point2D$Double" method="getField">
+     <string>x</string>
+     <void method="set">
+      <object idref="Point2D$Double5"/>
+      <double>210.0</double>
+     </void>
+    </void>
     <void method="setLocation">
-     <double>0.0</double>
+     <double>210.0</double>
      <double>0.0</double>
     </void>
    </object>
@@ -298,24 +295,24 @@
      </void>
     </void>
    </object>
-   <object class="java.awt.geom.Point2D$Double" id="Point2D$Double5">
+   <object class="java.awt.geom.Point2D$Double" id="Point2D$Double6">
     <void class="java.awt.geom.Point2D$Double" method="getField">
      <string>x</string>
      <void method="set">
-      <object idref="Point2D$Double5"/>
-      <double>1010.0</double>
+      <object idref="Point2D$Double6"/>
+      <double>1000.0</double>
      </void>
     </void>
     <void class="java.awt.geom.Point2D$Double" method="getField">
      <string>y</string>
      <void method="set">
-      <object idref="Point2D$Double5"/>
-      <double>740.0</double>
+      <object idref="Point2D$Double6"/>
+      <double>710.0</double>
      </void>
     </void>
     <void method="setLocation">
-     <double>1010.0</double>
-     <double>740.0</double>
+     <double>1000.0</double>
+     <double>710.0</double>
     </void>
    </object>
   </void>
@@ -363,18 +360,18 @@ So a player wanting to place a letter in the 1st column of the 2nd row would den
      </void>
     </void>
    </object>
-   <object class="java.awt.geom.Point2D$Double" id="Point2D$Double6">
+   <object class="java.awt.geom.Point2D$Double" id="Point2D$Double7">
     <void class="java.awt.geom.Point2D$Double" method="getField">
      <string>x</string>
      <void method="set">
-      <object idref="Point2D$Double6"/>
+      <object idref="Point2D$Double7"/>
       <double>1320.0</double>
      </void>
     </void>
     <void class="java.awt.geom.Point2D$Double" method="getField">
      <string>y</string>
      <void method="set">
-      <object idref="Point2D$Double6"/>
+      <object idref="Point2D$Double7"/>
       <double>210.0</double>
      </void>
     </void>
@@ -403,18 +400,18 @@ So a player wanting to place a letter in the 1st column of the 2nd row would den
      </void>
     </void>
    </object>
-   <object class="java.awt.geom.Point2D$Double" id="Point2D$Double7">
+   <object class="java.awt.geom.Point2D$Double" id="Point2D$Double8">
     <void class="java.awt.geom.Point2D$Double" method="getField">
      <string>x</string>
      <void method="set">
-      <object idref="Point2D$Double7"/>
+      <object idref="Point2D$Double8"/>
       <double>1340.0</double>
      </void>
     </void>
     <void class="java.awt.geom.Point2D$Double" method="getField">
      <string>y</string>
      <void method="set">
-      <object idref="Point2D$Double7"/>
+      <object idref="Point2D$Double8"/>
       <double>90.0</double>
      </void>
     </void>
@@ -448,24 +445,24 @@ So a player wanting to place a letter in the 1st column of the 2nd row would den
      </void>
     </void>
    </object>
-   <object class="java.awt.geom.Point2D$Double" id="Point2D$Double8">
+   <object class="java.awt.geom.Point2D$Double" id="Point2D$Double9">
     <void class="java.awt.geom.Point2D$Double" method="getField">
      <string>x</string>
      <void method="set">
-      <object idref="Point2D$Double8"/>
+      <object idref="Point2D$Double9"/>
       <double>520.0</double>
      </void>
     </void>
     <void class="java.awt.geom.Point2D$Double" method="getField">
      <string>y</string>
      <void method="set">
-      <object idref="Point2D$Double8"/>
-      <double>180.0</double>
+      <object idref="Point2D$Double9"/>
+      <double>380.0</double>
      </void>
     </void>
     <void method="setLocation">
      <double>520.0</double>
-     <double>180.0</double>
+     <double>380.0</double>
     </void>
    </object>
   </void>
@@ -476,8 +473,7 @@ So a player wanting to place a letter in the 1st column of the 2nd row would den
       <string>+handleBoardUpdate(e: ErrorEvent): void
 +handleLetterPlacement(word: Dictionary&lt;ArrayList&lt;Letter&gt;, ArrayList&lt;String&gt;&gt;): void
 +handleScoreUpdate(winner: int): void
-+handleNewTurn(): void
-+handleBlankTile(): void</string>
++handleNewTurn(): void</string>
      </void>
     </void>
     <void property="name">
@@ -487,210 +483,24 @@ GameObserver</string>
      </void>
     </void>
    </object>
-   <object class="java.awt.geom.Point2D$Double" id="Point2D$Double9">
-    <void class="java.awt.geom.Point2D$Double" method="getField">
-     <string>y</string>
-     <void method="set">
-      <object idref="Point2D$Double9"/>
-      <double>340.0</double>
-     </void>
-    </void>
-    <void method="setLocation">
-     <double>0.0</double>
-     <double>340.0</double>
-    </void>
-   </object>
-  </void>
-  <void method="addNode">
-   <object class="com.horstmann.violet.ClassNode" id="ClassNode9">
-    <void property="attributes">
-     <void property="text">
-      <string>- board: Board</string>
-     </void>
-    </void>
-    <void property="methods">
-     <void property="text">
-      <string>+ AIPlayer()
-+ aiTurn(): void
-- decideWord(): Dictionary &lt;ArrayList&lt;Letter&gt;, ArrayList&lt;String&gt;&gt;
-- validWordLocations(): HashTable&lt;String, Integer&gt;</string>
-     </void>
-    </void>
-    <void property="name">
-     <void property="text">
-      <string>AIPlayer</string>
-     </void>
-    </void>
-   </object>
    <object class="java.awt.geom.Point2D$Double" id="Point2D$Double10">
     <void class="java.awt.geom.Point2D$Double" method="getField">
      <string>x</string>
      <void method="set">
       <object idref="Point2D$Double10"/>
-      <double>190.0</double>
+      <double>20.0</double>
      </void>
     </void>
     <void class="java.awt.geom.Point2D$Double" method="getField">
      <string>y</string>
      <void method="set">
       <object idref="Point2D$Double10"/>
-      <double>790.0</double>
-     </void>
-    </void>
-    <void method="setLocation">
-     <double>190.0</double>
-     <double>790.0</double>
-    </void>
-   </object>
-  </void>
-  <void method="addNode">
-   <object class="com.horstmann.violet.NoteNode" id="NoteNode1">
-    <void id="Rectangle2D$Double1" property="bounds">
-     <void class="java.awt.geom.Rectangle2D$Double" method="getField">
-      <string>x</string>
-      <void method="set">
-       <object idref="Rectangle2D$Double1"/>
-       <double>500.0</double>
-      </void>
-     </void>
-     <void class="java.awt.geom.Rectangle2D$Double" method="getField">
-      <string>y</string>
-      <void method="set">
-       <object idref="Rectangle2D$Double1"/>
-       <double>400.0</double>
-      </void>
-     </void>
-     <void class="java.awt.geom.Rectangle2D$Double" method="getField">
-      <string>width</string>
-      <void method="set">
-       <object idref="Rectangle2D$Double1"/>
-       <double>300.0</double>
-      </void>
-     </void>
-     <void class="java.awt.geom.Rectangle2D$Double" method="getField">
-      <string>height</string>
-      <void method="set">
-       <object idref="Rectangle2D$Double1"/>
-       <double>60.0</double>
-      </void>
-     </void>
-    </void>
-    <void property="bounds">
-     <object idref="Rectangle2D$Double1"/>
-    </void>
-    <void property="text">
-     <void property="text">
-      <string>Add check in Player to see if the letter&apos;s letter is blank
-If so, call dialogue box to get the letter the user wants
-and assign to the blank tile.</string>
-     </void>
-    </void>
-   </object>
-   <object class="java.awt.geom.Point2D$Double" id="Point2D$Double11">
-    <void class="java.awt.geom.Point2D$Double" method="getField">
-     <string>x</string>
-     <void method="set">
-      <object idref="Point2D$Double11"/>
-      <double>500.0</double>
-     </void>
-    </void>
-    <void class="java.awt.geom.Point2D$Double" method="getField">
-     <string>y</string>
-     <void method="set">
-      <object idref="Point2D$Double11"/>
       <double>400.0</double>
      </void>
     </void>
     <void method="setLocation">
-     <double>500.0</double>
+     <double>20.0</double>
      <double>400.0</double>
-    </void>
-   </object>
-  </void>
-  <void method="addNode">
-   <object class="com.horstmann.violet.NoteNode" id="NoteNode2">
-    <void id="Rectangle2D$Double2" property="bounds">
-     <void class="java.awt.geom.Rectangle2D$Double" method="getField">
-      <string>x</string>
-      <void method="set">
-       <object idref="Rectangle2D$Double2"/>
-       <double>1450.0</double>
-      </void>
-     </void>
-     <void class="java.awt.geom.Rectangle2D$Double" method="getField">
-      <string>y</string>
-      <void method="set">
-       <object idref="Rectangle2D$Double2"/>
-       <double>590.0</double>
-      </void>
-     </void>
-     <void class="java.awt.geom.Rectangle2D$Double" method="getField">
-      <string>width</string>
-      <void method="set">
-       <object idref="Rectangle2D$Double2"/>
-       <double>280.0</double>
-      </void>
-     </void>
-     <void class="java.awt.geom.Rectangle2D$Double" method="getField">
-      <string>height</string>
-      <void method="set">
-       <object idref="Rectangle2D$Double2"/>
-       <double>60.0</double>
-      </void>
-     </void>
-    </void>
-    <void property="bounds">
-     <object idref="Rectangle2D$Double2"/>
-    </void>
-    <void property="text">
-     <void property="text">
-      <string>Premium tile values multiply with the letter
-- Negative values = multiply the entire word by the
-positive version</string>
-     </void>
-    </void>
-   </object>
-   <object class="java.awt.geom.Point2D$Double" id="Point2D$Double12">
-    <void class="java.awt.geom.Point2D$Double" method="getField">
-     <string>x</string>
-     <void method="set">
-      <object idref="Point2D$Double12"/>
-      <double>1450.0</double>
-     </void>
-    </void>
-    <void class="java.awt.geom.Point2D$Double" method="getField">
-     <string>y</string>
-     <void method="set">
-      <object idref="Point2D$Double12"/>
-      <double>590.0</double>
-     </void>
-    </void>
-    <void method="setLocation">
-     <double>1450.0</double>
-     <double>590.0</double>
-    </void>
-   </object>
-  </void>
-  <void method="addNode">
-   <object class="com.horstmann.violet.PointNode" id="PointNode0"/>
-   <object class="java.awt.geom.Point2D$Double" id="Point2D$Double13">
-    <void class="java.awt.geom.Point2D$Double" method="getField">
-     <string>x</string>
-     <void method="set">
-      <object idref="Point2D$Double13"/>
-      <double>1086.0</double>
-     </void>
-    </void>
-    <void class="java.awt.geom.Point2D$Double" method="getField">
-     <string>y</string>
-     <void method="set">
-      <object idref="Point2D$Double13"/>
-      <double>467.0</double>
-     </void>
-    </void>
-    <void method="setLocation">
-     <double>1086.0</double>
-     <double>467.0</double>
     </void>
    </object>
   </void>
@@ -828,28 +638,6 @@ positive version</string>
    </object>
    <object idref="ClassNode0"/>
    <object idref="ClassNode8"/>
-  </void>
-  <void method="connect">
-   <object class="com.horstmann.violet.ClassRelationshipEdge">
-    <void property="bentStyle">
-     <object class="com.horstmann.violet.BentStyle" field="VHV"/>
-    </void>
-    <void property="endArrowHead">
-     <object class="com.horstmann.violet.ArrowHead" field="TRIANGLE"/>
-    </void>
-   </object>
-   <object idref="ClassNode9"/>
-   <object idref="ClassNode4"/>
-  </void>
-  <void method="connect">
-   <object class="com.horstmann.violet.NoteEdge"/>
-   <object idref="ClassNode4"/>
-   <object idref="NoteNode1"/>
-  </void>
-  <void method="connect">
-   <object class="com.horstmann.violet.NoteEdge"/>
-   <object idref="NoteNode2"/>
-   <object idref="PointNode0"/>
   </void>
  </object>
 </java>

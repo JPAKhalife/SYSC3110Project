@@ -8,19 +8,16 @@ import java.awt.Color;
 
 
 public class ScrabbleView extends JFrame implements GameObserver {
-    public static final String[] TRIPLE_WORD_SQUARES = {"0,0", "0,7", "0,14", "7,0", "7,14", "14,0", "14,7", "14,14"};
-    public static final String[] DOUBLE_WORD_SQUARES = {"1,1", "2,2", "3,3", "4,4", "1,13", "2,12", "3,11", "4,10", "13,1", "12,2", "11,3", "10,4", "13,13", "12,12", "11,11", "10,10", "7,7"};
-    public static final String[] TRIPLE_LETTER_SQUARES = {"1,5", "1,9", "5,1", "5,5", "5,9", "5,13", "9,1", "9,5", "9,9", "9,13", "13,5", "13,9"};
-    private static final String[] DOUBLE_LETTER_SQUARES = {"0,3", "0,11", "2,6", "2,8", "3,7", "3,0", "3,14", "6,2", "6,6", "6,8", "6,12", "7,3", "7,11", "8,2", "8,6", "8,8", "8,12", "11,0", "11,7", "12,6", "12,8", "14,3", "14,11"};
     private JButton[][] boardButtons;
     private JTextPane scorePane;
     private Game game;
     private Container turnElements;
     private JButton[] rackButtons;  //holds the letters on a rack as buttons (placed letters, before sumbitted, are disabled)
+    private final Color TILE_COLOUR = new Color(240, 215, 149);
+    private final Color BOARD_COLOUR = new Color(103, 128, 78);
+    private final Color BOARD_CENTER = new Color(63, 146, 199);
     private final Color TRIPLE_WORD_COLOUR = new Color(227, 79, 68);
     private final Color DOUBLE_WORD_COLOUR = new Color(227, 145, 215);
-    private final Color TILE_COLOUR = new Color(237, 227, 199);
-    private final Color BOARD_COLOUR = new Color(214, 189, 124);
     private final Color TRIPLE_LETTER_COLOUR = new Color(63, 146, 199);
     private final Color DOUBLE_LETTER_COLOUR = new Color(117, 216, 230);
     private JTextPane currentPlayerField;
@@ -32,7 +29,7 @@ public class ScrabbleView extends JFrame implements GameObserver {
         //Configure frame
         super("Scrabble");
         int numPlayers = 0;
-        int numAIplayers = 0;
+        int numAIplayers = -1;
         while(numPlayers < 2 || numPlayers > 4)
         {
             //Get the user's desired number of players
@@ -65,7 +62,6 @@ public class ScrabbleView extends JFrame implements GameObserver {
         //Create controller
         GameController gameController = new GameController(game);
 
-
         //create board buttons
         char rowChar = 'a';
         JPanel boardPanel = new JPanel(new GridLayout(Board.BOARD_SIZE,Board.BOARD_SIZE));
@@ -73,6 +69,7 @@ public class ScrabbleView extends JFrame implements GameObserver {
             for (int j = 0; j < Board.BOARD_SIZE; j++) {
                 boardButtons[i][j] = new JButton();
                 boardButtons[i][j].setFont(new Font(null, Font.BOLD, 14));
+                boardButtons[i][j].setBackground(getTileColor(game.getBoard().getBoardTiles()[i][j]));
                 boardButtons[i][j].addActionListener(gameController);
                 String buttonCoordinate = "board," + Character.toString(rowChar) + "," + Integer.toString(j + 1);
                 boardButtons[i][j].setActionCommand(buttonCoordinate);
@@ -158,7 +155,116 @@ public class ScrabbleView extends JFrame implements GameObserver {
         }
 
         return false;
+    }
 
+    /**
+     * @param location The location of the board square
+     * @return whether the square is a double word premium square
+     */
+    public boolean isDoubleWordSquare(String location){
+        for (String doubleWordSquare : DOUBLE_WORD_SQUARES) {
+            if (doubleWordSquare.equals(location)) {
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
+    /**
+     * @param location The location of the board square
+     * @return whether the square is a triple letter premium square
+     */
+    public boolean isTripleLetterSquare(String location){
+        for (String tripleLetterSquare : TRIPLE_LETTER_SQUARES) {
+            if (tripleLetterSquare.equals(location)) {
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
+    /**
+     * @param location The location of the board square
+     * @return whether the square is a triple letter premium square
+     */
+    public boolean isDoubleLetterSquare(String location){
+        for (String doubleLetterSquare : DOUBLE_LETTER_SQUARES) {
+            if (doubleLetterSquare.equals(location)) {
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
+    /**
+     * Returns the colour constant associated with a tile score
+     * @param tileNum
+     * @return a color object
+     */
+    private Color getTileColor(int tileNum) {
+        switch (tileNum) {
+            case 2:
+                return DOUBLE_WORD_COLOUR;
+            case 3:
+                return TRIPLE_WORD_COLOUR;
+            case -2:
+                return DOUBLE_LETTER_COLOUR;
+            case -3:
+                return TRIPLE_LETTER_COLOUR;
+            default:
+                return BOARD_COLOUR;
+        }
+    }
+
+    /**
+     * displayBoard transforms the backend board configuration into a GUI representation
+     * @param board A copy of the backend board
+     */
+    private void displayBoard(Letter[][] board, int[][] tiles) {
+
+        for(int i = 0; i < Board.BOARD_SIZE; i++){
+            for(int j = 0; j < Board.BOARD_SIZE; j++){
+                String text = (board[i][j] == null)? "": Character.toString(board[i][j].getLetter()).toUpperCase();
+                boardButtons[i][j].setText(text);
+                boardButtons[i][j].setEnabled(text.isEmpty()); //If tile is occupied the button cannot be clicked
+
+                //board space colour for unoccupied spaces
+                if(text.isEmpty())
+                {
+                    boardButtons[i][j].setBackground(getTileColor(tiles[i][j]));
+                }
+                else if (!text.isEmpty())
+                {
+                    boardButtons[i][j].setBackground(TILE_COLOUR);
+                }
+                //set to tile colour
+                else
+                {
+                    boardButtons[i][j].setBackground(TILE_COLOUR);
+                }
+
+            }
+        }
+    }
+    /**
+     * currentScores builds the formatting for the scores of all players to be displayed
+     * @return A string representation of the player's current scores
+     */
+    private String currentScores(){
+        List<Player> players = game.getPlayers();
+        String scores = "";
+        scores += "Current Scores\n---------------------\n";
+        for(int i = 0; i < players.size(); i++){
+            Player player = players.get(i);
+            scores += "Player " + String.valueOf(i + 1)+ " : "+ player.getScore() + "\n";
+        }
+        return scores;
     }
 
     /**
@@ -301,16 +407,53 @@ public class ScrabbleView extends JFrame implements GameObserver {
      * @param e the error thrown by the board. If none, use the NONE error
      */
     @Override
+    public void handleLetterPlacement(Dictionary<ArrayList<Letter>, ArrayList<String>> word){
+        ArrayList<Letter> letters = word.keys().nextElement();
+        ArrayList<String> locations = word.elements().nextElement();
+        ArrayList<Letter> rack = game.getCurrentPlayer().getRack();
+
+        try {
+            int i = 0;
+            for (String location : locations) {
+                char y = location.charAt(0);
+                int x = Integer.parseInt(location.substring(1));
+                char letter = letters.get(i).getLetter();
+                y = Character.toLowerCase(y); //make sure lower case
+                //JButton placement = this.boardButtons[y - 'a'][x];
+                boardButtons[y - 'a'][x - 1].setBackground(TILE_COLOUR); //Board is indexed starting with 1 --> need to go down one
+                boardButtons[y - 'a'][x - 1].setFont(new Font(null, Font.BOLD, 12));
+                boardButtons[y - 'a'][x - 1].setForeground(Color.BLACK);
+                boardButtons[y - 'a'][x - 1].setText(Character.toString(letter).toUpperCase());
+                boardButtons[y - 'a'][x - 1].setEnabled(false);
+
+                i++;
+            }
+        }
+        catch(IndexOutOfBoundsException e)
+        {
+            //Ensuring that the user clicking in the wrong order doesn't cause errors
+            return;
+        }
+        catch(Exception exception)
+        {
+            return;
+        }
+
+    }
+
+    /**
+     * handleBoardUpdate handles how the GUI board should respond to all attempts at updating the board
+     * @param e the error thrown by the board. If none, use the NONE error
+     */
+    @Override
     public void handleBoardUpdate(ErrorEvent e) {
         if(e.getError()!= ErrorEvent.GameError.NONE){
             JOptionPane.showMessageDialog(null, e.getError().getErrorDescription());
         }
 
-        System.out.println("Going to update the board\n");
         //Update every button in the board to reflect what is in the Board class
         Letter[][] boardClone = game.getBoard().getBoardAppearance();
-        displayBoard(boardClone);
-
+        displayBoard(boardClone, game.getBoard().getBoardTiles());
         for(int i = 0; i < 7; i++)
         {
             rackButtons[i].setEnabled(true);

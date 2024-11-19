@@ -1,6 +1,6 @@
 /**
  * The Game class contains the current state of Scrabble and the main line of execution.
- * @author Elyssa Grant, Gillian O'Connel, John Khalife, Sandy Alzabadani 
+ * @author Elyssa Grant, Gillian O'Connel, John Khalife, Sandy Alzabadani
  * @date 08/18/2024
  */
 
@@ -45,11 +45,20 @@ public class Game {
      * @return The player located at the appropriate index
      */
     public Player getCurrentPlayer() {
-        return this.players.get(currentPlayer);
+        if(currentPlayer < this.players.size()){
+            return this.players.get(currentPlayer);
+        }else{
+            return this.AIplayers.get(currentPlayer - this.players.size());
+        }
     }
 
     public ArrayList<Player> getPlayers() {
-        return new ArrayList<Player>(players);
+        //create new list of players to hold all players in game (including AI)
+        ArrayList<Player> allPlayers = new ArrayList<Player>(players);
+        //add AIPlayers to list of all players
+        allPlayers.addAll(this.AIplayers);
+
+        return allPlayers;
     }
 
     public Board getBoard() {
@@ -73,7 +82,6 @@ public class Game {
             return false;
         }
     }
-
     /**
      * Using the known player scores, determines the player with the highest score at the moment
      * Intended to be used at the end of the game to find the winner
@@ -83,10 +91,11 @@ public class Game {
     public int findWinner() {
         int winner = -1;
         int winnerScore = 0;
-        for (int i = 0; i< players.size(); i++) {
-            if (players.get(i).getScore() > winnerScore) {
+        ArrayList<Player> allPlayers = getPlayers();
+        for (int i = 0; i < allPlayers.size(); i++) {
+            if (allPlayers.get(i).getScore() > winnerScore) {
                 winner = i;
-                winnerScore = players.get(i).getScore();
+                winnerScore = allPlayers.get(i).getScore();
             }
         }
 
@@ -150,8 +159,9 @@ public class Game {
     public void handleNewTurn()
     {
 
-        //Giving the next player a turn
-        currentPlayer = (currentPlayer + 1) % players.size();
+        //Giving the next player a turn (including AI players)
+        //turn order priority favours real players. Once all real players have finished, the AI players will play
+        currentPlayer = (currentPlayer + 1) % (getPlayers().size());
 
         //displaying the updated scores and board statuses
         for(GameObserver view: views)
