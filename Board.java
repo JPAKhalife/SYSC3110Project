@@ -5,7 +5,6 @@
  * @date 2024/10/08
  */
 
-import javax.imageio.stream.ImageInputStream;
 import java.io.File;
 import java.util.*;
 import java.lang.*;
@@ -13,6 +12,8 @@ import java.lang.*;
 public class Board {
     public static final int BOARD_SIZE = 15;
     private Letter[][] board;
+    private static int[][] PREMIUM_TILES = new int[BOARD_SIZE][BOARD_SIZE];
+
     public static HashSet<String> words; //set of all valid words
     private boolean firstTurn;
     private ErrorEvent status;
@@ -26,6 +27,45 @@ public class Board {
         firstTurn = true;
         loadWords();
         status = new ErrorEvent();
+        initializeTiles();
+    }
+
+    public static void initializeTiles() {
+        //Fill all squares with 1.
+        for (int i = 0 ; i < BOARD_SIZE ; i++) {
+            for (int j = 0 ; j < BOARD_SIZE ; j++) {
+                PREMIUM_TILES[i][j] = 1;
+            }
+        }
+        //Add all double word tiles (2)
+        PREMIUM_TILES[7][7] = 2;//center
+        for (int i = 0 ; i < 4 ; i++) {
+            mirrorTileCoordinates(1 + i,1 + i,2);
+        }
+        //Add all triple word tiles (3)
+        mirrorTileCoordinates(0,0,3);
+        flipTileCoordinates(0,7,3);
+        //Add all double letter tiles (-2)
+        flipTileCoordinates(0,3,-2);
+        flipTileCoordinates(2,6,-2);
+        flipTileCoordinates(3,7,-2);
+        mirrorTileCoordinates(6,6,-2);
+
+        //Add all triple letter tiles (-3)
+        flipTileCoordinates(1,5,-3);
+        mirrorTileCoordinates(5,5,-3);
+    }
+
+    private static void mirrorTileCoordinates(int x , int y, int v) {
+        PREMIUM_TILES[BOARD_SIZE - x - 1][BOARD_SIZE - y - 1] = v;
+        PREMIUM_TILES[x][y] = v;
+        PREMIUM_TILES[BOARD_SIZE - x - 1][y] = v;
+        PREMIUM_TILES[x][BOARD_SIZE - y - 1] = v;
+    }
+
+    private static void flipTileCoordinates(int x , int y, int v) {
+        mirrorTileCoordinates(x,y,v);
+        mirrorTileCoordinates(y,x,v);
     }
 
     /**
@@ -205,6 +245,7 @@ public class Board {
             turnScore += points;
         }
         firstTurn = false; //if the check passes, it is never needed again.
+        deactivateTiles(letterLocation); //deactivate the tiles of the letters placed
         return turnScore;
     }
 
@@ -277,6 +318,18 @@ public class Board {
         int smallestCoord = getCoordinateFromLocation(direction,location);
         int largestCoord = getCoordinateFromLocation(direction,location);
         ArrayList<Letter> boardSlice = grabWordSlice(direction, location);
+        int[] tileSlice;
+
+        if (direction == 1) {
+            tileSlice = PREMIUM_TILES[getCoordinateFromLocation(direction ^ 1,location)];
+
+        } else {
+            tileSlice = new int[BOARD_SIZE];
+            for (int i = 0 ; i < BOARD_SIZE ; i++) {
+                tileSlice[i] = PREMIUM_TILES[i][getCoordinateFromLocation(direction ^ 1,location)];
+            }
+        }
+
 
         //Now grab the smallest and largest coords of the full word formed
         while (boardSlice.get(smallestCoord - 1) != null) {
@@ -295,15 +348,42 @@ public class Board {
         //Reason for checking the size: if we are checking a single letter,
         // it is likely perpendicular with no intercepts, and should not be counted for points.
         // A single word will never be entered here, as the minimum word size must be 2 on the first turn.
-        // Afterwards, if one letter is placed it must be intersecting so more than one letter will be passed here.
+        // Afterward, if one letter is placed it must be intersecting so more than one letter will be passed here.
         if (scoreWord.size() > 1) {
+            //This holds all the word multipliers
+            ArrayList<Integer> multipliers = new ArrayList<>();
             for (int i = 0; i < scoreWord.size(); i++) {
-                points += scoreWord.get(i).getPoints();
+                //Check whether it is a word or letter multiplier
+                if (tileSlice[i + smallestCoord] < 2) {
+                    //multiply the letter
+                    points += scoreWord.get(i).getPoints()*Math.abs(tileSlice[i + smallestCoord]);
+                } else {
+                    //add to list of post multipliers
+                    points += scoreWord.get(i).getPoints();
+                    multipliers.add(tileSlice[i + smallestCoord]);
+                }
+
+
+            }
+            //letter points have been tallied, multiply the word score.
+            for (int i : multipliers) {
+                points = points*Math.abs(i);
             }
 
         }
         return points;
 
+    }
+
+    /**
+     * This method is used after a letter has been placed on a tile to deactivate any premium square
+     * it might have. This is because a premium square can only be used on one turn.
+     * @param locations - an arraylist of locations to disable
+     */
+    public void deactivateTiles(ArrayList<String> locations) {
+        for (String l : locations) {
+            PREMIUM_TILES[getCoordinateFromLocation(0, l)][getCoordinateFromLocation(1,l)] = 1;
+        }
     }
 
     /**
@@ -428,5 +508,12 @@ public class Board {
     }
 
     public boolean isFirstTurn() {return firstTurn;};
+    /**
+     * Returns a copy of the board's tiles
+     * @return an integer array representing all the tiles in the board.
+     */
+    public int[][] getBoardTiles() {
+        return PREMIUM_TILES;
+    }
 
 } //end class
