@@ -12,7 +12,7 @@ import java.lang.*;
 public class Board {
     public static final int BOARD_SIZE = 15;
     private Letter[][] board;
-    private static int[][] PREMIUM_TILES = new int[BOARD_SIZE][BOARD_SIZE];
+    private final static int[][] PREMIUM_TILES = new int[BOARD_SIZE][BOARD_SIZE];
     public static HashSet<String> words; //set of all valid words
     private boolean firstTurn;
     private ErrorEvent status;
@@ -359,7 +359,7 @@ public class Board {
                 } else {
                     //add to list of post multipliers
                     points += scoreWord.get(i).getPoints();
-                    multipliers.add(tileSlice[i + smallestCoord]);
+                    multipliers.add(Integer.valueOf(tileSlice[i + smallestCoord]));
                 }
 
 
