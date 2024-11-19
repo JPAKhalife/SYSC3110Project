@@ -159,17 +159,17 @@ public class Game {
         //turn order priority favours real players. Once all real players have finished, the AI players will play
         currentPlayer = (currentPlayer + 1) % (players.size());
 
+        if(this.players.get(currentPlayer) instanceof AIPlayer){
+            AIPlayer currentAI = (AIPlayer) this.players.get(currentPlayer);
+            currentAI.aiTurn();
+        }
+
         //displaying the updated scores and board statuses
         for(GameObserver view: views)
         {
             view.handleScoreUpdate(-1);
             view.handleNewTurn(currentPlayer);
         }
-
-        //Other things that need to be done somewhere:
-        //2. Checking if the game is over via the bag being empty
-        //3. If so, finding the winner
-        //4. Otherwise, call this function to make the next turn occur
 
     }
 
