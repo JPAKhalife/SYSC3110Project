@@ -82,8 +82,6 @@ public class Game {
             return false;
         }
     }
-
-
     /**
      * Using the known player scores, determines the player with the highest score at the moment
      * Intended to be used at the end of the game to find the winner
@@ -163,7 +161,6 @@ public class Game {
 
         //Giving the next player a turn (including AI players)
         //turn order priority favours real players. Once all real players have finished, the AI players will play
-
         currentPlayer = (currentPlayer + 1) % (getPlayers().size());
 
         //displaying the updated scores and board statuses

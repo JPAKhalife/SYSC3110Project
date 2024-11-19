@@ -4,6 +4,7 @@ import java.util.*;
 public class AIPlayer extends Player{
     private Board board;
     Random rand;
+
     public static final int NORTH = 0;
     public static final int EAST = 1;
     public static final int SOUTH = 2;
@@ -90,6 +91,7 @@ public class AIPlayer extends Player{
 
             if(result > 0)
             {
+
                 System.out.println("Adding score");
                 updateScore(result);
                 return true;
@@ -104,7 +106,6 @@ public class AIPlayer extends Player{
         System.out.println("Did not find a word");
         return false;
     }
-
     /**
      * This function determines whether a given starting location is valid to add a word to, and in what direction
      * @param i the row of the board to check

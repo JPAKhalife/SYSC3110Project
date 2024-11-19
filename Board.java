@@ -13,7 +13,6 @@ public class Board {
     public static final int BOARD_SIZE = 15;
     private Letter[][] board;
     private static int[][] PREMIUM_TILES = new int[BOARD_SIZE][BOARD_SIZE];
-
     public static HashSet<String> words; //set of all valid words
     private boolean firstTurn;
     private ErrorEvent status;
@@ -506,7 +505,6 @@ public class Board {
     {
         return board.clone();
     }
-
     public boolean isFirstTurn() {return firstTurn;};
 
 
@@ -517,6 +515,5 @@ public class Board {
     public int[][] getBoardTiles() {
         return PREMIUM_TILES;
     }
-
 } //end class
 
