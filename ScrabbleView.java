@@ -74,21 +74,6 @@ public class ScrabbleView extends JFrame implements GameObserver {
                 String buttonCoordinate = "board," + Character.toString(rowChar) + "," + Integer.toString(j + 1);
                 boardButtons[i][j].setActionCommand(buttonCoordinate);
                 boardPanel.add(boardButtons[i][j]); //add to panel to be placed in frame
-
-                //check if board square is a premium square
-                String boardLocation = Integer.toString(i) + "," + Integer.toString(j);
-                if(isTripleWordSquare(boardLocation)) {
-                    boardButtons[i][j].setBackground(TRIPLE_WORD_COLOUR);
-                }else if(isDoubleWordSquare(boardLocation)){
-                    boardButtons[i][j].setBackground(DOUBLE_WORD_COLOUR);
-                }else if(isTripleLetterSquare(boardLocation)){
-                    boardButtons[i][j].setBackground(TRIPLE_LETTER_COLOUR);
-                }else if(isDoubleLetterSquare(boardLocation)){
-                    boardButtons[i][j].setBackground(DOUBLE_LETTER_COLOUR);
-                }else{
-                    boardButtons[i][j].setBackground(BOARD_COLOUR);
-                }
-
             }
             rowChar++;
         }
@@ -142,65 +127,6 @@ public class ScrabbleView extends JFrame implements GameObserver {
 
         this.setVisible(true);
     } //end constructor
-
-    /**
-     * @param location The location of the board square
-     * @return whether the square is a triple word premium square
-     */
-    public boolean isTripleWordSquare(String location){
-        for (String tripleWordSquare : TRIPLE_WORD_SQUARES) {
-            if (tripleWordSquare.equals(location)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @param location The location of the board square
-     * @return whether the square is a double word premium square
-     */
-    public boolean isDoubleWordSquare(String location){
-        for (String doubleWordSquare : DOUBLE_WORD_SQUARES) {
-            if (doubleWordSquare.equals(location)) {
-                return true;
-            }
-        }
-
-        return false;
-
-    }
-
-    /**
-     * @param location The location of the board square
-     * @return whether the square is a triple letter premium square
-     */
-    public boolean isTripleLetterSquare(String location){
-        for (String tripleLetterSquare : TRIPLE_LETTER_SQUARES) {
-            if (tripleLetterSquare.equals(location)) {
-                return true;
-            }
-        }
-
-        return false;
-
-    }
-
-    /**
-     * @param location The location of the board square
-     * @return whether the square is a triple letter premium square
-     */
-    public boolean isDoubleLetterSquare(String location){
-        for (String doubleLetterSquare : DOUBLE_LETTER_SQUARES) {
-            if (doubleLetterSquare.equals(location)) {
-                return true;
-            }
-        }
-
-        return false;
-
-    }
 
     /**
      * Returns the colour constant associated with a tile score
@@ -267,104 +193,6 @@ public class ScrabbleView extends JFrame implements GameObserver {
         return scores;
     }
 
-    /**
-     * @param location The location of the board square
-     * @return whether the square is a double word premium square
-     */
-    public boolean isDoubleWordSquare(String location){
-        for (String doubleWordSquare : DOUBLE_WORD_SQUARES) {
-            if (doubleWordSquare.equals(location)) {
-                return true;
-            }
-        }
-
-        return false;
-
-    }
-
-    /**
-     * @param location The location of the board square
-     * @return whether the square is a triple letter premium square
-     */
-    public boolean isTripleLetterSquare(String location){
-        for (String tripleLetterSquare : TRIPLE_LETTER_SQUARES) {
-            if (tripleLetterSquare.equals(location)) {
-                return true;
-            }
-        }
-
-        return false;
-
-    }
-
-    /**
-     * @param location The location of the board square
-     * @return whether the square is a triple letter premium square
-     */
-    public boolean isDoubleLetterSquare(String location){
-        for (String doubleLetterSquare : DOUBLE_LETTER_SQUARES) {
-            if (doubleLetterSquare.equals(location)) {
-                return true;
-            }
-        }
-
-        return false;
-
-    }
-
-    /**
-     * displayBoard transforms the backend board configuration into a GUI representation
-     * @param board A copy of the backend board
-     */
-    private void displayBoard(Letter[][] board) {
-        System.out.println("Entered displayBoard\n");
-        for(int i = 0; i < Board.BOARD_SIZE; i++){
-            for(int j = 0; j < Board.BOARD_SIZE; j++){
-                String text = (board[i][j] == null)? "": Character.toString(board[i][j].getLetter()).toUpperCase();
-                System.out.println(text+ "\n");
-                boardButtons[i][j].setText(text);
-                boardButtons[i][j].setEnabled(text.isEmpty()); //If tile is occupied the button cannot be clicked
-
-                //board space colour for unoccupied spaces
-                if(text.isEmpty())
-                {
-                    String boardLocation = Integer.toString(i) + "," + Integer.toString(j);
-                    if(isTripleWordSquare(boardLocation)) {
-                        boardButtons[i][j].setBackground(TRIPLE_WORD_COLOUR);
-                    }else if(isDoubleWordSquare(boardLocation)){
-                        boardButtons[i][j].setBackground(DOUBLE_WORD_COLOUR);
-                    }else if(isTripleLetterSquare(boardLocation)){
-                        boardButtons[i][j].setBackground(TRIPLE_LETTER_COLOUR);
-                    }else if(isDoubleLetterSquare(boardLocation)){
-                        boardButtons[i][j].setBackground(DOUBLE_LETTER_COLOUR);
-                    }else{
-                        boardButtons[i][j].setBackground(BOARD_COLOUR);
-                    }
-
-                }
-                //set to tile colour
-                else
-                {
-                    boardButtons[i][j].setBackground(TILE_COLOUR);
-                }
-
-            }
-        }
-    }
-    /**
-     * currentScores builds the formatting for the scores of all players to be displayed
-     * @return A string representation of the player's current scores
-     */
-    private String currentScores(){
-        List<Player> players = game.getPlayers();
-        String scores = "";
-        scores += "Current Scores\n---------------------\n";
-        for(int i = 0; i < players.size(); i++){
-            Player player = players.get(i);
-            scores += "Player " + String.valueOf(i + 1)+ " : "+ player.getScore() + "\n";
-        }
-        return scores;
-    }
 
     @Override
     public void handleLetterPlacement(Dictionary<ArrayList<Letter>, ArrayList<String>> word){
@@ -379,45 +207,6 @@ public class ScrabbleView extends JFrame implements GameObserver {
                 int x = Integer.parseInt(location.substring(1));
                 char letter = letters.get(i).getLetter();
                 System.out.println("handleLetterPlacement - y: " + y + ", x: " + x + ", letter: " + letter);
-                y = Character.toLowerCase(y); //make sure lower case
-                //JButton placement = this.boardButtons[y - 'a'][x];
-                boardButtons[y - 'a'][x - 1].setBackground(TILE_COLOUR); //Board is indexed starting with 1 --> need to go down one
-                boardButtons[y - 'a'][x - 1].setFont(new Font(null, Font.BOLD, 12));
-                boardButtons[y - 'a'][x - 1].setForeground(Color.BLACK);
-                boardButtons[y - 'a'][x - 1].setText(Character.toString(letter).toUpperCase());
-                boardButtons[y - 'a'][x - 1].setEnabled(false);
-
-                i++;
-            }
-        }
-        catch(IndexOutOfBoundsException e)
-        {
-            //Ensuring that the user clicking in the wrong order doesn't cause errors
-            return;
-        }
-        catch(Exception exception)
-        {
-            return;
-        }
-
-    }
-
-    /**
-     * handleBoardUpdate handles how the GUI board should respond to all attempts at updating the board
-     * @param e the error thrown by the board. If none, use the NONE error
-     */
-    @Override
-    public void handleLetterPlacement(Dictionary<ArrayList<Letter>, ArrayList<String>> word){
-        ArrayList<Letter> letters = word.keys().nextElement();
-        ArrayList<String> locations = word.elements().nextElement();
-        ArrayList<Letter> rack = game.getCurrentPlayer().getRack();
-
-        try {
-            int i = 0;
-            for (String location : locations) {
-                char y = location.charAt(0);
-                int x = Integer.parseInt(location.substring(1));
-                char letter = letters.get(i).getLetter();
                 y = Character.toLowerCase(y); //make sure lower case
                 //JButton placement = this.boardButtons[y - 'a'][x];
                 boardButtons[y - 'a'][x - 1].setBackground(TILE_COLOUR); //Board is indexed starting with 1 --> need to go down one
