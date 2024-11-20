@@ -180,7 +180,8 @@ public class Player {
      * This method returns true if the rack is empty
      * @return a boolean stating whether the rack is empty
      */
-    public boolean isRackEmpty() {
+    private boolean isRackEmpty() {
+
         return rack.size() <= 0;
     }
 

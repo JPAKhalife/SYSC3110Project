@@ -37,13 +37,14 @@ public class ScrabbleView extends JFrame implements GameObserver {
             String playerInput = JOptionPane.showInputDialog("Please enter the number of players (2 - 4): ");
 
             numPlayers = Integer.parseInt(playerInput);
-            totalPlayers += numPlayers;
+            totalPlayers = numPlayers;
         }
         while(totalPlayers > 4 || numAIplayers < 0 || totalPlayers < 2) {
             String AIplayerInput = JOptionPane.showInputDialog("Please enter the number of AI players: ");
 
             numAIplayers = Integer.parseInt(AIplayerInput);
-            totalPlayers += numAIplayers;
+            totalPlayers = numAIplayers + numPlayers;
+            System.out.println("total player: " + totalPlayers);
         }
 
         game = new Game(numPlayers,numAIplayers);
