@@ -61,7 +61,7 @@ public class Game {
         return this.board;
     }
 
-    public boolean addPlayer() {
+    protected boolean addPlayer() {
         try {
             players.add(new Player());
             return true;
@@ -70,7 +70,7 @@ public class Game {
         }
     }
 
-    public boolean addAIplayer(){
+    protected boolean addAIplayer(){
         try{
             players.add(new AIPlayer(board));
             return true;
