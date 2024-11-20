@@ -158,7 +158,7 @@ public class Player {
      * Pulls more letters from the bag to fill their rack up to 7 letters
      * @return a boolean indicating whether the rack was filled back up to 7 letters successfully
      */
-    public boolean pullFromBag()
+    protected boolean pullFromBag()
     {
         while(rack.size() < 7)
         {
