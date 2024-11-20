@@ -13,4 +13,5 @@ Deliverable 4 will include features to enhance the user experience. These change
 Overall, future deliverables aim to enhance the user experience by adding a more attractive interface and expanding the current features to offer a unique Scrabble game each time.
 
 Known issues:
+There are no known issues with the current version of the game.
 

@@ -1,20 +1,26 @@
 User Manual
 Group 8
-Sandy Alzabadani, Elyssa Grant, Gillian O'Connel, John Khalife
-Date: 20/10/2024
+Sandy Alzabadani, Elyssa Grant, Gillian O'Connell, John Khalife
+Date: 11/19/2024
 
-The game accommodates four players. The user is displayed with a random selection of 7 letters. The user is then prompted with the main menu consisting of three options; Place Letters, Exchange Letters, and Pass Turn. 
+The game accommodates two to four players, with at minimum one ‘human’ player. Upon starting, the user will first be prompted to enter the number of human players, then prompted for the number of AI players. 
 
-1.	Place Letters option allows the user to select the number of letters they want to place on the board. 
-The user is then asked to enter the index of the letter they would like to start with based on the given rack of letters. 
-The user is then prompted to pick the location of where they want the letter to be placed on the board, based on the scrabble notation [Row][Column] ex. A1. 
-This is repeated for the number of letters selected, until all the selected letters are placed on the board. 
-If the word formed or the placement is invalid, a message is displayed to the user stating that its invalid and the main menu is redisplayed. 
-If the word placement and the formed word is valid, the letters and the locations of the letters selected are displayed to the user as well as a display of the board. 
-The main menu is then redisplayed.
+The interface for the game consists of the following elements
+The Scrabble board, which includes premium squares for various score bonus
+The current player’s rack, with a label specifying the current player
+A display of the current score for each player
+The turn action buttons- ‘Submit’, ‘Exchange’, and ‘Skip’
 
-2.	Exchange Letters option allows the user to exchange a letter from the rack with a letter from the bag. The user is prompted with a message asking how many letters the user would like to exchange and which letters from the rack the user would like to exchange. 
+The following sections outline all possible actions that may be taken on a user’s turn. 
 
-3.	Pass turn option allows the user to pass the game to the next player and the main menu is redisplayed with a new rack to the next player.
+1. Placing Words on the Board: 
+The current player selects a letter from their rack by clicking it. The user can then click the board tile where they would like to place the selected letter. The letter placed will display automatically on the board. Clicking the ‘Submit’ button will validate the placed word. If the word is valid, the current player’s score is updated accordingly and their turn ends. Alternatively, If either the word formed or the placement is invalid, a message is displayed to the user stating that it is invalid and the placed letters are removed from the board. The user then has the opportunity to take another action
+
+2. Exchanging Letters:
+The user may exchange unwanted letters on their rack by selecting up to seven letters and then clicking the ‘Exchange’ button. The selected letters will then be swapped with letters from the bag. After exchanging, the current player’s turn is over. The current player will not be able to see the new letters until their next turn.
+
+3. Skipping Turns:
+A player may choose to do nothing (neither place a word on the board nor exchange letters) on their turn by clicking the ‘Skip’ button. Skipping a turn will pass the game to the next player.
+
 
 The game ends when the letter bag runs out of letters and at least one of the players’ racks runs out of letters. The player with the highest score wins.

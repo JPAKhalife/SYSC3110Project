@@ -165,6 +165,7 @@ public class Game {
             currentPlayer = (currentPlayer + 1) % (players.size()); //incrementing again, since the AI just went
         }
 
+
         //displaying the updated scores and board statuses
         for(GameObserver view: views)
         {
