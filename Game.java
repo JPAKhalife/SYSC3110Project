@@ -159,9 +159,10 @@ public class Game {
         //turn order priority favours real players. Once all real players have finished, the AI players will play
         currentPlayer = (currentPlayer + 1) % (players.size());
 
-        if(this.players.get(currentPlayer) instanceof AIPlayer){
+        while(this.players.get(currentPlayer) instanceof AIPlayer){
             AIPlayer currentAI = (AIPlayer) this.players.get(currentPlayer);
             currentAI.aiTurn();
+            currentPlayer = (currentPlayer + 1) % (players.size()); //incrementing again, since the AI just went
         }
 
         //displaying the updated scores and board statuses
@@ -169,6 +170,7 @@ public class Game {
         {
             view.handleScoreUpdate(-1);
             view.handleNewTurn(currentPlayer);
+            view.handleBoardUpdate(board.getStatus());
         }
 
     }

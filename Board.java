@@ -12,7 +12,7 @@ import java.lang.*;
 public class Board {
     public static final int BOARD_SIZE = 15;
     private Letter[][] board;
-    private static int[][] PREMIUM_TILES = new int[BOARD_SIZE][BOARD_SIZE];
+    private final static int[][] PREMIUM_TILES = new int[BOARD_SIZE][BOARD_SIZE];
     public static HashSet<String> words; //set of all valid words
     private boolean firstTurn;
     private ErrorEvent status;
@@ -331,11 +331,11 @@ public class Board {
 
 
         //Now grab the smallest and largest coords of the full word formed
-        while (boardSlice.get(smallestCoord - 1) != null) {
+        while (smallestCoord > 0 && boardSlice.get(smallestCoord - 1) != null) {
             smallestCoord--;
         }
 
-        while (boardSlice.get(largestCoord + 1) != null) {
+        while (largestCoord < BOARD_SIZE - 1 && boardSlice.get(largestCoord + 1) != null) {
             largestCoord++;
         }
 
@@ -359,7 +359,7 @@ public class Board {
                 } else {
                     //add to list of post multipliers
                     points += scoreWord.get(i).getPoints();
-                    multipliers.add(tileSlice[i + smallestCoord]);
+                    multipliers.add(Integer.valueOf(tileSlice[i + smallestCoord]));
                 }
 
 
@@ -381,7 +381,7 @@ public class Board {
      */
     public void deactivateTiles(ArrayList<String> locations) {
         for (String l : locations) {
-            PREMIUM_TILES[getCoordinateFromLocation(0, l)][getCoordinateFromLocation(1,l)] = 1;
+            PREMIUM_TILES[getCoordinateFromLocation(1, l)][getCoordinateFromLocation(0,l)] = 1;
         }
     }
 

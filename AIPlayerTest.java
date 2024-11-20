@@ -14,7 +14,7 @@ public class AIPlayerTest {
     @Before
     public void setUp()
     {
-        Game game = new Game(4);
+        Game game = new Game(4,0);
         board = new Board();
         player = new AIPlayer(board);
     }
