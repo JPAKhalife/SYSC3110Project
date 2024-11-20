@@ -84,7 +84,7 @@ public class Game {
      *
      * @return The Player who won
      */
-    public int findWinner() {
+    protected int findWinner() {
         int winner = -1;
         int winnerScore = 0;
 
