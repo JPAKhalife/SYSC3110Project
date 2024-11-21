@@ -8,10 +8,10 @@ public class AIPlayer extends Player{
     private Board board;
     Random rand;
 
-    public static final int NORTH = 0;
-    public static final int EAST = 1;
-    public static final int SOUTH = 2;
-    public static final int WEST = 3;
+    private static final int NORTH = 0;
+    private static final int EAST = 1;
+    private static final int SOUTH = 2;
+    private static final int WEST = 3;
 
     /**
      * Default constructor for the AI player

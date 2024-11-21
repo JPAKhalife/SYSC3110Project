@@ -158,7 +158,7 @@ public class Player {
      * Pulls more letters from the bag to fill their rack up to 7 letters
      * @return a boolean indicating whether the rack was filled back up to 7 letters successfully
      */
-    public boolean pullFromBag()
+    protected boolean pullFromBag()
     {
         while(rack.size() < 7)
         {
@@ -180,7 +180,8 @@ public class Player {
      * This method returns true if the rack is empty
      * @return a boolean stating whether the rack is empty
      */
-    public boolean isRackEmpty() {
+    private boolean isRackEmpty() {
+
         return rack.size() <= 0;
     }
 

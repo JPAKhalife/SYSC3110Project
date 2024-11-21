@@ -61,7 +61,7 @@ public class Game {
         return this.board;
     }
 
-    public boolean addPlayer() {
+    protected boolean addPlayer() {
         try {
             players.add(new Player());
             return true;
@@ -70,7 +70,7 @@ public class Game {
         }
     }
 
-    public boolean addAIplayer(){
+    protected boolean addAIplayer(){
         try{
             players.add(new AIPlayer(board));
             return true;
@@ -84,7 +84,7 @@ public class Game {
      *
      * @return The Player who won
      */
-    public int findWinner() {
+    protected int findWinner() {
         int winner = -1;
         int winnerScore = 0;
 
@@ -164,6 +164,7 @@ public class Game {
             currentAI.aiTurn();
             currentPlayer = (currentPlayer + 1) % (players.size()); //incrementing again, since the AI just went
         }
+
 
         //displaying the updated scores and board statuses
         for(GameObserver view: views)

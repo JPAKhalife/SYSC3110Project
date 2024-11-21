@@ -29,7 +29,7 @@ public class Board {
         initializeTiles();
     }
 
-    public static void initializeTiles() {
+    private static void initializeTiles() {
         //Fill all squares with 1.
         for (int i = 0 ; i < BOARD_SIZE ; i++) {
             for (int j = 0 ; j < BOARD_SIZE ; j++) {
@@ -379,7 +379,7 @@ public class Board {
      * it might have. This is because a premium square can only be used on one turn.
      * @param locations - an arraylist of locations to disable
      */
-    public void deactivateTiles(ArrayList<String> locations) {
+    private void deactivateTiles(ArrayList<String> locations) {
         for (String l : locations) {
             PREMIUM_TILES[getCoordinateFromLocation(1, l)][getCoordinateFromLocation(0,l)] = 1;
         }
