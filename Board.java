@@ -28,13 +28,13 @@ public class Board implements Serializable {
     /**
      * Constructor for Board
      */
-    public Board(){
+    public Board(String filename){
         board = new Letter [BOARD_SIZE][BOARD_SIZE];
         words = new HashSet<>();
         firstTurn = true;
         loadWords();
         status = new ErrorEvent();
-        initializeTiles("board.xml");
+        initializeTiles(filename);
     }
 
     public static void initializeTiles(String filename) {
@@ -72,9 +72,12 @@ public class Board implements Serializable {
                 public void endElement(String uri, String localName, String qName) throws SAXException {
                     String value = currentText.toString().trim();
                     currentText.setLength(0);
-                    if (!value.isEmpty() && colNum != 0) {
-                        PREMIUM_TILES[rowNum - 1][colNum - 1] = Integer.parseInt(value);
+                    if (rowNum <= BOARD_SIZE && colNum <= BOARD_SIZE) {
+                        if (!value.isEmpty() && colNum != 0) {
+                            PREMIUM_TILES[rowNum - 1][colNum - 1] = Integer.parseInt(value);
+                        }
                     }
+
                 }
             };
             // Start parsing
