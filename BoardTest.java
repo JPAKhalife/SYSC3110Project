@@ -40,6 +40,22 @@ public class BoardTest {
         assertEquals(ErrorEvent.GameError.NONE,board.getStatus().getError());
     }
 
+    @Test
+    public void addWordTripleWord() {
+
+    }
+
+    @Test
+    public void addWordDoubleLetter() {
+
+    }
+
+
+    @Test
+    public void addWordTripleLetter() {
+
+    }
+
 
     /**
      * This method ensures that adding a first word to the board not in the starting position returns a score of 01.
