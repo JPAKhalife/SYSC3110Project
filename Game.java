@@ -19,9 +19,9 @@ public class Game {
     /**
      * Basic constructor for Game
      */
-    public Game(int playerNum, int AIplayerNum) {
+    public Game(int playerNum, int AIplayerNum, String filename) {
         players = new ArrayList<>();
-        board = new Board();
+        board = new Board(filename);
         currentPlayer = 0;
         views = new ArrayList<>();
         LetterBag.createBag();

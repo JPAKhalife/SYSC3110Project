@@ -12,7 +12,7 @@ public class GameTest {
     @Before
     public void setUp() throws Exception
     {
-        game = new Game(4,0);
+        game = new Game(4,0,"board.xml");
     }
 
     @After
@@ -50,7 +50,7 @@ public class GameTest {
 
     @Test
     public void getPlayers() {
-        Game game2 = new Game(4,0);
+        Game game2 = new Game(4,0,"board.xml");
 
         //ensuring that the players list is not null
         assertNotNull(game.getPlayers());

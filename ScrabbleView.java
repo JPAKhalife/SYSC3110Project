@@ -63,7 +63,21 @@ public class ScrabbleView extends JFrame implements GameObserver {
 
         }
 
-        game = new Game(numPlayers,numAIplayers);
+        String fileName = "board.xml";
+        int output = 1;
+        while((output = JOptionPane.showConfirmDialog(null, "Would you like to have a custom board file?", "Specify board file", JOptionPane.YES_NO_OPTION)) == JOptionPane.CLOSED_OPTION);
+        if (output == JOptionPane.YES_OPTION) {
+            //Must be set to 1 and not zero, zero is approve
+            JFileChooser fileChooser = new JFileChooser();
+            output = 1;
+            while (output != JFileChooser.APPROVE_OPTION) {
+                fileChooser.setDialogTitle("Choose a file to load the premium tiles from.");
+                output = fileChooser.showOpenDialog(null);
+            }
+            fileName = fileChooser.getSelectedFile().getName();
+        }
+
+        game = new Game(numPlayers,numAIplayers,fileName);
         game.addView(this);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(800,800);

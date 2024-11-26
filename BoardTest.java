@@ -14,7 +14,7 @@ public class BoardTest {
 
     @Before
     public void setUp() throws Exception {
-        board = new Board();
+        board = new Board("board.xml");
         letters = new ArrayList<>();
         locations = new ArrayList<>();
     }
@@ -214,8 +214,10 @@ public class BoardTest {
         assertEquals(board.addWord(letters,locations), -1);
         //Make sure that the error code corresponds to this.
         assertEquals(ErrorEvent.GameError.INVALID_INTERSECTION,board.getStatus().getError());
+    }
 
-
+    @Test
+    public void checkBoardCustomTiles() {
 
     }
 }
