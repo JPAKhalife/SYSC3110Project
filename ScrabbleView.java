@@ -23,8 +23,9 @@ public class ScrabbleView extends JFrame implements GameObserver {
     private final Color TRIPLE_LETTER_COLOUR = new Color(63, 146, 199);
     private final Color DOUBLE_LETTER_COLOUR = new Color(117, 216, 230);
     private JTextPane currentPlayerField;
-
-
+    private JMenuBar menuBar;
+    private JMenuItem saveItem;
+    private JMenuItem loadItem;
     /**
      * The basic constructor for the ScrabbleView class
      */
@@ -68,6 +69,20 @@ public class ScrabbleView extends JFrame implements GameObserver {
         this.setSize(800,800);
         this.setLayout(new BorderLayout());
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        GameController gameController = new GameController(game);
+
+        //Create menubar for serialization features
+        menuBar = new JMenuBar();
+        JMenu menu = new JMenu("Game Options");
+        saveItem = new JMenuItem("Save game as serializable");
+        saveItem.setActionCommand("serial,save");
+        saveItem.addActionListener(gameController);
+        loadItem = new JMenuItem("Load game from serializable");
+        saveItem.setActionCommand("serial,load");
+        loadItem.addActionListener(gameController);
+        menu.add(saveItem);
+        menu.add(loadItem);
+        menuBar.add(menu);
 
         //Create GUI elements in frame
         turnElements = new Container(); //holds the current player's rack and the turn buttons
@@ -77,9 +92,6 @@ public class ScrabbleView extends JFrame implements GameObserver {
         JTextPane currentPlayerPane = new JTextPane();
         JPanel PlayerPanel = new JPanel();
         rackButtons = new JButton[7];
-
-        //Create controller
-        GameController gameController = new GameController(game);
 
         //create board buttons
         char rowChar = 'a';
@@ -159,6 +171,8 @@ public class ScrabbleView extends JFrame implements GameObserver {
         this.add(boardPanel, BorderLayout.CENTER);
 
         this.add(scorePane, BorderLayout.EAST);
+
+        this.add(menuBar, BorderLayout.NORTH);
 
         this.setVisible(true);
     } //end constructor
