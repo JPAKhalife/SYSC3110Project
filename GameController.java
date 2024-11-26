@@ -136,6 +136,16 @@ public class GameController implements ActionListener {
 
             }else if(command[1].equals("load")){
                 //pop up window for file selection
+                //pop up window for file selection
+                int output = 1;
+                String fileName = "";
+                JFileChooser fileChooser = new JFileChooser();
+                while(output != JFileChooser.APPROVE_OPTION){
+                    fileChooser.setDialogTitle("Select the file to load game progress from.");
+                    output = fileChooser.showOpenDialog(null);
+                }
+                fileName = fileChooser.getSelectedFile().getName();
+
                 //save game state is file
             }
 
