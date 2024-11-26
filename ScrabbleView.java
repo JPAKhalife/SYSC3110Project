@@ -28,6 +28,10 @@ public class ScrabbleView extends JFrame implements GameObserver {
     private JMenuItem loadItem;
     /**
      * The basic constructor for the ScrabbleView class
+     *
+     * needs method to update the board after each undo/redo
+     * --> called handleUndo(int locationIndexI, int locationIndexJ, int rackIndex)
+     * --> called handleRedo(int locationIndexI, int locationIndexJ, int rackIndex)
      */
     public ScrabbleView(){
         //Configure frame
@@ -63,6 +67,7 @@ public class ScrabbleView extends JFrame implements GameObserver {
 
         }
 
+        //Prompt user with the option to upload a custom board
         String fileName = "board.xml";
         int output = 1;
         while((output = JOptionPane.showConfirmDialog(null, "Would you like to have a custom board file?", "Specify board file", JOptionPane.YES_NO_OPTION)) == JOptionPane.CLOSED_OPTION);

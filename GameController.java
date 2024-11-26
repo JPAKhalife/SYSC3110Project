@@ -123,7 +123,17 @@ public class GameController implements ActionListener {
         } else if(command[0].equals("serial")) {
             if(command[1].equals("save")){
                 //pop up window for file selection
+                int output = 1;
+                String fileName = "";
+                JFileChooser fileChooser = new JFileChooser();
+                while(output != JFileChooser.APPROVE_OPTION){
+                    fileChooser.setDialogTitle("Select the file to save the current game state to.");
+                    output = fileChooser.showOpenDialog(null);
+                }
+                fileName = fileChooser.getSelectedFile().getName();
+
                 //save game state is file
+
             }else if(command[1].equals("load")){
                 //pop up window for file selection
                 //save game state is file
