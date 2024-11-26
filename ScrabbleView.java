@@ -13,6 +13,8 @@ public class ScrabbleView extends JFrame implements GameObserver {
     private Game game;
     private Container turnElements;
     private JButton[] rackButtons;  //holds the letters on a rack as buttons (placed letters, before sumbitted, are disabled)
+    private JButton undoButton;
+    private JButton redoButton;
     private final Color TILE_COLOUR = new Color(240, 215, 149);
     private final Color BOARD_COLOUR = new Color(103, 128, 78);
     private final Color BOARD_CENTER = new Color(63, 146, 199);
@@ -21,6 +23,7 @@ public class ScrabbleView extends JFrame implements GameObserver {
     private final Color TRIPLE_LETTER_COLOUR = new Color(63, 146, 199);
     private final Color DOUBLE_LETTER_COLOUR = new Color(117, 216, 230);
     private JTextPane currentPlayerField;
+
 
     /**
      * The basic constructor for the ScrabbleView class
@@ -83,6 +86,9 @@ public class ScrabbleView extends JFrame implements GameObserver {
         }
         boardButtons[7][7].setBackground(BOARD_CENTER);
 
+        Container doButtons = new Container();
+        doButtons.setLayout(new GridLayout(2,1));
+
         JPanel rackPanel = new JPanel(new GridLayout(1,7));
         Player currentPlayer= game.getCurrentPlayer();
         ArrayList<Letter> playerLetters = currentPlayer.getRack();
@@ -95,14 +101,26 @@ public class ScrabbleView extends JFrame implements GameObserver {
             rackPanel.add(rackButtons[i]);
         }
 
+        JPanel doPanel = new JPanel(new GridLayout(1,2));
+        JButton undoButton = new JButton("undo");
+        undoButton.addActionListener(gameController);
+        undoButton.setActionCommand("turn,undo");
+        JButton redoButton = new JButton("redo");
+        redoButton.addActionListener(gameController);
+        redoButton.setActionCommand("turn,redo");
+        doPanel.add(undoButton);
+        doPanel.add(redoButton);
+
         String[] commands = {"submit", "exchange","skip"};
-        JPanel turnPanel = new JPanel(new GridLayout(3,1));
+        JPanel turnPanel = new JPanel(new GridLayout(4,1));
+        turnPanel.add(doPanel);
         for(int i = 0; i<3; i++){
             turnButtons[i] = new JButton(commands[i]);
             turnButtons[i].addActionListener(gameController);
             turnButtons[i].setActionCommand("turn,"+ commands[i].toLowerCase());
             turnPanel.add(turnButtons[i]);
         }
+
 
 
         //Add rack and turn buttons below the board
