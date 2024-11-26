@@ -96,6 +96,21 @@ public class GameController implements ActionListener {
                 game.getCurrentPlayer().playerTurn(2); //DNE
             } else if (command[1].equals("pass")) {
                 //Don't need to do anything special here
+            }else if(command[1].equals("undo")){
+                //pop "move" from top of stack (getting letter and location of last move)
+                //remove letter from board
+                //re-enable letter on rack for use
+                //add action to redo stack
+
+                //if stack empty --> error event message (cannot undo)
+
+            }else if(command[1].equals("redo")){
+                //pop "move" from top of stack (getting letter and location of last undo)
+                //add letter to board
+                //disable letter on rack for use
+                //add action to undo stack
+
+                //if stack empty --> error event message (cannot redo)
             }
 
             //changing to the next player's turn
