@@ -120,7 +120,16 @@ public class GameController implements ActionListener {
             }
             game.handleNewTurn();
 
-        } else if (command[0].equals("menu")) {
+        } else if(command[0].equals("serial")) {
+            if(command[1].equals("save")){
+                //pop up window for file selection
+                //save game state is file
+            }else if(command[1].equals("load")){
+                //pop up window for file selection
+                //save game state is file
+            }
+
+        }else if (command[0].equals("menu")) {
             if (command[1].equals("restart")) {
                 //Handle restarting the game. game.restart()?
             } else if (command[1].equals("quit")) {
