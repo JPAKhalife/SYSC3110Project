@@ -5,11 +5,19 @@
  * @date 2024/10/08
  */
 
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import java.io.File;
+import java.io.Serializable;
 import java.util.*;
 import java.lang.*;
 
-public class Board {
+public class Board implements Serializable {
+    private static final long serialVersionUID = 1L;
     public static final int BOARD_SIZE = 15;
     private Letter[][] board;
     private final static int[][] PREMIUM_TILES = new int[BOARD_SIZE][BOARD_SIZE];
@@ -26,45 +34,54 @@ public class Board {
         firstTurn = true;
         loadWords();
         status = new ErrorEvent();
-        initializeTiles();
+        initializeTiles("board.xml");
     }
 
-    private static void initializeTiles() {
-        //Fill all squares with 1.
-        for (int i = 0 ; i < BOARD_SIZE ; i++) {
-            for (int j = 0 ; j < BOARD_SIZE ; j++) {
-                PREMIUM_TILES[i][j] = 1;
-            }
+    public static void initializeTiles(String filename) {
+        try {
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            SAXParser saxParser = factory.newSAXParser();
+
+            DefaultHandler handler = new DefaultHandler() {
+                int rowNum = 0;
+                int colNum = 0;
+                ArrayList<String> values;
+                StringBuilder currentText = new StringBuilder();
+
+                @Override
+                public void startDocument() throws SAXException {
+                    values = new ArrayList<>();
+                }
+
+                @Override
+                public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+                    if (qName.equals("row")) {
+                        rowNum++;
+                        colNum = 0;
+                    } else if (qName.equals("value")) {
+                        colNum++;
+                    }
+                }
+
+                @Override
+                public void characters(char[] ch, int start, int length) throws SAXException {
+                    currentText.append(ch, start, length);
+                }
+
+                @Override
+                public void endElement(String uri, String localName, String qName) throws SAXException {
+                    String value = currentText.toString().trim();
+                    currentText.setLength(0);
+                    if (!value.isEmpty() && colNum != 0) {
+                        PREMIUM_TILES[rowNum - 1][colNum - 1] = Integer.parseInt(value);
+                    }
+                }
+            };
+            // Start parsing
+            saxParser.parse(filename, handler);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        //Add all double word tiles (2)
-        PREMIUM_TILES[7][7] = 2;//center
-        for (int i = 0 ; i < 4 ; i++) {
-            mirrorTileCoordinates(1 + i,1 + i,2);
-        }
-        //Add all triple word tiles (3)
-        mirrorTileCoordinates(0,0,3);
-        flipTileCoordinates(0,7,3);
-        //Add all double letter tiles (-2)
-        flipTileCoordinates(0,3,-2);
-        flipTileCoordinates(2,6,-2);
-        flipTileCoordinates(3,7,-2);
-        mirrorTileCoordinates(6,6,-2);
-
-        //Add all triple letter tiles (-3)
-        flipTileCoordinates(1,5,-3);
-        mirrorTileCoordinates(5,5,-3);
-    }
-
-    private static void mirrorTileCoordinates(int x , int y, int v) {
-        PREMIUM_TILES[BOARD_SIZE - x - 1][BOARD_SIZE - y - 1] = v;
-        PREMIUM_TILES[x][y] = v;
-        PREMIUM_TILES[BOARD_SIZE - x - 1][y] = v;
-        PREMIUM_TILES[x][BOARD_SIZE - y - 1] = v;
-    }
-
-    private static void flipTileCoordinates(int x , int y, int v) {
-        mirrorTileCoordinates(x,y,v);
-        mirrorTileCoordinates(y,x,v);
     }
 
     /**
@@ -396,6 +413,7 @@ public class Board {
                 board[getCoordinateFromLocation(1,letterLocation.get(i))]
                         [getCoordinateFromLocation(0,letterLocation.get(i))]
                         =  null;
+                PREMIUM_TILES[getCoordinateFromLocation(1,letterLocation.get(i))][getCoordinateFromLocation(0,letterLocation.get(i))] = 1;
             }
         } else {
             for (int i = 0 ; i < letterLocation.size() ; i++) {
