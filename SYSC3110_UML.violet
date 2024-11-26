@@ -649,6 +649,52 @@ Serializable</string>
     </void>
    </object>
   </void>
+  <void method="addNode">
+   <object class="com.horstmann.violet.ClassNode" id="ClassNode10">
+    <void property="attributes">
+     <void property="text">
+      <string>- word: String
+- direction: int
+- wordOfLetters: ArrayLIst&lt;Letter&gt;</string>
+     </void>
+    </void>
+    <void property="methods">
+     <void property="text">
+      <string>+ WordPlacementEvent(location: String, direction: int)
++ WordPlacementEvent(location: String, direction: int, word: String, letters: ArrayList&lt;Letter&gt;)
++ getLocation(): String
++ getDirection(): int
++ getLetters(): ArrayList&lt;Letter&gt;
++ wordLength(): int</string>
+     </void>
+    </void>
+    <void property="name">
+     <void property="text">
+      <string>WordPlacementEvent</string>
+     </void>
+    </void>
+   </object>
+   <object class="java.awt.geom.Point2D$Double" id="Point2D$Double13">
+    <void class="java.awt.geom.Point2D$Double" method="getField">
+     <string>x</string>
+     <void method="set">
+      <object idref="Point2D$Double13"/>
+      <double>40.0</double>
+     </void>
+    </void>
+    <void class="java.awt.geom.Point2D$Double" method="getField">
+     <string>y</string>
+     <void method="set">
+      <object idref="Point2D$Double13"/>
+      <double>900.0</double>
+     </void>
+    </void>
+    <void method="setLocation">
+     <double>40.0</double>
+     <double>900.0</double>
+    </void>
+   </object>
+  </void>
   <void method="connect">
    <object class="com.horstmann.violet.ClassRelationshipEdge">
     <void property="bentStyle">
@@ -800,6 +846,18 @@ Serializable</string>
    <object class="com.horstmann.violet.NoteEdge"/>
    <object idref="NoteNode1"/>
    <object idref="PointNode0"/>
+  </void>
+  <void method="connect">
+   <object class="com.horstmann.violet.ClassRelationshipEdge">
+    <void property="endArrowHead">
+     <object class="com.horstmann.violet.ArrowHead" field="V"/>
+    </void>
+    <void property="lineStyle">
+     <object class="com.horstmann.violet.LineStyle" field="DOTTED"/>
+    </void>
+   </object>
+   <object idref="ClassNode9"/>
+   <object idref="ClassNode10"/>
   </void>
  </object>
 </java>
