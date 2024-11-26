@@ -22,7 +22,6 @@ public class ScrabbleView extends JFrame implements GameObserver {
     private final Color DOUBLE_WORD_COLOUR = new Color(227, 145, 215);
     private final Color TRIPLE_LETTER_COLOUR = new Color(63, 146, 199);
     private final Color DOUBLE_LETTER_COLOUR = new Color(117, 216, 230);
-    private final String DEFAULT_BOARD_FILE = "board.xml";
     private JTextPane currentPlayerField;
     private JMenuBar menuBar;
     private JMenuItem saveItem;
@@ -64,7 +63,7 @@ public class ScrabbleView extends JFrame implements GameObserver {
 
         }
 
-        String fileName = DEFAULT_BOARD_FILE;
+        String fileName = "board.xml";
         int output = 1;
         while((output = JOptionPane.showConfirmDialog(null, "Would you like to have a custom board file?", "Specify board file", JOptionPane.YES_NO_OPTION)) == JOptionPane.CLOSED_OPTION);
         if (output == JOptionPane.YES_OPTION) {
