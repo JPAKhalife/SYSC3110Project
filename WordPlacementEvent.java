@@ -50,11 +50,6 @@ public class WordPlacementEvent extends EventObject {
         return (ArrayList<Letter>) wordOfLetters.clone();
     }
 
-    public boolean addLetter(Letter letter)
-    {
-        return wordOfLetters.add(letter);
-    }
-
     public int wordLength()
     {
         return word.length();
