@@ -3,6 +3,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
@@ -35,9 +36,14 @@ public class BoardTest {
         letters.add(new Letter('a',1));
         locations.add("h8");
         locations.add("h9");
-        //Make sure that the score returned by add word is 2.
-        assertEquals(board.addWord(letters,locations), 2);
+        //Make sure that the score returned by add word is 4 (double tile).
+        assertEquals(board.addWord(letters,locations), 4);
         assertEquals(ErrorEvent.GameError.NONE,board.getStatus().getError());
+    }
+
+    @Test
+    public void addWordTripleWord() {
+
     }
 
 
@@ -218,6 +224,14 @@ public class BoardTest {
 
     @Test
     public void checkBoardCustomTiles() {
+        //This copies the board
+        int[][] originalBoard = Arrays.stream(board.getBoardTiles()).map(int[]::clone).toArray(int[][]::new);
+        Board board2 = new Board("boardtest.xml");
+        for (int i = 0 ; i < Board.BOARD_SIZE ; i++) {
+            for ( int j = 0 ; j < Board.BOARD_SIZE ; j++) {
+                assertNotEquals(originalBoard[i][j],board2.getBoardTiles()[i][j]);
+            }
+        }
 
     }
 }
