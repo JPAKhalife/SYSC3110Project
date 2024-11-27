@@ -89,6 +89,13 @@ public class Player {
         playedLetters.add(rack.get(rackIndex));
         System.out.println("Letter added\n");
 
+        //Adding the new letter as an undo value
+        if(playedLetters.size() <= playedLocations.size())
+        {
+            String undo = (playedLetters.size() - 1)+ "," + playedLocations.get(playedLetters.size() - 1) + ","+rackIndex;
+            undoStack.push(undo);
+        }
+
     }
 
     /**
@@ -107,6 +114,13 @@ public class Player {
             return true;
         }
 
+        if(playedLocations.size() <= playedLetters.size())
+        {
+            Letter playedLetter = playedLetters.get(playedLocations.size() - 1); //Getting the letter associated with the just added coordinate
+            int rackIndex = rack.indexOf(playedLetter);
+            String undo = (playedLocations.size() - 1)+ "," + location + ","+rackIndex;
+            undoStack.push(undo);
+        }
 
         return false;
     }
@@ -203,6 +217,7 @@ public class Player {
     public int[] undoPlacement()
     {
         String undo = undoStack.pop();
+        redoStack.push(undo); //Saving for later redo
         String[] indices = undo.split(",");
 
         playedLetters.remove(Integer.parseInt(indices[0]));
@@ -217,6 +232,7 @@ public class Player {
     public int[] redoPlacement()
     {
         String redo = redoStack.pop();
+        undoStack.push(redo);
         String[] indices = redo.split(",");
 
         Letter letterToPlay = rack.get(Integer.parseInt(indices[2]));
