@@ -132,7 +132,8 @@ public class GameController implements ActionListener {
                 }
                 fileName = fileChooser.getSelectedFile().getName();
 
-                //save game state is file
+                //save game state in file
+
 
             }else if(command[1].equals("load")){
                 //pop up window for file selection
@@ -146,7 +147,9 @@ public class GameController implements ActionListener {
                 }
                 fileName = fileChooser.getSelectedFile().getName();
 
-                //save game state is file
+                //load game state from file
+
+                //update view by handler
             }
 
         }else if (command[0].equals("menu")) {
