@@ -351,6 +351,16 @@ public class ScrabbleView extends JFrame implements GameObserver {
         currentPlayerField.setText("Player "+ (playerNum + 1) +" Turn");
     }
 
+    @Override
+    public void handleUndo() {
+
+    }
+
+    @Override
+    public void handleRedo() {
+
+    }
+
     public static void main(String[] args) {
         //Makes placed letter text black when board buttons are disabled
         UIManager.put("Button.disabledText", new ColorUIResource(Color.BLACK));

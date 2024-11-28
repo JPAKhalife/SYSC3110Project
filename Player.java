@@ -10,6 +10,9 @@ public class Player {
     private int score;
     protected ArrayList<Letter> playedLetters;
     protected ArrayList<String> playedLocations;
+    //These stacks contain data formatted as "playedLettersIndex,playedLocationsValue,rackIndex"
+    private Stack<String> undoStack;
+    private Stack<String> redoStack;
 
     /**
      * Constructor for the Player class
@@ -192,5 +195,57 @@ public class Player {
     public ArrayList<Letter> getRack()
     {
         return new ArrayList<Letter>(rack);
+    }
+
+    /**
+     * undoPlacement undoes a previously performed move
+     */
+    public int[] undoPlacement()
+    {
+        String undo = undoStack.pop();
+        redoStack.push(undo); //Saving for later redo
+        String[] indices = undo.split(",");
+
+        playedLetters.remove(Integer.parseInt(indices[0]));
+        playedLocations.remove(indices[1]);
+
+        return transformToIndices(indices);
+    }
+
+    /**
+     * redoPlacement redoes a previously undone move
+     */
+    public int[] redoPlacement()
+    {
+        String redo = redoStack.pop();
+        undoStack.push(redo);
+        String[] indices = redo.split(",");
+
+        Letter letterToPlay = rack.get(Integer.parseInt(indices[2]));
+        playedLetters.add(letterToPlay);
+        playedLocations.add(indices[1]);
+
+        return transformToIndices(indices);
+    }
+
+    /**
+     * This function helps separate the values of the locations that are changed by an undo/redo before sending them
+     * to be processed in the Controller and View
+     * @param values An array of Strings where the first value is the playedLetters index, the second is a String representation
+     *               of the index on the board, and the third is the index of letter on the rack
+     * @return An array of integers, where the first two are the indices for the location on the board, and the final one
+     *          is the index of the letter on the rack
+     */
+    private int[] transformToIndices(String[] values)
+    {
+        int[] indices = new int[3];
+
+        indices[2] = Integer.parseInt(values[0]);
+        indices[1] = Integer.parseInt(String.valueOf(values[1].charAt(1)));
+
+        char row = values[1].charAt(0);
+        indices[0] = row - 'a';
+
+        return indices;
     }
 }
