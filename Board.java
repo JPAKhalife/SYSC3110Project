@@ -9,7 +9,7 @@ import java.io.File;
 import java.util.*;
 import java.lang.*;
 
-public class Board {
+public class Board implements Serializable {
     public static final int BOARD_SIZE = 15;
     private Letter[][] board;
     private static int[][] PREMIUM_TILES = new int[BOARD_SIZE][BOARD_SIZE];

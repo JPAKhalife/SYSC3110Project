@@ -1,4 +1,6 @@
-public class ErrorEvent {
+import java.io.Serializable;
+
+public class ErrorEvent implements Serializable {
     private GameError error;
 
     /**

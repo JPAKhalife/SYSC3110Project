@@ -1,10 +1,12 @@
+import java.io.Serializable;
+
 /**
  * The Letter class is responsible for keeping track of letters and their value in points.
  * @author Elyssa Grant, Gillian O'Connel, John Khalife, Sandy Alzabadani 
  * @date 08/10/2024
  */
 
-public class Letter {
+public class Letter implements Serializable {
 
     //Member variables
     private char letter;

@@ -1,13 +1,14 @@
 import javax.swing.*;
 import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
+import java.io.Serializable;
 import java.util.Dictionary;
 import java.util.List;
 import java.util.ArrayList;
 import java.awt.Color;
 
 
-public class ScrabbleView extends JFrame implements GameObserver {
+public class ScrabbleView extends JFrame implements GameObserver, Serializable {
 
     private JButton[][] boardButtons;
     private JTextPane scorePane;

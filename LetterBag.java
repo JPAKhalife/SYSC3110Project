@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -5,7 +6,7 @@ import java.util.*;
  * @author Sandy Alzabadani
  * @date 08/10/2024
  */
-public class LetterBag {
+public class LetterBag implements Serializable {
     private static Hashtable<Letter,Integer> letters = new Hashtable<Letter, Integer>();;
     private static List<Letter> letterList = new ArrayList<>(); // Maintain state across method calls
     private static Random random = new Random();

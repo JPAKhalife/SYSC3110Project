@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.EventObject;
 
-public class WordPlacementEvent extends EventObject {
+public class WordPlacementEvent extends EventObject implements Serializable {
 
     private String word;
     private int direction;
