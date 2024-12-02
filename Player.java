@@ -107,20 +107,20 @@ public class Player implements Serializable {
      */
     public boolean addCoordinate(char i, int j)
     {
+        String location = "";
         //ensuring that the player's location on the board is valid
         if(i >= 'a' && j >= 1 && i <= 'o' && j < 16)
         {
-            String location = String.valueOf(i) + j; //combining them into a singular string representation of the location
+            location = String.valueOf(i) + j; //combining them into a singular string representation of the location
             playedLocations.add(location); //adding the location
+            if(playedLocations.size() <= playedLetters.size())
+            {
+                Letter playedLetter = playedLetters.get(playedLocations.size() - 1); //Getting the letter associated with the just added coordinate
+                int rackIndex = rack.indexOf(playedLetter);
+                String undo = (playedLocations.size() - 1)+ "," + location + ","+rackIndex;
+                undoStack.push(undo);
+            }
             return true;
-        }
-
-        if(playedLocations.size() <= playedLetters.size())
-        {
-            Letter playedLetter = playedLetters.get(playedLocations.size() - 1); //Getting the letter associated with the just added coordinate
-            int rackIndex = rack.indexOf(playedLetter);
-            String undo = (playedLocations.size() - 1)+ "," + location + ","+rackIndex;
-            undoStack.push(undo);
         }
 
         return false;
