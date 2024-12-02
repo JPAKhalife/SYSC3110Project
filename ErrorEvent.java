@@ -1,4 +1,6 @@
-public class ErrorEvent {
+import java.io.Serializable;
+
+public class ErrorEvent implements Serializable {
     private GameError error;
 
     /**
@@ -15,7 +17,6 @@ public class ErrorEvent {
         LETTERS_NOT_ADJACENT("The letters specified are not connected to each other."),
         INVALID_WORD("The letters added do not form a word."),
         INVALID_INTERSECTION("One of the letters added intersects a word but does not create a new one.");
-
 
         private final String errorDescription;
 

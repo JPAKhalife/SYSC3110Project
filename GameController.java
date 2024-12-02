@@ -98,19 +98,43 @@ public class GameController implements ActionListener {
                 //Don't need to do anything special here
             }else if(command[1].equals("undo")){
                 //pop "move" from top of stack (getting letter and location of last move)
-                //remove letter from board
-                //re-enable letter on rack for use
-                //add action to redo stack
+                int[] buttonIndices = game.getCurrentPlayer().undoPlacement();
 
                 //if stack empty --> error event message (cannot undo)
+                if(buttonIndices[0] == -1)
+                {
+                    for(GameObserver view: game.getViews())
+                    {
+                        view.handleBoardUpdate(new ErrorEvent().setError(CANNOT_UNDO));
+                    }
+                }
+                else{
+                    //re-enable letter on rack for use
+                    for(GameObserver view: game.getViews())
+                    {
+                        view.handleUndo(buttonIndices[0], buttonIndices[1], buttonIndices[2]);
+                    }
+                }
 
             }else if(command[1].equals("redo")){
                 //pop "move" from top of stack (getting letter and location of last undo)
-                //add letter to board
-                //disable letter on rack for use
-                //add action to undo stack
-
+                int[] buttonIndices = game.getCurrentPlayer().redoPlacement();
                 //if stack empty --> error event message (cannot redo)
+                if(buttonIndices[0] == -1)
+                {
+                    for(GameObserver view: game.getViews())
+                    {
+                        view.handleBoardUpdate(new ErrorEvent().setError(CANNOT_REDO));
+                    }
+                }
+                else{
+                    //disable letter on rack for use
+                    for(GameObserver view: game.getViews())
+                    {
+                        view.handleRedo(buttonIndices[0], buttonIndices[1], buttonIndices[2]);
+                    }
+                }
+
             }
 
             //changing to the next player's turn

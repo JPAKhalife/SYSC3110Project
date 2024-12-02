@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.EventObject;
 
-public class WordPlacementEvent extends EventObject {
+public class WordPlacementEvent extends EventObject implements Serializable {
 
     private String word;
     private int direction;
@@ -48,11 +49,6 @@ public class WordPlacementEvent extends EventObject {
     public ArrayList<Letter> getLetters()
     {
         return (ArrayList<Letter>) wordOfLetters.clone();
-    }
-
-    public boolean addLetter(Letter letter)
-    {
-        return wordOfLetters.add(letter);
     }
 
     public int wordLength()
