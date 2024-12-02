@@ -218,14 +218,20 @@ public class Player implements Serializable {
      */
     public int[] undoPlacement()
     {
-        String undo = undoStack.pop();
-        redoStack.push(undo); //Saving for later redo
-        String[] indices = undo.split(",");
+        try {
+            String undo = undoStack.pop();
+            redoStack.push(undo); //Saving for later redo
+            String[] indices = undo.split(",");
 
-        playedLetters.remove(Integer.parseInt(indices[0]));
-        playedLocations.remove(indices[1]);
+            playedLetters.remove(Integer.parseInt(indices[0]));
+            playedLocations.remove(indices[1]);
 
-        return transformToIndices(indices);
+            return transformToIndices(indices);
+        }
+        catch(EmptyStackException e)
+        {
+            return new int[]{-1, -1, -1};
+        }
     }
 
     /**
@@ -233,15 +239,20 @@ public class Player implements Serializable {
      */
     public int[] redoPlacement()
     {
-        String redo = redoStack.pop();
-        undoStack.push(redo);
-        String[] indices = redo.split(",");
+        try{
+            String redo = redoStack.pop();
+            undoStack.push(redo);
+            String[] indices = redo.split(",");
 
-        Letter letterToPlay = rack.get(Integer.parseInt(indices[2]));
-        playedLetters.add(letterToPlay);
-        playedLocations.add(indices[1]);
+            Letter letterToPlay = rack.get(Integer.parseInt(indices[2]));
+            playedLetters.add(letterToPlay);
+            playedLocations.add(indices[1]);
 
-        return transformToIndices(indices);
+            return transformToIndices(indices);
+        } catch(EmptyStackException e)
+        {
+            return new int[]{-1, -1, -1};
+        }
     }
 
     /**
@@ -255,10 +266,12 @@ public class Player implements Serializable {
     private int[] transformToIndices(String[] values)
     {
         int[] indices = new int[3];
-
+        //position 3 = rack index
         indices[2] = Integer.parseInt(values[0]);
+        //position 2 is the column on the board
         indices[1] = Integer.parseInt(String.valueOf(values[1].charAt(1)));
 
+        //Transforming the row into an integer value
         char row = values[1].charAt(0);
         indices[0] = row - 'a';
 

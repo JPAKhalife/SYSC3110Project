@@ -18,7 +18,6 @@ public class ErrorEvent implements Serializable {
         INVALID_WORD("The letters added do not form a word."),
         INVALID_INTERSECTION("One of the letters added intersects a word but does not create a new one.");
 
-
         private final String errorDescription;
 
         /**
