@@ -486,7 +486,9 @@ So a player wanting to place a letter in the 1st column of the 2nd row would den
 +handleLetterPlacement(word: Dictionary&lt;ArrayList&lt;Letter&gt;, ArrayList&lt;String&gt;&gt;): void
 +handleScoreUpdate(winner: int): void
 +handleNewTurn(): void
-+handleBlankTile(): void</string>
++handleBlankTile(): void
++ handleUndo(i: int j: int rackIndex: int): void
++ handleRedo(i: int, j: int, rackIndex: int): void</string>
      </void>
     </void>
     <void property="name">
@@ -501,12 +503,12 @@ GameObserver</string>
      <string>y</string>
      <void method="set">
       <object idref="Point2D$Double9"/>
-      <double>500.0</double>
+      <double>490.0</double>
      </void>
     </void>
     <void method="setLocation">
      <double>0.0</double>
-     <double>500.0</double>
+     <double>490.0</double>
     </void>
    </object>
   </void>
