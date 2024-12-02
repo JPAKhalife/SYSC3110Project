@@ -44,6 +44,10 @@ public class ErrorEvent implements Serializable {
         this.error = GameError.NONE;
     }
 
+    public ErrorEvent(GameError e) {
+        this.error = e;
+    }
+
     /**
      * This method gets the error stored in the error event
      * @return A game error
