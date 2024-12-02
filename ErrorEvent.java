@@ -1,4 +1,6 @@
-public class ErrorEvent {
+import java.io.Serializable;
+
+public class ErrorEvent implements Serializable {
     private GameError error;
 
     /**
@@ -17,7 +19,6 @@ public class ErrorEvent {
         INVALID_INTERSECTION("One of the letters added intersects a word but does not create a new one."),
         CANNOT_UNDO("Unable to undo past this point."),
         CANNOT_REDO("Unable to redo past this point.");
-
 
         private final String errorDescription;
 

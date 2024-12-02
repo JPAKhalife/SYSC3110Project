@@ -3,13 +3,17 @@
  * @author Elyssa
  * @date 2024/18/08
  */
+import java.io.Serializable;
 import java.util.*;
 
-public class Player {
+public class Player implements Serializable {
     protected ArrayList <Letter> rack;
     private int score;
     protected ArrayList<Letter> playedLetters;
     protected ArrayList<String> playedLocations;
+    //These stacks contain data formatted as "playedLettersIndex,playedLocationsValue,rackIndex"
+    private Stack<String> undoStack;
+    private Stack<String> redoStack;
 
     /**
      * Constructor for the Player class
@@ -46,26 +50,26 @@ public class Player {
 
         if(userTurn == 1) //The user wants to place letters on the board
         {
-//            //Sorting the letters so players can add them in odd ways
-//            for(int i = 0; i < playedLocations.size() - 1; i++)
-//            {
-//                int smallestIndex = i;
-//                for(int j = 0; j < playedLocations.size(); j++)
-//                {
-//                    if(playedLocations.get(smallestIndex).charAt(0) > playedLocations.get(i).charAt(0) || playedLocations.get(smallestIndex).charAt(1) > playedLocations.get(i).charAt(1))
-//                    {
-//                        smallestIndex = i;
-//                    }
-//                }
-//
-//                playedLocations.add(i, playedLocations.get(smallestIndex));
-//                playedLocations.remove(smallestIndex + 1); //Since the extra one was added in, this will be the new location of the duplicate
-//
-//                //Move the associated letter along with the index
-//                playedLetters.add(i, playedLetters.get(smallestIndex));
-//                playedLetters.remove(smallestIndex + 1);
-//
-//            }
+            //Sorting the letters so players can add them in odd ways
+            for(int i = 0; i < playedLocations.size() - 1; i++)
+            {
+                int smallestIndex = i;
+                for(int j = 0; j < playedLocations.size(); j++)
+                {
+                    if(playedLocations.get(smallestIndex).charAt(0) > playedLocations.get(j).charAt(0) || playedLocations.get(smallestIndex).charAt(1) > playedLocations.get(j).charAt(1))
+                    {
+                        smallestIndex = j;
+                    }
+                }
+
+                playedLocations.add(i, playedLocations.get(smallestIndex));
+                playedLocations.remove(smallestIndex + 1); //Since the extra one was added in, this will be the new location of the duplicate
+
+                //Move the associated letter along with the index
+                playedLetters.add(i, playedLetters.get(smallestIndex));
+                playedLetters.remove(smallestIndex + 1);
+
+            }
 
             playerWord.put(playedLetters, playedLocations);
         }
@@ -86,6 +90,13 @@ public class Player {
         playedLetters.add(rack.get(rackIndex));
         System.out.println("Letter added\n");
 
+        //Adding the new letter as an undo value
+        if(playedLetters.size() <= playedLocations.size())
+        {
+            String undo = (playedLetters.size() - 1)+ "," + playedLocations.get(playedLetters.size() - 1) + ","+rackIndex;
+            undoStack.push(undo);
+        }
+
     }
 
     /**
@@ -96,11 +107,19 @@ public class Player {
      */
     public boolean addCoordinate(char i, int j)
     {
+        String location = "";
         //ensuring that the player's location on the board is valid
         if(i >= 'a' && j >= 1 && i <= 'o' && j < 16)
         {
-            String location = String.valueOf(i) + j; //combining them into a singular string representation of the location
+            location = String.valueOf(i) + j; //combining them into a singular string representation of the location
             playedLocations.add(location); //adding the location
+            if(playedLocations.size() <= playedLetters.size())
+            {
+                Letter playedLetter = playedLetters.get(playedLocations.size() - 1); //Getting the letter associated with the just added coordinate
+                int rackIndex = rack.indexOf(playedLetter);
+                String undo = (playedLocations.size() - 1)+ "," + location + ","+rackIndex;
+                undoStack.push(undo);
+            }
             return true;
         }
 
@@ -186,11 +205,77 @@ public class Player {
     }
 
     /**
-     *
+     * getRack obtains a copy of the player's rack
      * @return A copy of the player's rack
      */
     public ArrayList<Letter> getRack()
     {
         return new ArrayList<Letter>(rack);
     }
+
+    /**
+     * undoPlacement undoes a previously performed move
+     */
+    public int[] undoPlacement()
+    {
+        try {
+            String undo = undoStack.pop();
+            redoStack.push(undo); //Saving for later redo
+            String[] indices = undo.split(",");
+
+            playedLetters.remove(Integer.parseInt(indices[0]));
+            playedLocations.remove(indices[1]);
+
+            return transformToIndices(indices);
+        }
+        catch(EmptyStackException e)
+        {
+            return new int[]{-1, -1, -1};
+        }
+    }
+
+    /**
+     * redoPlacement redoes a previously undone move
+     */
+    public int[] redoPlacement()
+    {
+        try{
+            String redo = redoStack.pop();
+            undoStack.push(redo);
+            String[] indices = redo.split(",");
+
+            Letter letterToPlay = rack.get(Integer.parseInt(indices[2]));
+            playedLetters.add(letterToPlay);
+            playedLocations.add(indices[1]);
+
+            return transformToIndices(indices);
+        } catch(EmptyStackException e)
+        {
+            return new int[]{-1, -1, -1};
+        }
+    }
+
+    /**
+     * This function helps separate the values of the locations that are changed by an undo/redo before sending them
+     * to be processed in the Controller and View
+     * @param values An array of Strings where the first value is the playedLetters index, the second is a String representation
+     *               of the index on the board, and the third is the index of letter on the rack
+     * @return An array of integers, where the first two are the indices for the location on the board, and the final one
+     *          is the index of the letter on the rack
+     */
+    private int[] transformToIndices(String[] values)
+    {
+        int[] indices = new int[3];
+        //position 3 = rack index
+        indices[2] = Integer.parseInt(values[0]);
+        //position 2 is the column on the board
+        indices[1] = Integer.parseInt(String.valueOf(values[1].charAt(1)));
+
+        //Transforming the row into an integer value
+        char row = values[1].charAt(0);
+        indices[0] = row - 'a';
+
+        return indices;
+    }
+
 }

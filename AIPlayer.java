@@ -1,10 +1,10 @@
+import java.io.Serializable;
 import java.sql.Array;
 import java.util.*;
-
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
-public class AIPlayer extends Player{
+public class AIPlayer extends Player implements Serializable {
     private Board board;
     Random rand;
 
