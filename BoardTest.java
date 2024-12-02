@@ -14,7 +14,7 @@ public class BoardTest {
 
     @Before
     public void setUp() throws Exception {
-        board = new Board();
+        board = new Board("board.xml");
         letters = new ArrayList<>();
         locations = new ArrayList<>();
     }
@@ -38,7 +38,23 @@ public class BoardTest {
         //Make sure that the score returned by add word is 2.
         assertEquals(board.addWord(letters,locations), 2);
         assertEquals(ErrorEvent.GameError.NONE,board.getStatus().getError());
-     }
+    }
+
+    @Test
+    public void addWordTripleWord() {
+
+    }
+
+    @Test
+    public void addWordDoubleLetter() {
+
+    }
+
+
+    @Test
+    public void addWordTripleLetter() {
+
+    }
 
 
     /**
@@ -214,8 +230,10 @@ public class BoardTest {
         assertEquals(board.addWord(letters,locations), -1);
         //Make sure that the error code corresponds to this.
         assertEquals(ErrorEvent.GameError.INVALID_INTERSECTION,board.getStatus().getError());
+    }
 
-
+    @Test
+    public void checkBoardCustomTiles() {
 
     }
 }

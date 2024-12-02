@@ -1,14 +1,17 @@
 import java.io.Serializable;
 import java.sql.Array;
 import java.util.*;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 public class AIPlayer extends Player implements Serializable {
     private Board board;
     Random rand;
-    public static final int NORTH = 0;
-    public static final int EAST = 1;
-    public static final int SOUTH = 2;
-    public static final int WEST = 3;
+
+    private static final int NORTH = 0;
+    private static final int EAST = 1;
+    private static final int SOUTH = 2;
+    private static final int WEST = 3;
 
     /**
      * Default constructor for the AI player
@@ -42,6 +45,8 @@ public class AIPlayer extends Player implements Serializable {
 
             playerTurn(2);
         }
+
+        pullFromBag();
     }
 
     /**
@@ -76,7 +81,7 @@ public class AIPlayer extends Player implements Serializable {
                             //DEBUGGING FOR LOOP
                             for(int h = 0; h < wordInfo.size(); h++)
                             {
-                                System.out.println(wordInfo.get(i));
+                                System.out.println(wordInfo.get(h));
                             }
                         }
                     }
@@ -85,12 +90,13 @@ public class AIPlayer extends Player implements Serializable {
         }
 
         //For all the words, attempt to add them to the board
-        for(int i = wordInfo.size() - 1; i >= 0; i--)
+        for(WordPlacementEvent word: wordInfo)
         {
-            int result = tryAddToBoard(wordInfo.get(i));
+            int result = tryAddToBoard(word);
 
             if(result > 0)
             {
+
                 System.out.println("Adding score");
                 updateScore(result);
                 return true;
@@ -105,7 +111,6 @@ public class AIPlayer extends Player implements Serializable {
         System.out.println("Did not find a word");
         return false;
     }
-
     /**
      * This function determines whether a given starting location is valid to add a word to, and in what direction
      * @param i the row of the board to check
@@ -155,7 +160,7 @@ public class AIPlayer extends Player implements Serializable {
             freeSpacesInDirection[EAST] = offsetFromInput - 1;
         }
         //This is one row down, aka South
-        if((i + 1) <= Board.BOARD_SIZE && boardAppearance[i + 1][j] == null)
+        if((i + 1) < Board.BOARD_SIZE && boardAppearance[i + 1][j] == null)
         {
             offsetFromInput = 1;
 
@@ -220,7 +225,7 @@ public class AIPlayer extends Player implements Serializable {
                 //The first letter will either be the first or last letter, so can build the rest without worrying about sub-permutations
                 for (int k = 0; k < wordLength - 1; k++)
                 {
-                    Letter usedLetter = unusedLetters.remove(rand.nextInt(unusedLetters.size()));
+                    Letter usedLetter = unusedLetters.remove(rand.nextInt(max(unusedLetters.size(), 1)));
                     //adding a random unused letter to the end of the word
                     wordBuilt.append(usedLetter.getLetter());
                     addedLetters.add(usedLetter);

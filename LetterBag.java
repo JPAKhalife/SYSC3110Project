@@ -111,7 +111,8 @@ public class LetterBag implements Serializable {
     }
 
     /**
-     * Adds a letter back into the bag
+     * Adds a letter back into the bag.
+     * This method is used for testing getNextLetter method
      * @param tempLetter The letter to be returned to the bag
      */
     public static void addLetter(Letter tempLetter) {
@@ -139,4 +140,3 @@ public class LetterBag implements Serializable {
         letterList.clear();
     }
 }
-

@@ -14,8 +14,8 @@ public class AIPlayerTest {
     @Before
     public void setUp()
     {
-        Game game = new Game(4);
-        board = new Board();
+        Game game = new Game(4,0,"board.xml");
+        board = new Board("board.xml");
         player = new AIPlayer(board);
     }
 

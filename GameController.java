@@ -45,7 +45,6 @@ public class GameController implements ActionListener {
             int x = Integer.valueOf(command[2]);
             //Add these to the addCoordinate method
             game.getCurrentPlayer().addCoordinate(y, x); //DNE
-
             //HANDLE TEMPORARY VIEW (letter placed on board BEFORE submitted)
             //get most recent letter placed
             Dictionary<ArrayList<Letter>, ArrayList<String>> word = game.getCurrentPlayer().playerTurn(1);
@@ -53,12 +52,10 @@ public class GameController implements ActionListener {
             for(GameObserver view: game.getViews()){
                 view.handleLetterPlacement(word);
             }
-
         } else if (command[0].equals("rack")) {
             //Grab + place the index
             int index = Integer.valueOf(command[1]);
             game.getCurrentPlayer().placeLetter(index); //DNE
-
             JButton buttonPressed = (JButton) e.getSource();
             buttonPressed.setEnabled(false);
 
@@ -87,11 +84,11 @@ public class GameController implements ActionListener {
                 }
                 else
                 {
-                   if(!gameNotOver)
-                   {
-                       winner = game.findWinner();
-                       return; //Game is over --> don't need to move onto next turn
-                   }
+                    if(!gameNotOver)
+                    {
+                        winner = game.findWinner();
+                        return; //Game is over --> don't need to move onto next turn
+                    }
                 }
 
             } else if (command[1].equals("exchange")) {
@@ -99,6 +96,21 @@ public class GameController implements ActionListener {
                 game.getCurrentPlayer().playerTurn(2); //DNE
             } else if (command[1].equals("pass")) {
                 //Don't need to do anything special here
+            }else if(command[1].equals("undo")){
+                //pop "move" from top of stack (getting letter and location of last move)
+                //remove letter from board
+                //re-enable letter on rack for use
+                //add action to redo stack
+
+                //if stack empty --> error event message (cannot undo)
+
+            }else if(command[1].equals("redo")){
+                //pop "move" from top of stack (getting letter and location of last undo)
+                //add letter to board
+                //disable letter on rack for use
+                //add action to undo stack
+
+                //if stack empty --> error event message (cannot redo)
             }
 
             //changing to the next player's turn
@@ -108,7 +120,36 @@ public class GameController implements ActionListener {
             }
             game.handleNewTurn();
 
-        } else if (command[0].equals("menu")) {
+        } else if(command[0].equals("serial")) {
+            if(command[1].equals("save")){
+                //pop up window for file selection
+                int output = 1;
+                String fileName = "";
+                JFileChooser fileChooser = new JFileChooser();
+                while(output != JFileChooser.APPROVE_OPTION){
+                    fileChooser.setDialogTitle("Select the file to save the current game state to.");
+                    output = fileChooser.showOpenDialog(null);
+                }
+                fileName = fileChooser.getSelectedFile().getName();
+
+                //save game state is file
+
+            }else if(command[1].equals("load")){
+                //pop up window for file selection
+                //pop up window for file selection
+                int output = 1;
+                String fileName = "";
+                JFileChooser fileChooser = new JFileChooser();
+                while(output != JFileChooser.APPROVE_OPTION){
+                    fileChooser.setDialogTitle("Select the file to load game progress from.");
+                    output = fileChooser.showOpenDialog(null);
+                }
+                fileName = fileChooser.getSelectedFile().getName();
+
+                //save game state is file
+            }
+
+        }else if (command[0].equals("menu")) {
             if (command[1].equals("restart")) {
                 //Handle restarting the game. game.restart()?
             } else if (command[1].equals("quit")) {
