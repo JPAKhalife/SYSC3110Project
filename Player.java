@@ -3,9 +3,10 @@
  * @author Elyssa
  * @date 2024/18/08
  */
+import java.io.Serializable;
 import java.util.*;
 
-public class Player {
+public class Player implements Serializable {
     protected ArrayList <Letter> rack;
     private int score;
     protected ArrayList<Letter> playedLetters;

@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.sql.Array;
 import java.util.*;
 
-public class AIPlayer extends Player{
+public class AIPlayer extends Player implements Serializable {
     private Board board;
     Random rand;
 
