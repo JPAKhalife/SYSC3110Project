@@ -104,6 +104,15 @@ public class GameController implements ActionListener {
 
                 //if stack empty --> error event message (cannot undo)
 
+                //will need to do try/catch for future undo error (omitted until implemented)
+                int[] values = game.getCurrentPlayer().undoPlacement();
+                for(GameObserver view: game.getViews())
+                {
+                    view.handleUndo(values[0], values[1], values[2]);
+                }
+                game.handleNewTurn();
+
+
             }else if(command[1].equals("redo")){
                 //pop "move" from top of stack (getting letter and location of last undo)
                 //add letter to board
