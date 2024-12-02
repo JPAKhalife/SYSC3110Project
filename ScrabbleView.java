@@ -318,6 +318,12 @@ public class ScrabbleView extends JFrame implements GameObserver {
     public static void main(String[] args) {
         //Makes placed letter text black when board buttons are disabled
         UIManager.put("Button.disabledText", new ColorUIResource(Color.BLACK));
+        //Change the default look and feel to help with macOS
+        try {
+            UIManager.setLookAndFeel( UIManager.getCrossPlatformLookAndFeelClassName() );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         ScrabbleView v = new ScrabbleView();
     }
 }

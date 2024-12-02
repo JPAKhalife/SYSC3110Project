@@ -42,22 +42,58 @@ public class BoardTest {
     }
 
     @Test
-    public void addWordTripleWord() {
+    public void addWordTileTest() {
+        ArrayList<Letter> letters = new ArrayList<>();
+        ArrayList<String> locations = new ArrayList<>();
+        letters.add(new Letter('a',1));
+        letters.add(new Letter('t',1));
+        locations.add("h8");
+        locations.add("i8");
+        //Make sure that the score returned by add word is 4 (double word).
+        assertEquals(board.addWord(letters,locations), 4);
+        assertEquals(ErrorEvent.GameError.NONE,board.getStatus().getError());
 
+        letters.clear();
+        locations.clear();
+        letters.add(new Letter('o',1));
+        locations.add("i9");
+        //Make sure that the score returned by add word is 3 (double letter).
+        assertEquals(board.addWord(letters,locations), 3);
+        letters.clear();
+        locations.clear();
+        locations.add("h9");
+        locations.add("j9");
+        letters.add(new Letter('w',1));
+        letters.add(new Letter('n',1));
+        board.addWord(letters,locations);
+        letters.clear();
+        locations.clear();
+        locations.add("j10");
+        letters.add(new Letter('a',1));
+        //Make sure that the score returned by add word is 4 (triple letter).
+        assertEquals(board.addWord(letters,locations), 4);
+        letters.clear();
+        locations.clear();
+        locations.add("j11");
+        locations.add("j12");
+        locations.add("j13");
+        locations.add("j14");
+        locations.add("j15");
+        letters.add(new Letter('m',1));
+        letters.add(new Letter('i',1));
+        letters.add(new Letter('b',1));
+        letters.add(new Letter('i',1));
+        letters.add(new Letter('a',1));
+        assertNotEquals(board.addWord(letters,locations), -1);
+        letters.clear();
+        locations.clear();
+        letters.add(new Letter('a',1));
+        letters.add(new Letter('a',1));
+        locations.add("h15");
+        locations.add("i15");
+        //make sure that tripple word works
+        assertEquals(board.addWord(letters,locations), 9);
     }
-
-    @Test
-    public void addWordDoubleLetter() {
-
-    }
-
-
-    @Test
-    public void addWordTripleLetter() {
-
-    }
-
-
 
     /**
      * This method ensures that adding a first word to the board not in the starting position returns a score of 01.
