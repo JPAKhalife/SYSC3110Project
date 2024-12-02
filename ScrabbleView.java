@@ -351,14 +351,35 @@ public class ScrabbleView extends JFrame implements GameObserver {
         currentPlayerField.setText("Player "+ (playerNum + 1) +" Turn");
     }
 
+    /**
+     * Remove the tile placed by current player from the board and return it to their rack
+     *
+     * @param locationIndexI The row in the board where the tile was placed
+     * @param locationIndexJ The coloumn in the board the tile was placed
+     * @param rackIndex The index on the rack where the placed tile was
+     */
     @Override
-    public void handleUndo() {
-
+    public void handleUndo(int locationIndexI, int locationIndexJ, int rackIndex) {
+        //remove placed tile from board
+        boardButtons[locationIndexI][locationIndexJ].setText("");
+        boardButtons[locationIndexI][locationIndexJ].setBackground(BOARD_COLOUR); //TEMPORARY COLOUR
+        //return to rack
+        rackButtons[rackIndex].setEnabled(true);
     }
-
+    /**
+     * Return the tile removed by current player undoing their turn from the board and remove it from their rack
+     *
+     * @param locationIndexI The row in the board where the tile was placed
+     * @param locationIndexJ The coloumn in the board the tile was placed
+     * @param rackIndex The index on the rack where the placed tile was
+     */
     @Override
-    public void handleRedo() {
-
+    public void handleRedo(int locationIndexI, int locationIndexJ, int rackIndex) {
+        //place tile back on the board
+        boardButtons[locationIndexI][locationIndexJ].setText(rackButtons[rackIndex].getText());
+        boardButtons[locationIndexI][locationIndexJ].setBackground(TILE_COLOUR);
+        //remove tile from rack
+        rackButtons[rackIndex].setEnabled(false);
     }
 
     public static void main(String[] args) {
