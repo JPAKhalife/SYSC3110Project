@@ -26,7 +26,7 @@ A player may choose to do nothing (neither place a word on the board nor exchang
 The game ends when the letter bag runs out of letters and at least one of the players’ racks runs out of letters. The player with the highest score wins.
 
 4. Redo/Undo:
-
+A player can undo a tile that was just placed by clicking the undo button and then redo placing another tile by clicking the redo button.
 
 5. Save Game:
 A player can save the game by selecting save from the menu bar. The player can then choose a file to save the game to.
