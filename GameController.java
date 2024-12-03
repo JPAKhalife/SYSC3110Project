@@ -43,7 +43,7 @@ public class GameController implements ActionListener {
             char y = command[1].charAt(0); //This should be a single letter
             int x = Integer.valueOf(command[2]);
             //Add these to the addCoordinate method
-            game.getCurrentPlayer().addCoordinate(y, x); //DNE
+            game.getCurrentPlayer().addCoordinate(y, x);
             //HANDLE TEMPORARY VIEW (letter placed on board BEFORE submitted)
             //get most recent letter placed
             Dictionary<ArrayList<Letter>, ArrayList<String>> word = game.getCurrentPlayer().playerTurn(1);
@@ -54,7 +54,7 @@ public class GameController implements ActionListener {
         } else if (command[0].equals("rack")) {
             //Grab + place the index
             int index = Integer.valueOf(command[1]);
-            game.getCurrentPlayer().placeLetter(index); //DNE
+            game.getCurrentPlayer().placeLetter(index);
             JButton buttonPressed = (JButton) e.getSource();
             buttonPressed.setEnabled(false);
 
@@ -103,7 +103,7 @@ public class GameController implements ActionListener {
                 int[] buttonIndices = game.getCurrentPlayer().undoPlacement();
 
                 //if stack empty --> error event message (cannot undo)
-                if(buttonIndices[0] == -1)
+                if(buttonIndices[0] == -1 || buttonIndices[1] == -1 || buttonIndices[2] == -1)
                 {
                     for(GameObserver view: game.getViews())
                     {
@@ -117,17 +117,7 @@ public class GameController implements ActionListener {
                         view.handleUndo(buttonIndices[0], buttonIndices[1], buttonIndices[2]);
                     }
                 }
-
-                //will need to do try/catch for future undo error (omitted until implemented)
-                int[] values = game.getCurrentPlayer().undoPlacement();
-                for(GameObserver view: game.getViews())
-                {
-                    view.handleUndo(values[0], values[1], values[2]);
-                }
-                game.handleNewTurn();
-
-
-            }else if(command[1].equals("redo")){
+            } else if(command[1].equals("redo")){
                 //pop "move" from top of stack (getting letter and location of last undo)
                 int[] buttonIndices = game.getCurrentPlayer().redoPlacement();
                 //if stack empty --> error event message (cannot redo)
