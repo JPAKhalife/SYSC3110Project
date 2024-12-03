@@ -367,6 +367,7 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
         boardButtons[locationIndexI][locationIndexJ].setBackground(getTileColor(game.getBoard().getBoardTiles()[locationIndexI][locationIndexJ])); //TEMPORARY COLOUR
         //return to rack
         rackButtons[rackIndex].setEnabled(true);
+        boardButtons[locationIndexI][locationIndexJ].setEnabled(true);
     }
     /**
      * Return the tile removed by current player undoing their turn from the board and remove it from their rack
@@ -380,6 +381,7 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
         //place tile back on the board
         boardButtons[locationIndexI][locationIndexJ].setText(rackButtons[rackIndex].getText());
         boardButtons[locationIndexI][locationIndexJ].setBackground(TILE_COLOUR);
+        boardButtons[locationIndexI][locationIndexJ].setEnabled(false);
         //remove tile from rack
         rackButtons[rackIndex].setEnabled(false);
     }

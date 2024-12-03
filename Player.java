@@ -226,8 +226,8 @@ public class Player implements Serializable {
             String[] indices = redo.split(",");
 
             Letter letterToPlay = rack.get(Integer.parseInt(indices[2]));
-            playedLetters.add(letterToPlay);
-            playedLocations.add(indices[1]);
+            playedLetters.add(Integer.parseInt(indices[0]), letterToPlay);
+            playedLocations.add(Integer.parseInt(indices[0]), indices[1]);
 
             return transformToIndices(indices);
         } catch(EmptyStackException e)
@@ -250,7 +250,7 @@ public class Player implements Serializable {
         //position 3 = rack index
         indices[2] = Integer.parseInt(values[0]);
         //position 2 is the column on the board
-        indices[1] = Integer.parseInt(String.valueOf(values[1].charAt(1)));
+        indices[1] = Integer.parseInt(values[1].substring(1)) - 1;
 
         //Transforming the row into an integer value
         char row = values[1].charAt(0);
