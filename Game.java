@@ -15,6 +15,9 @@ public class Game implements Serializable {
     private Board board;
     private int currentPlayer;
     private ArrayList<GameObserver> views;
+    private static final int TIMER_DELAY_MS = 30000;
+    private boolean doTimer;
+    private Timer timer;
 
 
     /**
@@ -25,6 +28,8 @@ public class Game implements Serializable {
         board = new Board(filename);
         currentPlayer = 0;
         views = new ArrayList<>();
+        timer = new Timer();
+        doTimer = false;
         LetterBag.createBag();
 
         for(int i = 0; i < playerNum; i++)
@@ -216,6 +221,7 @@ public class Game implements Serializable {
      */
     public void handleNewTurn()
     {
+        this.timer.cancel();
 
         //Giving the next player a turn (including AI players)
         //turn order priority favours real players. Once all real players have finished, the AI players will play
@@ -236,6 +242,9 @@ public class Game implements Serializable {
             view.handleBoardUpdate(board.getStatus());
         }
 
+        if (this.doTimer) {
+            activateTimer();
+        }
     }
 
     /**
@@ -256,5 +265,27 @@ public class Game implements Serializable {
      */
     public ArrayList<GameObserver> getViews(){
         return this.views;
+    }
+
+    /**
+     * This method turns on and off the timer.
+     */
+    public void toggleTimer() {
+        this.doTimer  = !this.doTimer;
+        if (this.doTimer) {
+            activateTimer();
+        }
+    }
+
+    /**
+     * This method activates the timer
+     */
+    public void activateTimer() {
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                handleNewTurn();
+            }
+        },TIMER_DELAY_MS);
     }
 }

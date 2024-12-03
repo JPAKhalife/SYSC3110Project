@@ -13,10 +13,7 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
     private JButton[][] boardButtons;
     private JTextPane scorePane;
     private Game game;
-    private Container turnElements;
     private JButton[] rackButtons;  //holds the letters on a rack as buttons (placed letters, before sumbitted, are disabled)
-    private JButton undoButton;
-    private JButton redoButton;
     private final Color TILE_COLOUR = new Color(240, 215, 149);
     private final Color BOARD_COLOUR = new Color(103, 128, 78);
     private final Color BOARD_CENTER = new Color(63, 146, 199);
@@ -25,9 +22,6 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
     private final Color TRIPLE_LETTER_COLOUR = new Color(63, 146, 199);
     private final Color DOUBLE_LETTER_COLOUR = new Color(117, 216, 230);
     private JTextPane currentPlayerField;
-    private JMenuBar menuBar;
-    private JMenuItem saveItem;
-    private JMenuItem loadItem;
     /**
      * The basic constructor for the ScrabbleView class
      *
@@ -93,20 +87,23 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
         GameController gameController = new GameController(game);
 
         //Create menubar for serialization features
-        menuBar = new JMenuBar();
+        JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu("Game Options");
-        saveItem = new JMenuItem("Save game as serializable");
+        JMenuItem saveItem = new JMenuItem("Save game as serializable");
         saveItem.setActionCommand("serial,save");
         saveItem.addActionListener(gameController);
-        loadItem = new JMenuItem("Load game from serializable");
-        saveItem.setActionCommand("serial,load");
+        JMenuItem loadItem = new JMenuItem("Load game from serializable");
+        loadItem.setActionCommand("serial,load");
         loadItem.addActionListener(gameController);
+        JMenuItem timerMode = new JMenuItem("Timer Mode");
+        timerMode.setActionCommand("timer");
+        timerMode.addActionListener(gameController);
         menu.add(saveItem);
         menu.add(loadItem);
+        menu.add(timerMode);
         menuBar.add(menu);
 
         //Create GUI elements in frame
-        turnElements = new Container(); //holds the current player's rack and the turn buttons
         boardButtons = new JButton[15][15]; //holds the spaces on a board as buttons (occupied spaces disabled)
         JButton[] turnButtons = new JButton[3]; //holds the buttons used for a turn (submit, exchange, skip)
         scorePane = new JTextPane();
