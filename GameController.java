@@ -23,7 +23,6 @@ public class GameController implements ActionListener {
         this.game = game;
     }
 
-
     //Formatting for differentiating between actions:
     //board,<y(row)>,<x(col)> - x being int and y being letter.
     //NOTE: the reason y comes first is because that's the way the data is organized in the back end.
