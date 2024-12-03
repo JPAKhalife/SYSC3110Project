@@ -10,6 +10,7 @@ The Scrabble board, which includes premium squares for various score bonus
 The current player’s rack, with a label specifying the current player
 A display of the current score for each player
 The turn action buttons- ‘Submit’, ‘Exchange’, ‘Skip’, 'Undo', 'Redo'
+A menu called Game options which includes "Load game from serializable" and " Save game as serializable"
 
 The following sections outline all possible actions that may be taken on a user’s turn. 
 
@@ -29,9 +30,9 @@ The game ends when the letter bag runs out of letters and at least one of the pl
 A player can undo a tile that was just placed by clicking the undo button and then redo placing another tile by clicking the redo button.
 
 5. Save Game:
-A player can save the game by selecting save from the menu bar. The player can then choose a file to save the game to.
+A player can save the game by selecting save game as serializable from the menu GameOptions. A dialogue pops up where the player can then choose a file to save the game to.
 
 6. Load Game:
-A player can access a saved game by loading it from an already saved file. The player can select load from the menu bar and select the file that the game was saved to.
+A player can access a saved game by loading it from an already saved file. The player can select load game as serializable from the menu GameOptions and select the file that the game was saved to from the pop up dialogue.
 
 
