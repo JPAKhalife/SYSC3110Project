@@ -97,6 +97,7 @@ public class GameController implements ActionListener {
             } else if (command[1].equals("exchange")) {
                 //put exchange behavior here
                 game.getCurrentPlayer().playerTurn(2); //DNE
+                newTurnFunctions();
             } else if (command[1].equals("pass")) {
                 newTurnFunctions();
                 //Don't need to do anything special here
