@@ -1,18 +1,22 @@
-import javax.swing.*;
-import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.List;
-import java.util.ArrayList;
-import java.awt.Color;
+import javax.swing.*;
+import javax.swing.plaf.ColorUIResource;
 
 
-public class ScrabbleView extends JFrame implements GameObserver {
+
+public class ScrabbleView extends JFrame implements GameObserver, Serializable {
+
     private JButton[][] boardButtons;
     private JTextPane scorePane;
     private Game game;
     private Container turnElements;
     private JButton[] rackButtons;  //holds the letters on a rack as buttons (placed letters, before sumbitted, are disabled)
+    private JButton undoButton;
+    private JButton redoButton;
     private final Color TILE_COLOUR = new Color(240, 215, 149);
     private final Color BOARD_COLOUR = new Color(103, 128, 78);
     private final Color BOARD_CENTER = new Color(63, 146, 199);
@@ -21,9 +25,15 @@ public class ScrabbleView extends JFrame implements GameObserver {
     private final Color TRIPLE_LETTER_COLOUR = new Color(63, 146, 199);
     private final Color DOUBLE_LETTER_COLOUR = new Color(117, 216, 230);
     private JTextPane currentPlayerField;
-
+    private JMenuBar menuBar;
+    private JMenuItem saveItem;
+    private JMenuItem loadItem;
     /**
      * The basic constructor for the ScrabbleView class
+     *
+     * needs method to update the board after each undo/redo
+     * --> called handleUndo(int locationIndexI, int locationIndexJ, int rackIndex)
+     * --> called handleRedo(int locationIndexI, int locationIndexJ, int rackIndex)
      */
     public ScrabbleView(){
         //Configure frame
@@ -59,12 +69,41 @@ public class ScrabbleView extends JFrame implements GameObserver {
 
         }
 
-        game = new Game(numPlayers,numAIplayers);
+        //Prompt user with the option to upload a custom board
+        String fileName = "board.xml";
+        int output = 1;
+        while((output = JOptionPane.showConfirmDialog(null, "Would you like to have a custom board file?", "Specify board file", JOptionPane.YES_NO_OPTION)) == JOptionPane.CLOSED_OPTION);
+        if (output == JOptionPane.YES_OPTION) {
+            //Must be set to 1 and not zero, zero is approve
+            JFileChooser fileChooser = new JFileChooser();
+            output = 1;
+            while (output != JFileChooser.APPROVE_OPTION) {
+                fileChooser.setDialogTitle("Choose a file to load the premium tiles from.");
+                output = fileChooser.showOpenDialog(null);
+            }
+            fileName = fileChooser.getSelectedFile().getName();
+        }
+
+        game = new Game(numPlayers,numAIplayers,fileName);
         game.addView(this);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(800,800);
         this.setLayout(new BorderLayout());
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        GameController gameController = new GameController(game);
+
+        //Create menubar for serialization features
+        menuBar = new JMenuBar();
+        JMenu menu = new JMenu("Game Options");
+        saveItem = new JMenuItem("Save game as serializable");
+        saveItem.setActionCommand("serial,save");
+        saveItem.addActionListener(gameController);
+        loadItem = new JMenuItem("Load game from serializable");
+        saveItem.setActionCommand("serial,load");
+        loadItem.addActionListener(gameController);
+        menu.add(saveItem);
+        menu.add(loadItem);
+        menuBar.add(menu);
 
         //Create GUI elements in frame
         turnElements = new Container(); //holds the current player's rack and the turn buttons
@@ -74,9 +113,6 @@ public class ScrabbleView extends JFrame implements GameObserver {
         JTextPane currentPlayerPane = new JTextPane();
         JPanel PlayerPanel = new JPanel();
         rackButtons = new JButton[7];
-
-        //Create controller
-        GameController gameController = new GameController(game);
 
         //create board buttons
         char rowChar = 'a';
@@ -95,6 +131,9 @@ public class ScrabbleView extends JFrame implements GameObserver {
         }
         boardButtons[7][7].setBackground(BOARD_CENTER);
 
+        Container doButtons = new Container();
+        doButtons.setLayout(new GridLayout(2,1));
+
         JPanel rackPanel = new JPanel(new GridLayout(1,7));
         Player currentPlayer= game.getCurrentPlayer();
         ArrayList<Letter> playerLetters = currentPlayer.getRack();
@@ -107,14 +146,26 @@ public class ScrabbleView extends JFrame implements GameObserver {
             rackPanel.add(rackButtons[i]);
         }
 
+        JPanel doPanel = new JPanel(new GridLayout(1,2));
+        JButton undoButton = new JButton("undo");
+        undoButton.addActionListener(gameController);
+        undoButton.setActionCommand("turn,undo");
+        JButton redoButton = new JButton("redo");
+        redoButton.addActionListener(gameController);
+        redoButton.setActionCommand("turn,redo");
+        doPanel.add(undoButton);
+        doPanel.add(redoButton);
+
         String[] commands = {"submit", "exchange","skip"};
-        JPanel turnPanel = new JPanel(new GridLayout(3,1));
+        JPanel turnPanel = new JPanel(new GridLayout(4,1));
+        turnPanel.add(doPanel);
         for(int i = 0; i<3; i++){
             turnButtons[i] = new JButton(commands[i]);
             turnButtons[i].addActionListener(gameController);
             turnButtons[i].setActionCommand("turn,"+ commands[i].toLowerCase());
             turnPanel.add(turnButtons[i]);
         }
+
 
 
         //Add rack and turn buttons below the board
@@ -141,6 +192,8 @@ public class ScrabbleView extends JFrame implements GameObserver {
         this.add(boardPanel, BorderLayout.CENTER);
 
         this.add(scorePane, BorderLayout.EAST);
+
+        this.add(menuBar, BorderLayout.NORTH);
 
         this.setVisible(true);
     } //end constructor
@@ -300,9 +353,46 @@ public class ScrabbleView extends JFrame implements GameObserver {
         currentPlayerField.setText("Player "+ (playerNum + 1) +" Turn");
     }
 
+    /**
+     * Remove the tile placed by current player from the board and return it to their rack
+     *
+     * @param locationIndexI The row in the board where the tile was placed
+     * @param locationIndexJ The coloumn in the board the tile was placed
+     * @param rackIndex The index on the rack where the placed tile was
+     */
+    @Override
+    public void handleUndo(int locationIndexI, int locationIndexJ, int rackIndex) {
+        //remove placed tile from board
+        boardButtons[locationIndexI][locationIndexJ].setText("");
+        boardButtons[locationIndexI][locationIndexJ].setBackground(BOARD_COLOUR); //TEMPORARY COLOUR
+        //return to rack
+        rackButtons[rackIndex].setEnabled(true);
+    }
+    /**
+     * Return the tile removed by current player undoing their turn from the board and remove it from their rack
+     *
+     * @param locationIndexI The row in the board where the tile was placed
+     * @param locationIndexJ The coloumn in the board the tile was placed
+     * @param rackIndex The index on the rack where the placed tile was
+     */
+    @Override
+    public void handleRedo(int locationIndexI, int locationIndexJ, int rackIndex) {
+        //place tile back on the board
+        boardButtons[locationIndexI][locationIndexJ].setText(rackButtons[rackIndex].getText());
+        boardButtons[locationIndexI][locationIndexJ].setBackground(TILE_COLOUR);
+        //remove tile from rack
+        rackButtons[rackIndex].setEnabled(false);
+    }
+
     public static void main(String[] args) {
         //Makes placed letter text black when board buttons are disabled
         UIManager.put("Button.disabledText", new ColorUIResource(Color.BLACK));
+        //Change the default look and feel to help with macOS
+        try {
+            UIManager.setLookAndFeel( UIManager.getCrossPlatformLookAndFeelClassName() );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         ScrabbleView v = new ScrabbleView();
     }
 }

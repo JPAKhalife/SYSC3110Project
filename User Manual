@@ -9,7 +9,7 @@ The interface for the game consists of the following elements
 The Scrabble board, which includes premium squares for various score bonus
 The current player’s rack, with a label specifying the current player
 A display of the current score for each player
-The turn action buttons- ‘Submit’, ‘Exchange’, and ‘Skip’
+The turn action buttons- ‘Submit’, ‘Exchange’, ‘Skip’, 'Undo', 'Redo'
 
 The following sections outline all possible actions that may be taken on a user’s turn. 
 
@@ -24,3 +24,14 @@ A player may choose to do nothing (neither place a word on the board nor exchang
 
 
 The game ends when the letter bag runs out of letters and at least one of the players’ racks runs out of letters. The player with the highest score wins.
+
+4. Redo/Undo:
+A player can undo a tile that was just placed by clicking the undo button and then redo placing another tile by clicking the redo button.
+
+5. Save Game:
+A player can save the game by selecting save from the menu bar. The player can then choose a file to save the game to.
+
+6. Load Game:
+A player can access a saved game by loading it from an already saved file. The player can select load from the menu bar and select the file that the game was saved to.
+
+

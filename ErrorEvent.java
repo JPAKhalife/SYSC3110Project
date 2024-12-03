@@ -1,4 +1,6 @@
-public class ErrorEvent {
+import java.io.Serializable;
+
+public class ErrorEvent implements Serializable {
     private GameError error;
 
     /**
@@ -14,8 +16,9 @@ public class ErrorEvent {
         LETTERS_NOT_STRAIGHT("The letters specified are not all in the same row or column."),
         LETTERS_NOT_ADJACENT("The letters specified are not connected to each other."),
         INVALID_WORD("The letters added do not form a word."),
-        INVALID_INTERSECTION("One of the letters added intersects a word but does not create a new one.");
-
+        INVALID_INTERSECTION("One of the letters added intersects a word but does not create a new one."),
+        CANNOT_UNDO("Unable to undo past this point."),
+        CANNOT_REDO("Unable to redo past this point.");
 
         private final String errorDescription;
 
@@ -39,6 +42,10 @@ public class ErrorEvent {
     //This is the constructor for the error event
     public ErrorEvent() {
         this.error = GameError.NONE;
+    }
+
+    public ErrorEvent(GameError e) {
+        this.error = e;
     }
 
     /**
