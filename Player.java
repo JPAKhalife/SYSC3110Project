@@ -3,9 +3,10 @@
  * @author Elyssa
  * @date 2024/18/08
  */
+import java.io.Serializable;
 import java.util.*;
 
-public class Player {
+public class Player implements Serializable {
     protected ArrayList <Letter> rack;
     private int score;
     protected ArrayList<Letter> playedLetters;
@@ -55,9 +56,9 @@ public class Player {
                 int smallestIndex = i;
                 for(int j = 0; j < playedLocations.size(); j++)
                 {
-                    if(playedLocations.get(smallestIndex).charAt(0) > playedLocations.get(i).charAt(0) || playedLocations.get(smallestIndex).charAt(1) > playedLocations.get(i).charAt(1))
+                    if(playedLocations.get(smallestIndex).charAt(0) > playedLocations.get(j).charAt(0) || playedLocations.get(smallestIndex).charAt(1) > playedLocations.get(j).charAt(1))
                     {
-                        smallestIndex = i;
+                        smallestIndex = j;
                     }
                 }
 
@@ -89,6 +90,13 @@ public class Player {
         playedLetters.add(rack.get(rackIndex));
         System.out.println("Letter added\n");
 
+        //Adding the new letter as an undo value
+        if(playedLetters.size() <= playedLocations.size())
+        {
+            String undo = (playedLetters.size() - 1)+ "," + playedLocations.get(playedLetters.size() - 1) + ","+rackIndex;
+            undoStack.push(undo);
+        }
+
     }
 
     /**
@@ -105,6 +113,14 @@ public class Player {
             String location = String.valueOf(i) + j; //combining them into a singular string representation of the location
             playedLocations.add(location); //adding the location
             return true;
+        }
+
+        if(playedLocations.size() <= playedLetters.size())
+        {
+            Letter playedLetter = playedLetters.get(playedLocations.size() - 1); //Getting the letter associated with the just added coordinate
+            int rackIndex = rack.indexOf(playedLetter);
+            String undo = (playedLocations.size() - 1)+ "," + location + ","+rackIndex;
+            undoStack.push(undo);
         }
 
         return false;
@@ -189,7 +205,7 @@ public class Player {
     }
 
     /**
-     *
+     * getRack obtains a copy of the player's rack
      * @return A copy of the player's rack
      */
     public ArrayList<Letter> getRack()
@@ -248,4 +264,5 @@ public class Player {
 
         return indices;
     }
+
 }
