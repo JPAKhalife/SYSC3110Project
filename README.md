@@ -15,3 +15,6 @@ Overall, future deliverables aim to enhance the user experience by adding a more
 Known issues:
 There are no known issues with the current version of the game.
 
+Notes for marker:
+Board uses an inner-functions in the method initializeTiles() to override the default handler. This inner class is not highlighted in the UML diagram.  
+
