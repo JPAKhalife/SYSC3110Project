@@ -110,7 +110,7 @@ public class GameController implements ActionListener {
                 {
                     for(GameObserver view: game.getViews())
                     {
-                        //view.handleBoardUpdate(new ErrorEvent(ErrorEvent.GameError.CANNOT_UNDO));
+                        view.handleBoardUpdate(new ErrorEvent(ErrorEvent.GameError.CANNOT_UNDO));
                     }
                 }
                 else{

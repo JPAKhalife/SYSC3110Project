@@ -11,11 +11,12 @@ The current player’s rack, with a label specifying the current player
 A display of the current score for each player
 The turn action buttons- ‘Submit’, ‘Exchange’, ‘Skip’, 'Undo', 'Redo'
 
+
 The following sections outline all possible actions that may be taken on a user’s turn. 
 
 1. Placing Words on the Board: 
-The current player selects a letter from their rack by clicking it. The user can then click the board tile where they would like to place the selected letter. The letter placed will display automatically on the board. Clicking the ‘Submit’ button will validate the placed word. If the word is valid, the current player’s score is updated accordingly and their turn ends. Alternatively, If either the word formed or the placement is invalid, a message is displayed to the user stating that it is invalid and the placed letters are removed from the board. The user then has the opportunity to take another action
-
+  The current player selects a letter from their rack by clicking it. The user can then click the board tile where they would like to place the selected letter. The letter placed will display automatically on the board. Clicking the ‘Submit’ button will validate the placed word. If the word is valid, the current player’s score is updated accordingly and their turn ends. Alternatively, If either the word formed or the placement is invalid, a message is displayed to the user stating that it is invalid and the placed letters are removed from the board. The user then has the opportunity to take another action
+    
 2. Exchanging Letters:
 The user may exchange unwanted letters on their rack by selecting up to seven letters and then clicking the ‘Exchange’ button. The selected letters will then be swapped with letters from the bag. After exchanging, the current player’s turn is over. The current player will not be able to see the new letters until their next turn.
 
@@ -23,15 +24,19 @@ The user may exchange unwanted letters on their rack by selecting up to seven le
 A player may choose to do nothing (neither place a word on the board nor exchange letters) on their turn by clicking the ‘Skip’ button. Skipping a turn will pass the game to the next player.
 
 
-The game ends when the letter bag runs out of letters and at least one of the players’ racks runs out of letters. The player with the highest score wins.
+The following are additional features are available in the game to enhance the user-friendliness
 
-4. Redo/Undo:
-A player can undo a tile that was just placed by clicking the undo button and then redo placing another tile by clicking the redo button.
+1. Undo Letter Placement:
+  The player may undo up to all the letters placed on the board (for the current player's current turn) one-by-one by clicking the 'Undo' button. If the current   player attempts to undo after removing all the placed letters or before any letters are placed during the turn, an error message will be displayed.
+
+2. Redo Letter Placement:
+  The player may replace any letters removed from the board on the current turn by clicking the 'Redo' button. If the current player has redone all the letters     removed from the undo feature or the player has not performed any undos, an error message will appear
 
 5. Save Game:
-A player can save the game by selecting save from the menu bar. The player can then choose a file to save the game to.
+  A player can save the game by selecting 'Save game as serializable' from the 'Game Options' menu bar. The player can then choose a file to save the game to.
 
 6. Load Game:
-A player can access a saved game by loading it from an already saved file. The player can select load from the menu bar and select the file that the game was saved to.
+  A player can access a saved game by loading it from an already saved file. The player can select 'Load game from serializable' from the 'Game Options' menu bar and select the file the game was previously saved to.
 
 
+The game ends when the letter bag runs out of letters and at least one of the players’ racks runs out of letters. The player with the highest score wins.

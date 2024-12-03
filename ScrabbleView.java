@@ -308,6 +308,14 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
     public void handleBoardUpdate(ErrorEvent e) {
         if(e.getError()!= ErrorEvent.GameError.NONE){
             JOptionPane.showMessageDialog(null, e.getError().getErrorDescription());
+            switch (e.getError()) {
+                case CANNOT_REDO:
+                    return;
+                case CANNOT_UNDO:
+                    return;
+                default:
+                    break;
+            }
         }
 
         //Update every button in the board to reflect what is in the Board class
