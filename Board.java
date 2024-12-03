@@ -19,6 +19,7 @@ import java.lang.*;
 
 public class Board implements Serializable {
     private static final long serialVersionUID = 1L;
+
     public static final int BOARD_SIZE = 15;
     private Letter[][] board;
     private final static int[][] PREMIUM_TILES = new int[BOARD_SIZE][BOARD_SIZE];

@@ -4,12 +4,12 @@
  * @date 08/18/2024
  */
 
-import java.io.File;
-import java.io.Serializable;
+import java.io.*;
 import java.lang.reflect.Array;
 import java.util.*;
 
 public class Game implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private ArrayList<Player> players;
     private Board board;
@@ -130,6 +130,67 @@ public class Game implements Serializable {
             }
         }
         return wordScore;
+    }
+
+    public void saveGame(String filename) {
+        try{
+            FileOutputStream out = new FileOutputStream(filename);
+            ObjectOutputStream obj = new ObjectOutputStream(out);
+            obj.writeObject(this);
+            obj.close();
+            out.close();
+            System.out.println("Game saved successfully to " + filename);
+        }
+        catch(Exception e){
+            System.out.println("An error occured while saving game");
+            e.printStackTrace();
+
+        }
+
+    }
+
+    /**
+     * loadGame deserializes the game that is saved in a file and loads it
+     * @param filename the filename to be imported from
+     */
+    public void loadGame(String filename) {
+        try {
+            File file = new File(filename);
+            if (!file.exists()) {
+                System.out.println("File not found");
+                return;
+            }
+
+            ObjectInputStream inObj = new ObjectInputStream(new FileInputStream(filename));
+            Game loadedGame = (Game) inObj.readObject();
+            inObj.close();
+
+            if (loadedGame == null || loadedGame.getPlayers().isEmpty() || loadedGame.getBoard() == null) {
+                System.out.println("Game cannot be loaded");
+                return;
+
+            }
+            this.board = loadedGame.board;
+            this.players = loadedGame.players;
+            this.views = loadedGame.views;
+            this.currentPlayer = loadedGame.currentPlayer;
+
+
+            for(GameObserver view: views){
+                view.handleBoardUpdate(board.getStatus());
+                view.handleNewTurn(currentPlayer);
+                view.handleScoreUpdate(-1);
+            }
+
+            System.out.println("Game loaded successfully");
+
+        } catch (IOException e) {
+            System.out.println("An error occured while loading game");
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            System.out.println("Game is not a valid game class");
+            e.printStackTrace();
+        }
     }
 
     /**
