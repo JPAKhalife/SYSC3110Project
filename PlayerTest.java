@@ -155,3 +155,4 @@ public class PlayerTest {
         assertEquals(7, rack.size());
     }
 }
+//Salut
