@@ -24,3 +24,14 @@ A player may choose to do nothing (neither place a word on the board nor exchang
 
 
 The game ends when the letter bag runs out of letters and at least one of the players’ racks runs out of letters. The player with the highest score wins.
+
+4. Redo/Undo:
+
+
+5. Save Game:
+A player can save the game by selecting save from the menu bar. The player can then choose a file to save the game to.
+
+6. Load Game:
+A player can access a saved game by loading it from an already saved file. The player can select load from the menu bar and select the file that the game was saved to.
+
+
