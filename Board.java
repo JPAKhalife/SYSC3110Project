@@ -4,6 +4,7 @@
  * @author Gillian O'Connell
  * @date 2024/10/08
  */
+//John was here
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -18,6 +19,7 @@ import java.lang.*;
 
 public class Board implements Serializable {
     private static final long serialVersionUID = 1L;
+
     public static final int BOARD_SIZE = 15;
     private Letter[][] board;
     private final static int[][] PREMIUM_TILES = new int[BOARD_SIZE][BOARD_SIZE];
@@ -35,6 +37,15 @@ public class Board implements Serializable {
         loadWords();
         status = new ErrorEvent();
         initializeTiles(filename);
+    }
+
+    public static void printTiles() {
+        for (int i = 0 ; i < BOARD_SIZE ; i++) {
+            for (int j =  0 ; j < BOARD_SIZE ; j++) {
+                System.out.print(PREMIUM_TILES[i][j] + " ");
+            }
+            System.out.println();
+        }
     }
 
     public static void initializeTiles(String filename) {
@@ -416,7 +427,6 @@ public class Board implements Serializable {
                 board[getCoordinateFromLocation(1,letterLocation.get(i))]
                         [getCoordinateFromLocation(0,letterLocation.get(i))]
                         =  null;
-                PREMIUM_TILES[getCoordinateFromLocation(1,letterLocation.get(i))][getCoordinateFromLocation(0,letterLocation.get(i))] = 1;
             }
         } else {
             for (int i = 0 ; i < letterLocation.size() ; i++) {

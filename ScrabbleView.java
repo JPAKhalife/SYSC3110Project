@@ -1,11 +1,10 @@
-import javax.swing.*;
-import javax.swing.plaf.ColorUIResource;
 import java.awt.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.List;
-import java.util.ArrayList;
-import java.awt.Color;
+import javax.swing.*;
+import javax.swing.plaf.ColorUIResource;
 
 
 
@@ -388,6 +387,12 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
     public static void main(String[] args) {
         //Makes placed letter text black when board buttons are disabled
         UIManager.put("Button.disabledText", new ColorUIResource(Color.BLACK));
+        //Change the default look and feel to help with macOS
+        try {
+            UIManager.setLookAndFeel( UIManager.getCrossPlatformLookAndFeelClassName() );
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         ScrabbleView v = new ScrabbleView();
     }
 }

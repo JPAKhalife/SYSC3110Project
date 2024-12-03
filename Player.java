@@ -50,27 +50,6 @@ public class Player implements Serializable {
 
         if(userTurn == 1) //The user wants to place letters on the board
         {
-            //Sorting the letters so players can add them in odd ways
-            for(int i = 0; i < playedLocations.size() - 1; i++)
-            {
-                int smallestIndex = i;
-                for(int j = 0; j < playedLocations.size(); j++)
-                {
-                    if(playedLocations.get(smallestIndex).charAt(0) > playedLocations.get(j).charAt(0) || playedLocations.get(smallestIndex).charAt(1) > playedLocations.get(j).charAt(1))
-                    {
-                        smallestIndex = j;
-                    }
-                }
-
-                playedLocations.add(i, playedLocations.get(smallestIndex));
-                playedLocations.remove(smallestIndex + 1); //Since the extra one was added in, this will be the new location of the duplicate
-
-                //Move the associated letter along with the index
-                playedLetters.add(i, playedLetters.get(smallestIndex));
-                playedLetters.remove(smallestIndex + 1);
-
-            }
-
             playerWord.put(playedLetters, playedLocations);
         }
         else if(userTurn == 2) { //The user wants to exchange letters with the letter bag
@@ -107,20 +86,20 @@ public class Player implements Serializable {
      */
     public boolean addCoordinate(char i, int j)
     {
+        String location = "";
         //ensuring that the player's location on the board is valid
         if(i >= 'a' && j >= 1 && i <= 'o' && j < 16)
         {
-            String location = String.valueOf(i) + j; //combining them into a singular string representation of the location
+            location = String.valueOf(i) + j; //combining them into a singular string representation of the location
             playedLocations.add(location); //adding the location
+            if(playedLocations.size() <= playedLetters.size())
+            {
+                Letter playedLetter = playedLetters.get(playedLocations.size() - 1); //Getting the letter associated with the just added coordinate
+                int rackIndex = rack.indexOf(playedLetter);
+                String undo = (playedLocations.size() - 1)+ "," + location + ","+rackIndex;
+                //undoStack.push(undo);
+            }
             return true;
-        }
-
-        if(playedLocations.size() <= playedLetters.size())
-        {
-            Letter playedLetter = playedLetters.get(playedLocations.size() - 1); //Getting the letter associated with the just added coordinate
-            int rackIndex = rack.indexOf(playedLetter);
-            String undo = (playedLocations.size() - 1)+ "," + location + ","+rackIndex;
-            undoStack.push(undo);
         }
 
         return false;
@@ -218,14 +197,20 @@ public class Player implements Serializable {
      */
     public int[] undoPlacement()
     {
-        String undo = undoStack.pop();
-        redoStack.push(undo); //Saving for later redo
-        String[] indices = undo.split(",");
+        try {
+            String undo = undoStack.pop();
+            redoStack.push(undo); //Saving for later redo
+            String[] indices = undo.split(",");
 
-        playedLetters.remove(Integer.parseInt(indices[0]));
-        playedLocations.remove(indices[1]);
+            playedLetters.remove(Integer.parseInt(indices[0]));
+            playedLocations.remove(indices[1]);
 
-        return transformToIndices(indices);
+            return transformToIndices(indices);
+        }
+        catch(EmptyStackException e)
+        {
+            return new int[]{-1, -1, -1};
+        }
     }
 
     /**
@@ -233,15 +218,20 @@ public class Player implements Serializable {
      */
     public int[] redoPlacement()
     {
-        String redo = redoStack.pop();
-        undoStack.push(redo);
-        String[] indices = redo.split(",");
+        try{
+            String redo = redoStack.pop();
+            undoStack.push(redo);
+            String[] indices = redo.split(",");
 
-        Letter letterToPlay = rack.get(Integer.parseInt(indices[2]));
-        playedLetters.add(letterToPlay);
-        playedLocations.add(indices[1]);
+            Letter letterToPlay = rack.get(Integer.parseInt(indices[2]));
+            playedLetters.add(letterToPlay);
+            playedLocations.add(indices[1]);
 
-        return transformToIndices(indices);
+            return transformToIndices(indices);
+        } catch(EmptyStackException e)
+        {
+            return new int[]{-1, -1, -1};
+        }
     }
 
     /**
@@ -255,10 +245,12 @@ public class Player implements Serializable {
     private int[] transformToIndices(String[] values)
     {
         int[] indices = new int[3];
-
+        //position 3 = rack index
         indices[2] = Integer.parseInt(values[0]);
+        //position 2 is the column on the board
         indices[1] = Integer.parseInt(String.valueOf(values[1].charAt(1)));
 
+        //Transforming the row into an integer value
         char row = values[1].charAt(0);
         indices[0] = row - 'a';
 
