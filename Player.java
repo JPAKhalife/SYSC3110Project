@@ -50,27 +50,6 @@ public class Player implements Serializable {
 
         if(userTurn == 1) //The user wants to place letters on the board
         {
-            //Sorting the letters so players can add them in odd ways
-            for(int i = 0; i < playedLocations.size() - 1; i++)
-            {
-                int smallestIndex = i;
-                for(int j = 0; j < playedLocations.size(); j++)
-                {
-                    if(playedLocations.get(smallestIndex).charAt(0) > playedLocations.get(j).charAt(0) || playedLocations.get(smallestIndex).charAt(1) > playedLocations.get(j).charAt(1))
-                    {
-                        smallestIndex = j;
-                    }
-                }
-
-                playedLocations.add(i, playedLocations.get(smallestIndex));
-                playedLocations.remove(smallestIndex + 1); //Since the extra one was added in, this will be the new location of the duplicate
-
-                //Move the associated letter along with the index
-                playedLetters.add(i, playedLetters.get(smallestIndex));
-                playedLetters.remove(smallestIndex + 1);
-
-            }
-
             playerWord.put(playedLetters, playedLocations);
         }
         else if(userTurn == 2) { //The user wants to exchange letters with the letter bag
@@ -118,7 +97,7 @@ public class Player implements Serializable {
                 Letter playedLetter = playedLetters.get(playedLocations.size() - 1); //Getting the letter associated with the just added coordinate
                 int rackIndex = rack.indexOf(playedLetter);
                 String undo = (playedLocations.size() - 1)+ "," + location + ","+rackIndex;
-                undoStack.push(undo);
+                //undoStack.push(undo);
             }
             return true;
         }

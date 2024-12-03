@@ -38,6 +38,15 @@ public class Board implements Serializable {
         initializeTiles(filename);
     }
 
+    public static void printTiles() {
+        for (int i = 0 ; i < BOARD_SIZE ; i++) {
+            for (int j =  0 ; j < BOARD_SIZE ; j++) {
+                System.out.print(PREMIUM_TILES[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+
     public static void initializeTiles(String filename) {
         try {
             SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -417,7 +426,6 @@ public class Board implements Serializable {
                 board[getCoordinateFromLocation(1,letterLocation.get(i))]
                         [getCoordinateFromLocation(0,letterLocation.get(i))]
                         =  null;
-                PREMIUM_TILES[getCoordinateFromLocation(1,letterLocation.get(i))][getCoordinateFromLocation(0,letterLocation.get(i))] = 1;
             }
         } else {
             for (int i = 0 ; i < letterLocation.size() ; i++) {
