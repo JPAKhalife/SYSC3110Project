@@ -364,7 +364,7 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
     public void handleUndo(int locationIndexI, int locationIndexJ, int rackIndex) {
         //remove placed tile from board
         boardButtons[locationIndexI][locationIndexJ].setText("");
-        boardButtons[locationIndexI][locationIndexJ].setBackground(BOARD_COLOUR); //TEMPORARY COLOUR
+        boardButtons[locationIndexI][locationIndexJ].setBackground(getTileColor(game.getBoard().getBoardTiles()[locationIndexI][locationIndexJ])); //TEMPORARY COLOUR
         //return to rack
         rackButtons[rackIndex].setEnabled(true);
     }
