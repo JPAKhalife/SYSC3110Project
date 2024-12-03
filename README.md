@@ -15,7 +15,7 @@ The bonus Deliverable 5 will include a new feature to enhance the user experienc
 Overall, this deliverable aims to provide a user-friendly and complete Scrabble experience to the users. 
 
 Known issues:
-There are no known issues with the current version of the game.
+-If the user selects to save/import a file for the serializable feature, the user must select a file. This game does no support a cancel feature for the dialog file selector
 
 Notes for marker:
 Board uses an inner-functions in the method initializeTiles() to override the default handler. This inner class is not highlighted in the UML diagram, as there is no known UML convention for representing inner-functions.  
