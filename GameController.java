@@ -93,10 +93,12 @@ public class GameController implements ActionListener {
                     }
                 }
 
+                newTurnFunctions();
             } else if (command[1].equals("exchange")) {
                 //put exchange behavior here
                 game.getCurrentPlayer().playerTurn(2); //DNE
             } else if (command[1].equals("pass")) {
+                newTurnFunctions();
                 //Don't need to do anything special here
             }else if(command[1].equals("undo")){
                 //pop "move" from top of stack (getting letter and location of last move)
@@ -107,7 +109,7 @@ public class GameController implements ActionListener {
                 {
                     for(GameObserver view: game.getViews())
                     {
-                        view.handleBoardUpdate(new ErrorEvent(ErrorEvent.GameError.CANNOT_UNDO));
+                        //view.handleBoardUpdate(new ErrorEvent(ErrorEvent.GameError.CANNOT_UNDO));
                     }
                 }
                 else{
@@ -137,14 +139,6 @@ public class GameController implements ActionListener {
                 }
 
             }
-
-            //changing to the next player's turn
-            for(GameObserver view: game.getViews())
-            {
-                view.handleBoardUpdate(new ErrorEvent());
-            }
-            game.handleNewTurn();
-
         } else if(command[0].equals("serial")) {
             if(command[1].equals("save")){
                 //pop up window for file selection
@@ -185,5 +179,17 @@ public class GameController implements ActionListener {
             }
             //insert checks for other menu buttons here
         }
+    }
+
+    /**
+     * This method handles changing to the next player's turn.
+     */
+    public void newTurnFunctions() {
+        //changing to the next player's turn
+        for(GameObserver view: game.getViews())
+        {
+            view.handleBoardUpdate(new ErrorEvent());
+        }
+        game.handleNewTurn();
     }
 }
