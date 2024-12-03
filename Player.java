@@ -24,6 +24,8 @@ public class Player implements Serializable {
         score = 0;
         playedLetters = new ArrayList<>();
         playedLocations = new ArrayList<>();
+        undoStack = new Stack<>();
+        redoStack = new Stack<>();
 
         this.pullFromBag(); //The first thing a player does when they enter a game is fill their rack
     }
@@ -72,7 +74,7 @@ public class Player implements Serializable {
         //Adding the new letter as an undo value
         if(playedLetters.size() <= playedLocations.size())
         {
-            String undo = (playedLetters.size() - 1)+ "," + playedLocations.get(playedLetters.size() - 1) + ","+rackIndex;
+            String undo = (playedLetters.size() - 1) + "," + playedLocations.get(playedLetters.size() - 1) + ","+rackIndex;
             undoStack.push(undo);
         }
 
@@ -97,7 +99,7 @@ public class Player implements Serializable {
                 Letter playedLetter = playedLetters.get(playedLocations.size() - 1); //Getting the letter associated with the just added coordinate
                 int rackIndex = rack.indexOf(playedLetter);
                 String undo = (playedLocations.size() - 1)+ "," + location + ","+rackIndex;
-                //undoStack.push(undo);
+                undoStack.push(undo);
             }
             return true;
         }
