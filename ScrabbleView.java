@@ -22,6 +22,7 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
     private final Color TRIPLE_LETTER_COLOUR = new Color(63, 146, 199);
     private final Color DOUBLE_LETTER_COLOUR = new Color(117, 216, 230);
     private JTextPane currentPlayerField;
+    private JTextPane timerPane;
     /**
      * The basic constructor for the ScrabbleView class
      *
@@ -107,8 +108,8 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
         boardButtons = new JButton[15][15]; //holds the spaces on a board as buttons (occupied spaces disabled)
         JButton[] turnButtons = new JButton[3]; //holds the buttons used for a turn (submit, exchange, skip)
         scorePane = new JTextPane();
-        JTextPane currentPlayerPane = new JTextPane();
-        JPanel PlayerPanel = new JPanel();
+        timerPane = new JTextPane();
+        JPanel infoPanel = new JPanel(new GridLayout(2,1));
         rackButtons = new JButton[7];
 
         //create board buttons
@@ -180,6 +181,15 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
         //Create current player score pane
         scorePane.setFont(new Font(null, Font.BOLD, 14));
         scorePane.setEditable(false);
+        timerPane.setFont(new Font(null, Font.BOLD, 14));
+        timerPane.setEditable(false);
+        infoPanel.add(scorePane,BorderLayout.NORTH);
+        infoPanel.add(timerPane,BorderLayout.SOUTH);
+        JLabel centerLabel =  new JLabel();
+        centerLabel.setText(" ");
+        infoPanel.add(centerLabel, BorderLayout.CENTER);
+
+
 
         handleScoreUpdate(-1);
         this.handleBoardUpdate(new ErrorEvent());
@@ -188,7 +198,7 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
 
         this.add(boardPanel, BorderLayout.CENTER);
 
-        this.add(scorePane, BorderLayout.EAST);
+        this.add(infoPanel, BorderLayout.EAST);
 
         this.add(menuBar, BorderLayout.NORTH);
 
@@ -389,6 +399,14 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
         boardButtons[locationIndexI][locationIndexJ].setEnabled(false);
         //remove tile from rack
         rackButtons[rackIndex].setEnabled(false);
+    }
+
+    @Override
+    public void handleTimerUpdate(int time, boolean doTimer) {
+        if (doTimer) {
+            timerPane.setText("Time Remaining: " + time);
+        } else {
+        }
     }
 
     public static void main(String[] args) {

@@ -15,8 +15,9 @@ public class Game implements Serializable {
     private Board board;
     private int currentPlayer;
     private ArrayList<GameObserver> views;
-    private static final int TIMER_DELAY_MS = 30000;
+    private static final int TIMER_DELAY_S = 30;
     private boolean doTimer;
+    private int timerValue;
     private Timer timer;
 
 
@@ -29,6 +30,7 @@ public class Game implements Serializable {
         currentPlayer = 0;
         views = new ArrayList<>();
         timer = new Timer();
+        timerValue = TIMER_DELAY_S;
         doTimer = false;
         LetterBag.createBag();
 
@@ -221,8 +223,6 @@ public class Game implements Serializable {
      */
     public void handleNewTurn()
     {
-        this.timer.cancel();
-
         //Giving the next player a turn (including AI players)
         //turn order priority favours real players. Once all real players have finished, the AI players will play
         currentPlayer = (currentPlayer + 1) % (players.size());
@@ -243,7 +243,7 @@ public class Game implements Serializable {
         }
 
         if (this.doTimer) {
-            activateTimer();
+            this.timerValue = TIMER_DELAY_S;
         }
     }
 
@@ -274,6 +274,8 @@ public class Game implements Serializable {
         this.doTimer  = !this.doTimer;
         if (this.doTimer) {
             activateTimer();
+        } else {
+            this.timer.cancel();
         }
     }
 
@@ -281,11 +283,18 @@ public class Game implements Serializable {
      * This method activates the timer
      */
     public void activateTimer() {
-        timer.schedule(new TimerTask() {
+        timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                handleNewTurn();
+                for (GameObserver view : views) {
+                    timerValue--;
+                    view.handleTimerUpdate(timerValue,doTimer);
+                    if (timerValue <= 0) {
+                        handleNewTurn();
+                    }
+
+                }
             }
-        },TIMER_DELAY_MS);
+        },1000,1000);
     }
 }
