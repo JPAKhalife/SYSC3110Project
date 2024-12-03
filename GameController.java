@@ -115,6 +115,15 @@ public class GameController implements ActionListener {
                     }
                 }
 
+                //will need to do try/catch for future undo error (omitted until implemented)
+                int[] values = game.getCurrentPlayer().undoPlacement();
+                for(GameObserver view: game.getViews())
+                {
+                    view.handleUndo(values[0], values[1], values[2]);
+                }
+                game.handleNewTurn();
+
+
             }else if(command[1].equals("redo")){
                 //pop "move" from top of stack (getting letter and location of last undo)
                 int[] buttonIndices = game.getCurrentPlayer().redoPlacement();
@@ -155,7 +164,8 @@ public class GameController implements ActionListener {
                 }
                 fileName = fileChooser.getSelectedFile().getName();
 
-                //save game state is file
+                //save game state in file
+
 
             }else if(command[1].equals("load")){
                 //pop up window for file selection
@@ -169,7 +179,9 @@ public class GameController implements ActionListener {
                 }
                 fileName = fileChooser.getSelectedFile().getName();
 
-                //save game state is file
+                //load game state from file
+
+                //update view by handler
             }
 
         }else if (command[0].equals("menu")) {
