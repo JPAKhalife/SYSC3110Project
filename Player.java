@@ -198,6 +198,7 @@ public class Player implements Serializable {
 
     /**
      * undoPlacement undoes a previously performed move
+     * @return an array of the board indices followed by the rack index
      */
     public int[] undoPlacement()
     {
@@ -219,6 +220,7 @@ public class Player implements Serializable {
 
     /**
      * redoPlacement redoes a previously undone move
+     * @return the board indices followed by the rack index in array form
      */
     public int[] redoPlacement()
     {
@@ -261,4 +263,12 @@ public class Player implements Serializable {
         return indices;
     }
 
+    /**
+     * Removes the values from the undo and redo stack to perform a new turn
+     */
+    public void clearUndoRedo()
+    {
+        undoStack.clear();
+        redoStack.clear();
+    }
 }
