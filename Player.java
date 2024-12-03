@@ -14,6 +14,7 @@ public class Player implements Serializable {
     //These stacks contain data formatted as "playedLettersIndex,playedLocationsValue,rackIndex"
     private Stack<String> undoStack;
     private Stack<String> redoStack;
+    private int lastLetterIndex;
 
     /**
      * Constructor for the Player class
@@ -70,6 +71,7 @@ public class Player implements Serializable {
     {
         playedLetters.add(rack.get(rackIndex));
         System.out.println("Letter added\n");
+        lastLetterIndex = rackIndex;
 
         //Adding the new letter as an undo value
         if(playedLetters.size() <= playedLocations.size())
@@ -96,8 +98,8 @@ public class Player implements Serializable {
             playedLocations.add(location); //adding the location
             if(playedLocations.size() <= playedLetters.size())
             {
-                Letter playedLetter = playedLetters.get(playedLocations.size() - 1); //Getting the letter associated with the just added coordinate
-                int rackIndex = rack.indexOf(playedLetter);
+                //Getting the letter associated with the just added coordinate
+                int rackIndex = lastLetterIndex;
                 String undo = (playedLocations.size() - 1)+ "," + location + ","+rackIndex;
                 undoStack.push(undo);
             }
@@ -226,8 +228,8 @@ public class Player implements Serializable {
             String[] indices = redo.split(",");
 
             Letter letterToPlay = rack.get(Integer.parseInt(indices[2]));
-            playedLetters.add(Integer.parseInt(indices[0]), letterToPlay);
-            playedLocations.add(Integer.parseInt(indices[0]), indices[1]);
+            playedLetters.add(letterToPlay);
+            playedLocations.add(indices[1]);
 
             return transformToIndices(indices);
         } catch(EmptyStackException e)
@@ -248,7 +250,7 @@ public class Player implements Serializable {
     {
         int[] indices = new int[3];
         //position 3 = rack index
-        indices[2] = Integer.parseInt(values[0]);
+        indices[2] = Integer.parseInt(values[2]);
         //position 2 is the column on the board
         indices[1] = Integer.parseInt(values[1].substring(1)) - 1;
 
