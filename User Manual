@@ -9,7 +9,7 @@ The interface for the game consists of the following elements
 The Scrabble board, which includes premium squares for various score bonus
 The current player’s rack, with a label specifying the current player
 A display of the current score for each player
-The turn action buttons- ‘Submit’, ‘Exchange’, and ‘Skip’
+The turn action buttons- ‘Submit’, ‘Exchange’, ‘Skip’, 'Undo', 'Redo'
 
 The following sections outline all possible actions that may be taken on a user’s turn. 
 
