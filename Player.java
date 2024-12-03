@@ -182,7 +182,7 @@ public class Player implements Serializable {
      * This method returns true if the rack is empty
      * @return a boolean stating whether the rack is empty
      */
-    private boolean isRackEmpty() {
+    public boolean isRackEmpty() {
 
         return rack.size() <= 0;
     }
