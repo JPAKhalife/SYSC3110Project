@@ -109,7 +109,7 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
         JButton[] turnButtons = new JButton[3]; //holds the buttons used for a turn (submit, exchange, skip)
         scorePane = new JTextPane();
         timerPane = new JTextPane();
-        JPanel infoPanel = new JPanel(new GridLayout(2,1));
+        JPanel infoPanel = new JPanel(new GridLayout(3,1));
         rackButtons = new JButton[7];
 
         //create board buttons
@@ -183,11 +183,16 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
         scorePane.setEditable(false);
         timerPane.setFont(new Font(null, Font.BOLD, 14));
         timerPane.setEditable(false);
-        infoPanel.add(scorePane,BorderLayout.NORTH);
-        infoPanel.add(timerPane,BorderLayout.SOUTH);
-        JLabel centerLabel =  new JLabel();
-        centerLabel.setText(" ");
-        infoPanel.add(centerLabel, BorderLayout.CENTER);
+        infoPanel.add(scorePane);
+        //This is an empty field to remove the grey background.
+        JTextField spaceLabel =  new JTextField();
+        spaceLabel.setEditable(false);
+        spaceLabel.setBackground(Color.WHITE);
+        spaceLabel.setBorder(BorderFactory.createEmptyBorder());
+        infoPanel.add(timerPane);
+        infoPanel.add(spaceLabel);
+
+
 
 
 
@@ -406,6 +411,7 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
         if (doTimer) {
             timerPane.setText("Time Remaining: " + time);
         } else {
+            timerPane.setText("");
         }
     }
 
