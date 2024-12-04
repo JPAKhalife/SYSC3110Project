@@ -99,7 +99,7 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
         saveItem.setActionCommand("serial,save");
         saveItem.addActionListener(gameController);
         loadItem = new JMenuItem("Load game from serializable");
-        saveItem.setActionCommand("serial,load");
+        loadItem.setActionCommand("serial,load");
         loadItem.addActionListener(gameController);
         menu.add(saveItem);
         menu.add(loadItem);

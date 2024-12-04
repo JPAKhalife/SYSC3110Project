@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -147,34 +148,50 @@ public class GameController implements ActionListener {
 
         } else if(command[0].equals("serial")) {
             if(command[1].equals("save")){
-                //pop up window for file selection
-                int output = 1;
-                String fileName = "";
-                JFileChooser fileChooser = new JFileChooser();
-                while(output != JFileChooser.APPROVE_OPTION){
-                    fileChooser.setDialogTitle("Select the file to save the current game state to.");
-                    output = fileChooser.showOpenDialog(null);
-                }
-                fileName = fileChooser.getSelectedFile().getName();
 
-                //save game state in file
+
+                //String fileName = "";
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setDialogTitle("Save Game State"); // Set the dialog title
+
+                // Open Save Dialog
+                int userSelection = fileChooser.showSaveDialog(null); // Show Save Dialog
+
+                if (userSelection == JFileChooser.APPROVE_OPTION) {
+                    File selectedFile = fileChooser.getSelectedFile();
+
+                    // Append ".ser" if no extension is provided
+                    String filePath = selectedFile.getAbsolutePath();
+                    if (!filePath.endsWith(".ser")) {
+                        filePath += ".ser";
+                    }
+
+                    // Call the saveGame method
+                    game.saveGame(filePath);
+                } else {
+                    System.out.println("Save operation canceled by user.");
+                }
 
 
             }else if(command[1].equals("load")){
                 //pop up window for file selection
                 //pop up window for file selection
-                int output = 1;
-                String fileName = "";
                 JFileChooser fileChooser = new JFileChooser();
-                while(output != JFileChooser.APPROVE_OPTION){
-                    fileChooser.setDialogTitle("Select the file to load game progress from.");
-                    output = fileChooser.showOpenDialog(null);
+                fileChooser.setDialogTitle("Select the file to load game progress");
+
+                // Show the file chooser dialog
+                int userSelection = fileChooser.showOpenDialog(null);
+
+                if (userSelection == JFileChooser.APPROVE_OPTION) {
+                    // Get the selected file's full path
+                    String fileName = fileChooser.getSelectedFile().getAbsolutePath();
+
+
+                    game.loadGame(fileName);
+                } else {
+                    System.out.println("Load operation was canceled.");
                 }
-                fileName = fileChooser.getSelectedFile().getName();
-
-                //load game state from file
-
-                //update view by handler
+                //update view by handler within the loadGame method
             }
 
         }else if (command[0].equals("menu")) {
