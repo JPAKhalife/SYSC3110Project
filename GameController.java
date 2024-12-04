@@ -124,7 +124,7 @@ public class GameController implements ActionListener {
                 //pop "move" from top of stack (getting letter and location of last undo)
                 int[] buttonIndices = game.getCurrentPlayer().redoPlacement();
                 //if stack empty --> error event message (cannot redo)
-                if(buttonIndices[0] == -1)
+                if(buttonIndices[0] == -1 || buttonIndices[1] == -1 || buttonIndices[2] == -1)
                 {
                     for(GameObserver view: game.getViews())
                     {
