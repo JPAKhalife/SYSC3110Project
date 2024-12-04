@@ -88,6 +88,7 @@ public class GameController implements ActionListener {
                 {
                     if(!gameNotOver)
                     {
+                        game.toggleTimer();
                         winner = game.findWinner();
                         return; //Game is over --> don't need to move onto next turn
                     }
@@ -98,7 +99,7 @@ public class GameController implements ActionListener {
                 //put exchange behavior here
                 game.getCurrentPlayer().playerTurn(2); //DNE
                 game.handleNewTurn();
-            } else if (command[1].equals("pass")) {
+            } else if (command[1].equals("skip")) {
                 game.handleNewTurn();
                 //Don't need to do anything special here
             }else if(command[1].equals("undo")){
