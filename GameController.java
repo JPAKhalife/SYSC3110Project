@@ -98,7 +98,7 @@ public class GameController implements ActionListener {
                 //put exchange behavior here
                 game.getCurrentPlayer().playerTurn(2); //DNE
                 newTurnFunctions();
-            } else if (command[1].equals("pass")) {
+            } else if (command[1].equals("skip")) {
                 newTurnFunctions();
                 //Don't need to do anything special here
             }else if(command[1].equals("undo")){
@@ -153,7 +153,7 @@ public class GameController implements ActionListener {
                 fileName = fileChooser.getSelectedFile().getName();
 
                 //save game state in file
-
+                game.saveGame(fileName);
 
             }else if(command[1].equals("load")){
                 //pop up window for file selection
@@ -168,7 +168,7 @@ public class GameController implements ActionListener {
                 fileName = fileChooser.getSelectedFile().getName();
 
                 //load game state from file
-
+                game.loadGame(fileName);
                 //update view by handler
             }
 

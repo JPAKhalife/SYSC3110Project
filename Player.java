@@ -78,8 +78,10 @@ public class Player implements Serializable {
         {
             String undo = (playedLetters.size() - 1) + "," + playedLocations.get(playedLetters.size() - 1) + ","+rackIndex;
             undoStack.push(undo);
-        }
 
+            //Clearing the redo stack, since the player has changed the order of their actions
+            redoStack.clear();
+        }
     }
 
     /**
@@ -103,6 +105,9 @@ public class Player implements Serializable {
                 String undo = (playedLocations.size() - 1)+ "," + location + ","+rackIndex;
                 undoStack.push(undo);
             }
+
+            //Clearing the redo stack, since the player has changed their order of actions
+            redoStack.clear();
             return true;
         }
 
