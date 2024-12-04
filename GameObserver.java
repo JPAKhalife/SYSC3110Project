@@ -8,4 +8,5 @@ public interface GameObserver {
     public void handleNewTurn(int playerNum);
     public void handleUndo(int locationIndexI, int locationIndexJ, int rackIndex);
     public void handleRedo(int locationIndexI, int locationIndexJ, int rackIndex);
+    public char handleBlankTile();
 }

@@ -54,7 +54,15 @@ public class GameController implements ActionListener {
         } else if (command[0].equals("rack")) {
             //Grab + place the index
             int index = Integer.valueOf(command[1]);
-            game.getCurrentPlayer().placeLetter(index);
+            //Check for blank tile
+            if (game.getCurrentPlayer().getRack().get(index).getLetter() == '_') {
+                for(GameObserver view: game.getViews()){
+                    game.getCurrentPlayer().placeLetter(index,view.handleBlankTile());
+                }
+            } else {
+                game.getCurrentPlayer().placeLetter(index);
+            }
+
             JButton buttonPressed = (JButton) e.getSource();
             buttonPressed.setEnabled(false);
 

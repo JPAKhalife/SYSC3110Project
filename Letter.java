@@ -32,4 +32,29 @@ public class Letter implements Serializable {
     public int getPoints() {
         return points;
     }
+
+    /**
+     * Overridden equals method - needed for the blank tile
+     * @param obj - the object to compare with.
+     * @return whether or not the Letters are equal.
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (this.getClass() != obj.getClass()) return false;
+        Letter l = (Letter) obj;
+        return (l.getPoints() == this.getPoints()) && (l.getLetter() == this.getLetter());
+    }
+
+    /**
+     * Overridden hash code method
+     * This is needed due to the blank tile
+     * @return
+     */
+    @Override
+    public int hashCode() {
+        return Character.hashCode(letter);
+    }
+
 }

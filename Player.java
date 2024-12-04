@@ -70,7 +70,24 @@ public class Player implements Serializable {
     public void placeLetter(int rackIndex)
     {
         playedLetters.add(rack.get(rackIndex));
-        System.out.println("Letter added\n");
+        saveLetterPlacement(rackIndex);
+    }
+
+    /**
+     * This method places a blank letter
+     * @param blankLetter - the character to place
+     * @param rackIndex the index of the letter on the player's rack
+     */
+    public void placeLetter(int rackIndex, char blankLetter) {
+        playedLetters.add(new Letter(blankLetter,0));
+        saveLetterPlacement(rackIndex);
+    }
+
+    /**
+     * This method handles saving the placement of a letter to the last index, redo, and undo stack.
+     * @param rackIndex the index of the letter on the player's rack
+     */
+    private void saveLetterPlacement(int rackIndex) {
         lastLetterIndex = rackIndex;
 
         //Adding the new letter as an undo value
@@ -122,7 +139,13 @@ public class Player implements Serializable {
     {
         for(Letter l: playedLetters)
         {
-            rack.remove(l);
+            if (l.getPoints() == 0) {
+                rack.remove(new Letter('_',0));
+                LetterBag.addLetter(new Letter('_',0));
+            } else {
+                rack.remove(l);
+                LetterBag.addLetter(l);
+            }
         }
 
         pullFromBag();
@@ -145,7 +168,11 @@ public class Player implements Serializable {
 
             for(Letter l: playedLetters)
             {
-                rack.remove(l);
+                if (l.getPoints() == 0) { //check for blank tile
+                    rack.remove(new Letter('_',0));
+                } else {
+                    rack.remove(l);
+                }
             }
 
             //AT THE MOMENT, the player pulls from the bag in main. Need to send that somewhere else while also having a way to indicate
