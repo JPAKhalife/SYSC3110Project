@@ -10,7 +10,7 @@ Presently, checks for menu items that will restart or quit the game are present 
 
 The following is a breakdown of the details of future deliverables- outlining how the current implementation of the game will be expanded.
 
-The bonus Deliverable 5 will include a new feature to enhance the user experience. *INSERT BONUS FEATURE DESCRIPTION ONCE SELECTED*
+The bonus Deliverable 5 will include a timer feature to enhance the user experience. Each user will have 30 seconds to perform their turn. Once the timer reaches 0, the game will automatically move on to the next player's turn. This timer feature is optional. By default, the game will not include the turn timer and can be enabled by selecting the timer item in the 'Game Options' menu bar. 
 
 Overall, this deliverable aims to provide a user-friendly and complete Scrabble experience to the users. 
 
