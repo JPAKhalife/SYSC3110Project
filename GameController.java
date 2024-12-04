@@ -150,7 +150,7 @@ public class GameController implements ActionListener {
                     fileChooser.setDialogTitle("Select the file to save the current game state to.");
                     output = fileChooser.showOpenDialog(null);
                 }
-                fileName = fileChooser.getSelectedFile().getName();
+                fileName = String.valueOf(fileChooser.getSelectedFile());
 
                 //save game state in file
                 game.saveGame(fileName);
@@ -165,7 +165,7 @@ public class GameController implements ActionListener {
                     fileChooser.setDialogTitle("Select the file to load game progress from.");
                     output = fileChooser.showOpenDialog(null);
                 }
-                fileName = fileChooser.getSelectedFile().getName();
+                fileName = String.valueOf(fileChooser.getSelectedFile());
 
                 //load game state from file
                 game.loadGame(fileName);
