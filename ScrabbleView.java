@@ -61,7 +61,6 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
             try{
                 numAIplayers = Integer.parseInt(AIplayerInput);
                 totalPlayers = numAIplayers + numPlayers;
-                System.out.println("total player: " + totalPlayers);
             } catch(Exception e)
             {
                 JOptionPane.showMessageDialog(this, "Please enter a valid number of AIs");
@@ -276,7 +275,6 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
                 char y = location.charAt(0);
                 int x = Integer.parseInt(location.substring(1));
                 char letter = letters.get(i).getLetter();
-                System.out.println("handleLetterPlacement - y: " + y + ", x: " + x + ", letter: " + letter);
                 y = Character.toLowerCase(y); //make sure lower case
                 //JButton placement = this.boardButtons[y - 'a'][x];
                 boardButtons[y - 'a'][x - 1].setBackground(TILE_COLOUR); //Board is indexed starting with 1 --> need to go down one

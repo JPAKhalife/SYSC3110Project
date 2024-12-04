@@ -69,11 +69,7 @@ public class GameController implements ActionListener {
             if (command[1].equals("submit")) {
                 //Getting the combination of letters and locations
                 Dictionary<ArrayList<Letter>, ArrayList<String>> wordLocation = game.getCurrentPlayer().playerTurn(1);
-                System.out.println("before:");
-                Board.printTiles();
                 int score = game.addWord(wordLocation);
-                System.out.println("after:");
-                Board.printTiles();
 
                 //Needed here to both clear the player's inputs and also to update score if valid
                 boolean gameNotOver =  game.getCurrentPlayer().updateScore(score);
