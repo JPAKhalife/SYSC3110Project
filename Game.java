@@ -172,7 +172,6 @@ public class Game implements Serializable {
             }
             this.board = loadedGame.board;
             this.players = loadedGame.players;
-            this.views = loadedGame.views;
             this.currentPlayer = loadedGame.currentPlayer;
 
 
@@ -216,7 +215,8 @@ public class Game implements Serializable {
      */
     public void handleNewTurn()
     {
-
+        //clearing the stacks
+        getCurrentPlayer().clearUndoRedo();
         //Giving the next player a turn (including AI players)
         //turn order priority favours real players. Once all real players have finished, the AI players will play
         currentPlayer = (currentPlayer + 1) % (players.size());
@@ -233,7 +233,6 @@ public class Game implements Serializable {
         {
             view.handleScoreUpdate(-1);
             view.handleNewTurn(currentPlayer);
-            view.handleBoardUpdate(board.getStatus());
         }
 
     }

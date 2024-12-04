@@ -61,7 +61,6 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
             try{
                 numAIplayers = Integer.parseInt(AIplayerInput);
                 totalPlayers = numAIplayers + numPlayers;
-                System.out.println("total player: " + totalPlayers);
             } catch(Exception e)
             {
                 JOptionPane.showMessageDialog(this, "Please enter a valid number of AIs");
@@ -99,7 +98,7 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
         saveItem.setActionCommand("serial,save");
         saveItem.addActionListener(gameController);
         loadItem = new JMenuItem("Load game from serializable");
-        saveItem.setActionCommand("serial,load");
+        loadItem.setActionCommand("serial,load");
         loadItem.addActionListener(gameController);
         menu.add(saveItem);
         menu.add(loadItem);
@@ -276,7 +275,6 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
                 char y = location.charAt(0);
                 int x = Integer.parseInt(location.substring(1));
                 char letter = letters.get(i).getLetter();
-                System.out.println("handleLetterPlacement - y: " + y + ", x: " + x + ", letter: " + letter);
                 y = Character.toLowerCase(y); //make sure lower case
                 //JButton placement = this.boardButtons[y - 'a'][x];
                 boardButtons[y - 'a'][x - 1].setBackground(TILE_COLOUR); //Board is indexed starting with 1 --> need to go down one
@@ -308,6 +306,14 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
     public void handleBoardUpdate(ErrorEvent e) {
         if(e.getError()!= ErrorEvent.GameError.NONE){
             JOptionPane.showMessageDialog(null, e.getError().getErrorDescription());
+            switch (e.getError()) {
+                case CANNOT_REDO:
+                    return;
+                case CANNOT_UNDO:
+                    return;
+                default:
+                    break;
+            }
         }
 
         //Update every button in the board to reflect what is in the Board class
@@ -364,9 +370,10 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
     public void handleUndo(int locationIndexI, int locationIndexJ, int rackIndex) {
         //remove placed tile from board
         boardButtons[locationIndexI][locationIndexJ].setText("");
-        boardButtons[locationIndexI][locationIndexJ].setBackground(BOARD_COLOUR); //TEMPORARY COLOUR
+        boardButtons[locationIndexI][locationIndexJ].setBackground(getTileColor(game.getBoard().getBoardTiles()[locationIndexI][locationIndexJ])); //TEMPORARY COLOUR
         //return to rack
         rackButtons[rackIndex].setEnabled(true);
+        boardButtons[locationIndexI][locationIndexJ].setEnabled(true);
     }
     /**
      * Return the tile removed by current player undoing their turn from the board and remove it from their rack
@@ -380,6 +387,7 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
         //place tile back on the board
         boardButtons[locationIndexI][locationIndexJ].setText(rackButtons[rackIndex].getText());
         boardButtons[locationIndexI][locationIndexJ].setBackground(TILE_COLOUR);
+        boardButtons[locationIndexI][locationIndexJ].setEnabled(false);
         //remove tile from rack
         rackButtons[rackIndex].setEnabled(false);
     }

@@ -43,7 +43,7 @@ public class GameController implements ActionListener {
             char y = command[1].charAt(0); //This should be a single letter
             int x = Integer.valueOf(command[2]);
             //Add these to the addCoordinate method
-            game.getCurrentPlayer().addCoordinate(y, x); //DNE
+            game.getCurrentPlayer().addCoordinate(y, x);
             //HANDLE TEMPORARY VIEW (letter placed on board BEFORE submitted)
             //get most recent letter placed
             Dictionary<ArrayList<Letter>, ArrayList<String>> word = game.getCurrentPlayer().playerTurn(1);
@@ -54,7 +54,7 @@ public class GameController implements ActionListener {
         } else if (command[0].equals("rack")) {
             //Grab + place the index
             int index = Integer.valueOf(command[1]);
-            game.getCurrentPlayer().placeLetter(index); //DNE
+            game.getCurrentPlayer().placeLetter(index);
             JButton buttonPressed = (JButton) e.getSource();
             buttonPressed.setEnabled(false);
 
@@ -69,11 +69,7 @@ public class GameController implements ActionListener {
             if (command[1].equals("submit")) {
                 //Getting the combination of letters and locations
                 Dictionary<ArrayList<Letter>, ArrayList<String>> wordLocation = game.getCurrentPlayer().playerTurn(1);
-                System.out.println("before:");
-                Board.printTiles();
                 int score = game.addWord(wordLocation);
-                System.out.println("after:");
-                Board.printTiles();
 
                 //Needed here to both clear the player's inputs and also to update score if valid
                 boolean gameNotOver =  game.getCurrentPlayer().updateScore(score);
@@ -93,17 +89,20 @@ public class GameController implements ActionListener {
                     }
                 }
 
+                newTurnFunctions();
             } else if (command[1].equals("exchange")) {
                 //put exchange behavior here
                 game.getCurrentPlayer().playerTurn(2); //DNE
-            } else if (command[1].equals("pass")) {
+                newTurnFunctions();
+            } else if (command[1].equals("skip")) {
+                newTurnFunctions();
                 //Don't need to do anything special here
             }else if(command[1].equals("undo")){
                 //pop "move" from top of stack (getting letter and location of last move)
                 int[] buttonIndices = game.getCurrentPlayer().undoPlacement();
 
                 //if stack empty --> error event message (cannot undo)
-                if(buttonIndices[0] == -1)
+                if(buttonIndices[0] == -1 || buttonIndices[1] == -1 || buttonIndices[2] == -1)
                 {
                     for(GameObserver view: game.getViews())
                     {
@@ -117,21 +116,11 @@ public class GameController implements ActionListener {
                         view.handleUndo(buttonIndices[0], buttonIndices[1], buttonIndices[2]);
                     }
                 }
-
-                //will need to do try/catch for future undo error (omitted until implemented)
-                int[] values = game.getCurrentPlayer().undoPlacement();
-                for(GameObserver view: game.getViews())
-                {
-                    view.handleUndo(values[0], values[1], values[2]);
-                }
-                game.handleNewTurn();
-
-
-            }else if(command[1].equals("redo")){
+            } else if(command[1].equals("redo")){
                 //pop "move" from top of stack (getting letter and location of last undo)
                 int[] buttonIndices = game.getCurrentPlayer().redoPlacement();
                 //if stack empty --> error event message (cannot redo)
-                if(buttonIndices[0] == -1)
+                if(buttonIndices[0] == -1 || buttonIndices[1] == -1 || buttonIndices[2] == -1)
                 {
                     for(GameObserver view: game.getViews())
                     {
@@ -147,14 +136,6 @@ public class GameController implements ActionListener {
                 }
 
             }
-
-            //changing to the next player's turn
-            for(GameObserver view: game.getViews())
-            {
-                view.handleBoardUpdate(new ErrorEvent());
-            }
-            game.handleNewTurn();
-
         } else if(command[0].equals("serial")) {
             if(command[1].equals("save")){
                 //pop up window for file selection
@@ -165,10 +146,10 @@ public class GameController implements ActionListener {
                     fileChooser.setDialogTitle("Select the file to save the current game state to.");
                     output = fileChooser.showOpenDialog(null);
                 }
-                fileName = fileChooser.getSelectedFile().getName();
+                fileName = String.valueOf(fileChooser.getSelectedFile());
 
                 //save game state in file
-
+                game.saveGame(fileName);
 
             }else if(command[1].equals("load")){
                 //pop up window for file selection
@@ -180,10 +161,10 @@ public class GameController implements ActionListener {
                     fileChooser.setDialogTitle("Select the file to load game progress from.");
                     output = fileChooser.showOpenDialog(null);
                 }
-                fileName = fileChooser.getSelectedFile().getName();
+                fileName = String.valueOf(fileChooser.getSelectedFile());
 
                 //load game state from file
-
+                game.loadGame(fileName);
                 //update view by handler
             }
 
@@ -195,5 +176,17 @@ public class GameController implements ActionListener {
             }
             //insert checks for other menu buttons here
         }
+    }
+
+    /**
+     * This method handles changing to the next player's turn.
+     */
+    public void newTurnFunctions() {
+        //changing to the next player's turn
+        for(GameObserver view: game.getViews())
+        {
+            view.handleBoardUpdate(new ErrorEvent());
+        }
+        game.handleNewTurn();
     }
 }

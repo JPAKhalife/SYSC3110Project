@@ -14,6 +14,7 @@ public class Player implements Serializable {
     //These stacks contain data formatted as "playedLettersIndex,playedLocationsValue,rackIndex"
     private Stack<String> undoStack;
     private Stack<String> redoStack;
+    private int lastLetterIndex;
 
     /**
      * Constructor for the Player class
@@ -24,6 +25,8 @@ public class Player implements Serializable {
         score = 0;
         playedLetters = new ArrayList<>();
         playedLocations = new ArrayList<>();
+        undoStack = new Stack<>();
+        redoStack = new Stack<>();
 
         this.pullFromBag(); //The first thing a player does when they enter a game is fill their rack
     }
@@ -68,14 +71,17 @@ public class Player implements Serializable {
     {
         playedLetters.add(rack.get(rackIndex));
         System.out.println("Letter added\n");
+        lastLetterIndex = rackIndex;
 
         //Adding the new letter as an undo value
         if(playedLetters.size() <= playedLocations.size())
         {
-            String undo = (playedLetters.size() - 1)+ "," + playedLocations.get(playedLetters.size() - 1) + ","+rackIndex;
+            String undo = (playedLetters.size() - 1) + "," + playedLocations.get(playedLetters.size() - 1) + ","+rackIndex;
             undoStack.push(undo);
-        }
 
+            //Clearing the redo stack, since the player has changed the order of their actions
+            redoStack.clear();
+        }
     }
 
     /**
@@ -94,11 +100,14 @@ public class Player implements Serializable {
             playedLocations.add(location); //adding the location
             if(playedLocations.size() <= playedLetters.size())
             {
-                Letter playedLetter = playedLetters.get(playedLocations.size() - 1); //Getting the letter associated with the just added coordinate
-                int rackIndex = rack.indexOf(playedLetter);
+                //Getting the letter associated with the just added coordinate
+                int rackIndex = lastLetterIndex;
                 String undo = (playedLocations.size() - 1)+ "," + location + ","+rackIndex;
-                //undoStack.push(undo);
+                undoStack.push(undo);
             }
+
+            //Clearing the redo stack, since the player has changed their order of actions
+            redoStack.clear();
             return true;
         }
 
@@ -178,7 +187,7 @@ public class Player implements Serializable {
      * This method returns true if the rack is empty
      * @return a boolean stating whether the rack is empty
      */
-    private boolean isRackEmpty() {
+    public boolean isRackEmpty() {
 
         return rack.size() <= 0;
     }
@@ -194,6 +203,7 @@ public class Player implements Serializable {
 
     /**
      * undoPlacement undoes a previously performed move
+     * @return an array of the board indices followed by the rack index
      */
     public int[] undoPlacement()
     {
@@ -215,6 +225,7 @@ public class Player implements Serializable {
 
     /**
      * redoPlacement redoes a previously undone move
+     * @return the board indices followed by the rack index in array form
      */
     public int[] redoPlacement()
     {
@@ -246,9 +257,9 @@ public class Player implements Serializable {
     {
         int[] indices = new int[3];
         //position 3 = rack index
-        indices[2] = Integer.parseInt(values[0]);
+        indices[2] = Integer.parseInt(values[2]);
         //position 2 is the column on the board
-        indices[1] = Integer.parseInt(String.valueOf(values[1].charAt(1)));
+        indices[1] = Integer.parseInt(values[1].substring(1)) - 1;
 
         //Transforming the row into an integer value
         char row = values[1].charAt(0);
@@ -257,4 +268,12 @@ public class Player implements Serializable {
         return indices;
     }
 
+    /**
+     * Removes the values from the undo and redo stack to perform a new turn
+     */
+    public void clearUndoRedo()
+    {
+        undoStack.clear();
+        redoStack.clear();
+    }
 }
