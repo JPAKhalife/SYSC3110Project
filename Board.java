@@ -537,5 +537,10 @@ public class Board implements Serializable {
     public int[][] getBoardTiles() {
         return PREMIUM_TILES;
     }
+
+    public void clearStatus()
+    {
+        this.status = new ErrorEvent();
+    }
 } //end class
 

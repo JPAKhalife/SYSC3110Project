@@ -67,6 +67,7 @@ public class GameController implements ActionListener {
 
         } else if (command[0].equals("turn")) {
             int winner = -1; //Holds the winning player, if any
+            game.getBoard().clearStatus();
             if (command[1].equals("submit")) {
                 //Getting the combination of letters and locations
                 Dictionary<ArrayList<Letter>, ArrayList<String>> wordLocation = game.getCurrentPlayer().playerTurn(1);

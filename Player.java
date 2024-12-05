@@ -134,13 +134,8 @@ public class Player implements Serializable {
     {
         for(Letter l: playedLetters)
         {
-            if (l.getPoints() == 0) {
-                rack.remove(new Letter('_',0));
-                LetterBag.addLetter(new Letter('_',0));
-            } else {
                 rack.remove(l);
                 LetterBag.addLetter(l);
-            }
         }
 
         pullFromBag();
@@ -239,7 +234,7 @@ public class Player implements Serializable {
 
             return transformToIndices(indices);
         }
-        catch(EmptyStackException e)
+        catch(EmptyStackException | IndexOutOfBoundsException e)
         {
             return new int[]{-1, -1, -1};
         }
