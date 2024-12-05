@@ -54,14 +54,7 @@ public class GameController implements ActionListener {
         } else if (command[0].equals("rack")) {
             //Grab + place the index
             int index = Integer.valueOf(command[1]);
-            //Check for blank tile
-            if (game.getCurrentPlayer().getRack().get(index).getLetter() == '_') {
-                for(GameObserver view: game.getViews()){
-                    game.getCurrentPlayer().placeLetter(index,view.handleBlankTile());
-                }
-            } else {
-                game.getCurrentPlayer().placeLetter(index);
-            }
+            game.getCurrentPlayer().placeLetter(index);
 
             JButton buttonPressed = (JButton) e.getSource();
             buttonPressed.setEnabled(false);
@@ -77,13 +70,26 @@ public class GameController implements ActionListener {
             if (command[1].equals("submit")) {
                 //Getting the combination of letters and locations
                 Dictionary<ArrayList<Letter>, ArrayList<String>> wordLocation = game.getCurrentPlayer().playerTurn(1);
+                for (Letter l : wordLocation.keys().nextElement()) {
+                    if (l.getLetter() == '_') {
+                        for (GameObserver view : game.getViews()) {
+                            l.setLetter(view.handleBlankTile());
+                        }
+                    }
+                }
                 int score = game.addWord(wordLocation);
 
                 //Needed here to both clear the player's inputs and also to update score if valid
                 boolean gameNotOver =  game.getCurrentPlayer().updateScore(score);
 
                 //adding the combination of letters and locations to the board
-                if (score < 0) { //DNE
+                if (score < 0) {
+                    //Change the blank tiles back to underscores
+                    for (Letter l : game.getCurrentPlayer().getRack()) {
+                        if (l.getPoints() == 0) {
+                                l.setLetter('_');
+                        }
+                    }
                     //Returning early so that the user can re-try their turn instead of it being passed to the next player
                     game.handleBoardError();
                     return;

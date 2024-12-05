@@ -47,12 +47,25 @@ public class Player implements Serializable {
      */
     public Dictionary<ArrayList<Letter>, ArrayList<String>> playerTurn(int userTurn)
     {
-        int numLettersToPlay; //stores the number of letters the user wants to play
-        int letterToPlay; //stores the actual letters the user plays
         Dictionary<ArrayList<Letter>, ArrayList<String>> playerWord = new Hashtable<>(); //Stores the scrabble notation for where the user wants to add things to the board
 
         if(userTurn == 1) //The user wants to place letters on the board
         {
+            //It is necessary to sort in case there are any blank tiles.
+            for(int i = 0; i < this.playedLocations.size() - 1; ++i) {
+                int smallestIndex = i;
+
+                for(int j = 0; j < this.playedLocations.size(); ++j) {
+                    if (((String)this.playedLocations.get(smallestIndex)).charAt(0) > ((String)this.playedLocations.get(i)).charAt(0) || ((String)this.playedLocations.get(smallestIndex)).charAt(1) > ((String)this.playedLocations.get(i)).charAt(1)) {
+                        smallestIndex = i;
+                    }
+                }
+
+                this.playedLocations.add(i, (String)this.playedLocations.get(smallestIndex));
+                this.playedLocations.remove(smallestIndex + 1);
+                this.playedLetters.add(i, (Letter)this.playedLetters.get(smallestIndex));
+                this.playedLetters.remove(smallestIndex + 1);
+            }
             playerWord.put(playedLetters, playedLocations);
         }
         else if(userTurn == 2) { //The user wants to exchange letters with the letter bag
@@ -70,36 +83,18 @@ public class Player implements Serializable {
     public void placeLetter(int rackIndex)
     {
         playedLetters.add(rack.get(rackIndex));
-        saveLetterPlacement(rackIndex);
-    }
-
-    /**
-     * This method places a blank letter
-     * @param blankLetter - the character to place
-     * @param rackIndex the index of the letter on the player's rack
-     */
-    public void placeLetter(int rackIndex, char blankLetter) {
-        playedLetters.add(new Letter(blankLetter,0));
-        saveLetterPlacement(rackIndex);
-    }
-
-    /**
-     * This method handles saving the placement of a letter to the last index, redo, and undo stack.
-     * @param rackIndex the index of the letter on the player's rack
-     */
-    private void saveLetterPlacement(int rackIndex) {
         lastLetterIndex = rackIndex;
-
         //Adding the new letter as an undo value
         if(playedLetters.size() <= playedLocations.size())
         {
-            String undo = (playedLetters.size() - 1) + "," + playedLocations.get(playedLetters.size() - 1) + ","+rackIndex;
+            String undo = (playedLetters.size() - 1) + "," + playedLocations.get(playedLetters.size() - 1) + ","+ rackIndex;
             undoStack.push(undo);
 
             //Clearing the redo stack, since the player has changed the order of their actions
             redoStack.clear();
         }
     }
+
 
     /**
      * addCoordinate takes in and stores a coordinate on the board in preparation for a player to submit their turn

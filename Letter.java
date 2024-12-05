@@ -57,4 +57,12 @@ public class Letter implements Serializable {
         return Character.hashCode(letter);
     }
 
+    /**
+     * This method is used to set the character of a letter
+     * @param letter - the letter that will be changed to
+     */
+    public void setLetter(char letter) {
+        this.letter = letter;
+    }
+
 }
