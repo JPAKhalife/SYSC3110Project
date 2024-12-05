@@ -13,10 +13,7 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
     private JButton[][] boardButtons;
     private JTextPane scorePane;
     private Game game;
-    private Container turnElements;
     private JButton[] rackButtons;  //holds the letters on a rack as buttons (placed letters, before sumbitted, are disabled)
-    private JButton undoButton;
-    private JButton redoButton;
     private final Color TILE_COLOUR = new Color(240, 215, 149);
     private final Color BOARD_COLOUR = new Color(103, 128, 78);
     private final Color BOARD_CENTER = new Color(63, 146, 199);
@@ -25,9 +22,6 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
     private final Color TRIPLE_LETTER_COLOUR = new Color(63, 146, 199);
     private final Color DOUBLE_LETTER_COLOUR = new Color(117, 216, 230);
     private JTextPane currentPlayerField;
-    private JMenuBar menuBar;
-    private JMenuItem saveItem;
-    private JMenuItem loadItem;
     /**
      * The basic constructor for the ScrabbleView class
      *
@@ -92,12 +86,12 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
         GameController gameController = new GameController(game);
 
         //Create menubar for serialization features
-        menuBar = new JMenuBar();
+        JMenuBar menuBar = new JMenuBar();
         JMenu menu = new JMenu("Game Options");
-        saveItem = new JMenuItem("Save game as serializable");
+        JMenuItem saveItem = new JMenuItem("Save game as serializable");
         saveItem.setActionCommand("serial,save");
         saveItem.addActionListener(gameController);
-        loadItem = new JMenuItem("Load game from serializable");
+        JMenuItem loadItem = new JMenuItem("Load game from serializable");
         loadItem.setActionCommand("serial,load");
         loadItem.addActionListener(gameController);
         menu.add(saveItem);
@@ -105,12 +99,9 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
         menuBar.add(menu);
 
         //Create GUI elements in frame
-        turnElements = new Container(); //holds the current player's rack and the turn buttons
         boardButtons = new JButton[15][15]; //holds the spaces on a board as buttons (occupied spaces disabled)
         JButton[] turnButtons = new JButton[3]; //holds the buttons used for a turn (submit, exchange, skip)
         scorePane = new JTextPane();
-        JTextPane currentPlayerPane = new JTextPane();
-        JPanel PlayerPanel = new JPanel();
         rackButtons = new JButton[7];
 
         //create board buttons
@@ -164,8 +155,6 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
             turnButtons[i].setActionCommand("turn,"+ commands[i].toLowerCase());
             turnPanel.add(turnButtons[i]);
         }
-
-
 
         //Add rack and turn buttons below the board
         JPanel playPanel = new JPanel(new GridLayout(1,2));
@@ -390,6 +379,23 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
         boardButtons[locationIndexI][locationIndexJ].setEnabled(false);
         //remove tile from rack
         rackButtons[rackIndex].setEnabled(false);
+    }
+
+    /**
+     * This method is used to ask the player what the stand in letter should be for a blank tile.
+     */
+    @Override
+    public char handleBlankTile() {
+        String blankLetter;
+        boolean isValidLetter;
+        do {
+            isValidLetter = true;
+            blankLetter = JOptionPane.showInputDialog("Enter the letter that the blank tile should represent:");
+            if (blankLetter == null || blankLetter.length() != 1 || !Character.isLetter(blankLetter.charAt(0))) {
+                isValidLetter = false;
+            }
+        } while (!isValidLetter);
+        return blankLetter.toLowerCase().charAt(0);
     }
 
     public static void main(String[] args) {
