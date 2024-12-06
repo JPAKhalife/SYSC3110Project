@@ -39,15 +39,6 @@ public class Board implements Serializable {
         initializeTiles(filename);
     }
 
-    public static void printTiles() {
-        for (int i = 0 ; i < BOARD_SIZE ; i++) {
-            for (int j =  0 ; j < BOARD_SIZE ; j++) {
-                System.out.print(PREMIUM_TILES[i][j] + " ");
-            }
-            System.out.println();
-        }
-    }
-
     public static void initializeTiles(String filename) {
         try {
             SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -545,6 +536,11 @@ public class Board implements Serializable {
      */
     public int[][] getBoardTiles() {
         return PREMIUM_TILES;
+    }
+
+    public void clearStatus()
+    {
+        this.status = new ErrorEvent();
     }
 } //end class
 

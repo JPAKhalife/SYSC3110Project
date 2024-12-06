@@ -56,7 +56,6 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
             try{
                 numAIplayers = Integer.parseInt(AIplayerInput);
                 totalPlayers = numAIplayers + numPlayers;
-                System.out.println("total player: " + totalPlayers);
             } catch(Exception e)
             {
                 JOptionPane.showMessageDialog(this, "Please enter a valid number of AIs");
@@ -163,8 +162,6 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
             turnButtons[i].setActionCommand("turn,"+ commands[i].toLowerCase());
             turnPanel.add(turnButtons[i]);
         }
-
-
 
         //Add rack and turn buttons below the board
         JPanel playPanel = new JPanel(new GridLayout(1,2));
@@ -288,7 +285,6 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
                 char y = location.charAt(0);
                 int x = Integer.parseInt(location.substring(1));
                 char letter = letters.get(i).getLetter();
-                System.out.println("handleLetterPlacement - y: " + y + ", x: " + x + ", letter: " + letter);
                 y = Character.toLowerCase(y); //make sure lower case
                 //JButton placement = this.boardButtons[y - 'a'][x];
                 boardButtons[y - 'a'][x - 1].setBackground(TILE_COLOUR); //Board is indexed starting with 1 --> need to go down one
@@ -406,6 +402,7 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
         rackButtons[rackIndex].setEnabled(false);
     }
 
+
     @Override
     public void handleTimerUpdate(int time, boolean doTimer) {
         if (doTimer) {
@@ -413,6 +410,23 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
         } else {
             timerPane.setText("");
         }
+
+    /**
+     * This method is used to ask the player what the stand in letter should be for a blank tile.
+     */
+    @Override
+    public char handleBlankTile() {
+        String blankLetter;
+        boolean isValidLetter;
+        do {
+            isValidLetter = true;
+            blankLetter = JOptionPane.showInputDialog("Enter the letter that the blank tile should represent:");
+            if (blankLetter == null || blankLetter.length() != 1 || !Character.isLetter(blankLetter.charAt(0))) {
+                isValidLetter = false;
+            }
+        } while (!isValidLetter);
+        return blankLetter.toLowerCase().charAt(0);
+
     }
 
     public static void main(String[] args) {

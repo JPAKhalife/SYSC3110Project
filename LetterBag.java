@@ -43,6 +43,7 @@ public class LetterBag implements Serializable {
         Letter letterX = new Letter('x',8);
         Letter letterY = new Letter('y',4);
         Letter letterZ = new Letter('z',10);
+        Letter letterBlank = new Letter('_',0);
 
         letters.put(letterA,9);
         letters.put(letterB,2);
@@ -70,6 +71,7 @@ public class LetterBag implements Serializable {
         letters.put(letterX,1);
         letters.put(letterY,2);
         letters.put(letterZ,1);
+        letters.put(letterBlank,2);
 
 
         for(Enumeration<Letter> e = letters.keys();e.hasMoreElements();) {//loop through the enumeration of letter keys
@@ -112,7 +114,6 @@ public class LetterBag implements Serializable {
 
     /**
      * Adds a letter back into the bag.
-     * This method is used for testing getNextLetter method
      * @param tempLetter The letter to be returned to the bag
      */
     public static void addLetter(Letter tempLetter) {

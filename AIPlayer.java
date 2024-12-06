@@ -223,7 +223,7 @@ public class AIPlayer extends Player implements Serializable {
                 ArrayList<Letter> addedLetters = new ArrayList<>(); //Holds all the added letters that the AI has used
 
                 //The first letter will either be the first or last letter, so can build the rest without worrying about sub-permutations
-                for (int k = 0; k < wordLength - 1; k++)
+                for (int k = 0; k < min(wordLength - 1, unusedLetters.size()); k++)
                 {
                     Letter usedLetter = unusedLetters.remove(rand.nextInt(max(unusedLetters.size(), 1)));
                     //adding a random unused letter to the end of the word

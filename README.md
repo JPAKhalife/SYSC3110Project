@@ -8,7 +8,11 @@ Additionally, this game includes features to enhance the digital format of the g
 
 Presently, checks for menu items that will restart or quit the game are present in the Controller, but do not exist in the actual implementation.
 
-Overall, this deliverable aims to provide a user-friendly and complete Scrabble experience. 
+The following is a breakdown of the details of future deliverables- outlining how the current implementation of the game will be expanded.
+
+The bonus Deliverable 5 will include a timer feature to enhance the user experience. Each user will have 30 seconds to perform their turn. Once the timer reaches 0, the game will automatically move on to the next player's turn. This timer feature is optional. By default, the game will not include the turn timer and can be enabled by selecting the timer item in the 'Game Options' menu bar. 
+
+Overall, this deliverable aims to provide a user-friendly and complete Scrabble experience to the users. 
 
 Known issues:
 -If the user selects to save/import a file for the serializable feature, the user must select a file. This game does not support a cancel feature for the dialogue file selector

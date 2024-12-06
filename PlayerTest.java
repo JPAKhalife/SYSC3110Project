@@ -154,5 +154,36 @@ public class PlayerTest {
         assertNotNull(rack);
         assertEquals(7, rack.size());
     }
+
+    @Test
+    public void undoPlacement()
+    {
+        player.placeLetter(0);
+        player.addCoordinate('b', 2);
+        ArrayList<Letter> rack = player.getRack();
+
+        int[] indices = player.undoPlacement();
+
+        ArrayList<Letter> rackAfter = player.getRack();
+
+        assertEquals(rackAfter.size(), rack.size());
+
+        assertEquals(0, indices[2]);
+        assertEquals(1, indices[1]);
+        assertEquals(1, indices[0]);
+    }
+
+    @Test
+    public void redoPlacement()
+    {
+        player.addCoordinate('b', 2);
+        player.placeLetter(0);
+
+        player.undoPlacement();
+        int[] indices = player.redoPlacement();
+
+        assertEquals(0, indices[2]);
+        assertEquals(1, indices[1]);
+        assertEquals(1, indices[1]);
+    }
 }
-//Salut

@@ -179,7 +179,6 @@ public class Game implements Serializable {
             }
             this.board = loadedGame.board;
             this.players = loadedGame.players;
-            this.views = loadedGame.views;
             this.currentPlayer = loadedGame.currentPlayer;
 
 
@@ -239,9 +238,9 @@ public class Game implements Serializable {
         //displaying the updated scores and board statuses
         for(GameObserver view: views)
         {
+            view.handleBoardUpdate(board.getStatus());
             view.handleScoreUpdate(-1);
             view.handleNewTurn(currentPlayer);
-            view.handleBoardUpdate(board.getStatus());
         }
 
         if (this.doTimer) {

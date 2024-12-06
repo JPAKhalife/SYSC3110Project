@@ -55,6 +55,7 @@ public class GameController implements ActionListener {
             //Grab + place the index
             int index = Integer.valueOf(command[1]);
             game.getCurrentPlayer().placeLetter(index);
+
             JButton buttonPressed = (JButton) e.getSource();
             buttonPressed.setEnabled(false);
 
@@ -66,20 +67,30 @@ public class GameController implements ActionListener {
 
         } else if (command[0].equals("turn")) {
             int winner = -1; //Holds the winning player, if any
+            game.getBoard().clearStatus();
             if (command[1].equals("submit")) {
                 //Getting the combination of letters and locations
                 Dictionary<ArrayList<Letter>, ArrayList<String>> wordLocation = game.getCurrentPlayer().playerTurn(1);
-                System.out.println("before:");
-                Board.printTiles();
+                for (Letter l : wordLocation.keys().nextElement()) {
+                    if (l.getLetter() == '_') {
+                        for (GameObserver view : game.getViews()) {
+                            l.setLetter(view.handleBlankTile());
+                        }
+                    }
+                }
                 int score = game.addWord(wordLocation);
-                System.out.println("after:");
-                Board.printTiles();
 
                 //Needed here to both clear the player's inputs and also to update score if valid
                 boolean gameNotOver =  game.getCurrentPlayer().updateScore(score);
 
                 //adding the combination of letters and locations to the board
-                if (score < 0) { //DNE
+                if (score < 0) {
+                    //Change the blank tiles back to underscores
+                    for (Letter l : game.getCurrentPlayer().getRack()) {
+                        if (l.getPoints() == 0) {
+                                l.setLetter('_');
+                        }
+                    }
                     //Returning early so that the user can re-try their turn instead of it being passed to the next player
                     game.handleBoardError();
                     return;
@@ -98,9 +109,9 @@ public class GameController implements ActionListener {
             } else if (command[1].equals("exchange")) {
                 //put exchange behavior here
                 game.getCurrentPlayer().playerTurn(2); //DNE
-                game.handleNewTurn();
+                newTurnFunctions();
             } else if (command[1].equals("skip")) {
-                game.handleNewTurn();
+                newTurnFunctions();
                 //Don't need to do anything special here
             }else if(command[1].equals("undo")){
                 //pop "move" from top of stack (getting letter and location of last move)
@@ -151,10 +162,10 @@ public class GameController implements ActionListener {
                     fileChooser.setDialogTitle("Select the file to save the current game state to.");
                     output = fileChooser.showOpenDialog(null);
                 }
-                fileName = fileChooser.getSelectedFile().getName();
+                fileName = String.valueOf(fileChooser.getSelectedFile());
 
                 //save game state in file
-
+                game.saveGame(fileName);
 
             }else if(command[1].equals("load")){
                 //pop up window for file selection
@@ -166,10 +177,10 @@ public class GameController implements ActionListener {
                     fileChooser.setDialogTitle("Select the file to load game progress from.");
                     output = fileChooser.showOpenDialog(null);
                 }
-                fileName = fileChooser.getSelectedFile().getName();
+                fileName = String.valueOf(fileChooser.getSelectedFile());
 
                 //load game state from file
-
+                game.loadGame(fileName);
                 //update view by handler
             }
 
