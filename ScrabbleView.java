@@ -22,6 +22,7 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
     private final Color TRIPLE_LETTER_COLOUR = new Color(63, 146, 199);
     private final Color DOUBLE_LETTER_COLOUR = new Color(117, 216, 230);
     private JTextPane currentPlayerField;
+    private JTextPane timerPane;
     /**
      * The basic constructor for the ScrabbleView class
      *
@@ -94,14 +95,20 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
         JMenuItem loadItem = new JMenuItem("Load game from serializable");
         loadItem.setActionCommand("serial,load");
         loadItem.addActionListener(gameController);
+        JMenuItem timerMode = new JMenuItem("Timer Mode");
+        timerMode.setActionCommand("timer");
+        timerMode.addActionListener(gameController);
         menu.add(saveItem);
         menu.add(loadItem);
+        menu.add(timerMode);
         menuBar.add(menu);
 
         //Create GUI elements in frame
         boardButtons = new JButton[15][15]; //holds the spaces on a board as buttons (occupied spaces disabled)
         JButton[] turnButtons = new JButton[3]; //holds the buttons used for a turn (submit, exchange, skip)
         scorePane = new JTextPane();
+        timerPane = new JTextPane();
+        JPanel infoPanel = new JPanel(new GridLayout(3,1));
         rackButtons = new JButton[7];
 
         //create board buttons
@@ -171,6 +178,20 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
         //Create current player score pane
         scorePane.setFont(new Font(null, Font.BOLD, 14));
         scorePane.setEditable(false);
+        timerPane.setFont(new Font(null, Font.BOLD, 14));
+        timerPane.setEditable(false);
+        infoPanel.add(scorePane);
+        //This is an empty field to remove the grey background.
+        JTextField spaceLabel =  new JTextField();
+        spaceLabel.setEditable(false);
+        spaceLabel.setBackground(Color.WHITE);
+        spaceLabel.setBorder(BorderFactory.createEmptyBorder());
+        infoPanel.add(timerPane);
+        infoPanel.add(spaceLabel);
+
+
+
+
 
         handleScoreUpdate(-1);
         this.handleBoardUpdate(new ErrorEvent());
@@ -179,7 +200,7 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
 
         this.add(boardPanel, BorderLayout.CENTER);
 
-        this.add(scorePane, BorderLayout.EAST);
+        this.add(infoPanel, BorderLayout.EAST);
 
         this.add(menuBar, BorderLayout.NORTH);
 
@@ -381,6 +402,15 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
         rackButtons[rackIndex].setEnabled(false);
     }
 
+
+    @Override
+    public void handleTimerUpdate(int time, boolean doTimer) {
+        if (doTimer) {
+            timerPane.setText("Time Remaining: " + time);
+        } else {
+            timerPane.setText("");
+        }
+
     /**
      * This method is used to ask the player what the stand in letter should be for a blank tile.
      */
@@ -396,6 +426,7 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
             }
         } while (!isValidLetter);
         return blankLetter.toLowerCase().charAt(0);
+
     }
 
     public static void main(String[] args) {

@@ -274,7 +274,7 @@ public class BoardTest {
     public void checkBoardCustomTiles() {
         //This copies the board
         int[][] originalBoard = Arrays.stream(board.getBoardTiles()).map(int[]::clone).toArray(int[][]::new);
-        Board board2 = new Board("boardtest.xml");
+        Board board2 = new Board("board3test.xml");
         for (int i = 0 ; i < Board.BOARD_SIZE ; i++) {
             for ( int j = 0 ; j < Board.BOARD_SIZE ; j++) {
                 assertNotEquals(originalBoard[i][j],board2.getBoardTiles()[i][j]);

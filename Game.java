@@ -15,6 +15,10 @@ public class Game implements Serializable {
     private Board board;
     private int currentPlayer;
     private ArrayList<GameObserver> views;
+    private static final int TIMER_DELAY_S = 30;
+    private boolean doTimer;
+    private int timerValue;
+    private Timer timer;
 
 
     /**
@@ -25,6 +29,9 @@ public class Game implements Serializable {
         board = new Board(filename);
         currentPlayer = 0;
         views = new ArrayList<>();
+        timer = new Timer();
+        timerValue = TIMER_DELAY_S;
+        doTimer = false;
         LetterBag.createBag();
 
         for(int i = 0; i < playerNum; i++)
@@ -236,6 +243,9 @@ public class Game implements Serializable {
             view.handleNewTurn(currentPlayer);
         }
 
+        if (this.doTimer) {
+            this.timerValue = TIMER_DELAY_S;
+        }
     }
 
     /**
@@ -256,5 +266,36 @@ public class Game implements Serializable {
      */
     public ArrayList<GameObserver> getViews(){
         return this.views;
+    }
+
+    /**
+     * This method turns on and off the timer.
+     */
+    public void toggleTimer() {
+        this.doTimer  = !this.doTimer;
+        if (this.doTimer) {
+            activateTimer();
+        } else {
+            this.timer.cancel();
+        }
+    }
+
+    /**
+     * This method activates the timer
+     */
+    public void activateTimer() {
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                for (GameObserver view : views) {
+                    timerValue--;
+                    view.handleTimerUpdate(timerValue,doTimer);
+                    if (timerValue <= 0) {
+                        handleNewTurn();
+                    }
+
+                }
+            }
+        },1000,1000);
     }
 }

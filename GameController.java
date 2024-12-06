@@ -99,12 +99,13 @@ public class GameController implements ActionListener {
                 {
                     if(!gameNotOver)
                     {
+                        game.toggleTimer();
                         winner = game.findWinner();
                         return; //Game is over --> don't need to move onto next turn
                     }
                 }
 
-                newTurnFunctions();
+                game.handleNewTurn();
             } else if (command[1].equals("exchange")) {
                 //put exchange behavior here
                 game.getCurrentPlayer().playerTurn(2); //DNE
@@ -183,25 +184,8 @@ public class GameController implements ActionListener {
                 //update view by handler
             }
 
-        }else if (command[0].equals("menu")) {
-            if (command[1].equals("restart")) {
-                //Handle restarting the game. game.restart()?
-            } else if (command[1].equals("quit")) {
-                //Handle quitting the game? (this could be done in the view by specifying a window close behavior)
-            }
-            //insert checks for other menu buttons here
+        } else if (command[0].equals("timer")) {
+            game.toggleTimer();
         }
-    }
-
-    /**
-     * This method handles changing to the next player's turn.
-     */
-    public void newTurnFunctions() {
-        //changing to the next player's turn
-        for(GameObserver view: game.getViews())
-        {
-            view.handleBoardUpdate(new ErrorEvent());
-        }
-        game.handleNewTurn();
     }
 }
