@@ -108,6 +108,9 @@ public class GameController implements ActionListener {
                     }
                 }
                 game.setInputWait(false);
+                if (game.getTimerValue() > 0) {
+                    game.handleNewTurn();
+                }
                 game.handleNewTurn();
             } else if (command[1].equals("exchange")) {
                 //put exchange behavior here

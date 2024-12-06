@@ -408,7 +408,6 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
     @Override
     public void handleTimerUpdate(int time, boolean doTimer) {
         if (doTimer) {
-            System.out.println("time: " + time);
             timerPane.setText("Time Remaining: " + time);
         } else {
             timerPane.setText("");

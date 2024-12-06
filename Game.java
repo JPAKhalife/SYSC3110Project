@@ -15,7 +15,7 @@ public class Game implements Serializable {
     private Board board;
     private int currentPlayer;
     private ArrayList<GameObserver> views;
-    private static final int TIMER_DELAY_S = 5;
+    private static final int TIMER_DELAY_S = 30;
     private boolean doTimer;
     private boolean waitingForInput;
     private int timerValue;
@@ -232,10 +232,10 @@ public class Game implements Serializable {
             currentAI.aiTurn();
             currentPlayer = (currentPlayer + 1) % (players.size()); //incrementing again, since the AI just went
         }
-        System.out.println("chandlealled");
-
         if (this.doTimer) {
             setTimerValue(TIMER_DELAY_S);
+            timer.cancel();
+            activateTimer();
             for (GameObserver view : views) {
                 view.handleTimerUpdate(getTimerValue(),this.doTimer);
             }
@@ -250,8 +250,6 @@ public class Game implements Serializable {
             view.handleScoreUpdate(-1);
             view.handleNewTurn(currentPlayer);
         }
-
-        LetterBag.printContents();
         setInputWait(false);
     }
 
@@ -282,6 +280,7 @@ public class Game implements Serializable {
     public void toggleTimer() {
         this.doTimer  = !this.doTimer;
         if (this.doTimer) {
+            setTimerValue(TIMER_DELAY_S);
             activateTimer();
         } else {
             this.timer.cancel();
@@ -300,12 +299,7 @@ public class Game implements Serializable {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                for (GameObserver view : views) {
-                    if (getTimerValue() > 0) {
-                        System.out.println("ddecrememnt");
-                        setTimerValue(getTimerValue() - 1); //update the timer and display
-                        view.handleTimerUpdate(timerValue,doTimer);
-                    }
+                setTimerValue(getTimerValue() - 1); //update the timer and display
                     if (getTimerValue() <= 0) {
                         //If a JOptionPane is open when the turn increments:
                         //the submit button has already been pressed
@@ -320,13 +314,10 @@ public class Game implements Serializable {
                                     e.printStackTrace();
                                 }
                             }
-
                             setTimerValue(TIMER_DELAY_S); //run spawns a new thread besides the timer, which
-                            return; //We do not want to call handleNewTurn since submit does this already
                         }
                         handleNewTurn();
                     }
-                }
             }
         },1000,1000);
     }
@@ -346,6 +337,7 @@ public class Game implements Serializable {
      */
     public synchronized void setInputWait(boolean waitingForInput) {
         this.waitingForInput = waitingForInput;
+
     }
 
     /**
@@ -355,7 +347,9 @@ public class Game implements Serializable {
      */
     private synchronized void setTimerValue(int value) {
         this.timerValue = value;
-        System.out.println("Set to " + value);
+        for (GameObserver view : views) {
+            view.handleTimerUpdate(timerValue,doTimer);
+        }
     }
 
     /**
@@ -363,7 +357,7 @@ public class Game implements Serializable {
      * thread safety
      * @return an integer representing the timer value
      */
-    private synchronized int getTimerValue() {
+    public synchronized int getTimerValue() {
         return this.timerValue;
     }
 }
