@@ -6,6 +6,8 @@
 import java.io.Serializable;
 import java.util.*;
 
+import static java.lang.Math.min;
+
 public class Player implements Serializable {
     protected ArrayList <Letter> rack;
     private int score;
@@ -52,12 +54,12 @@ public class Player implements Serializable {
         if(userTurn == 1) //The user wants to place letters on the board
         {
             //It is necessary to sort in case there are any blank tiles.
-            for(int i = 0; i < this.playedLocations.size() - 1; ++i) {
+            for(int i = 0; i < min(this.playedLocations.size() - 1, this.playedLetters.size() - 1); ++i) {
                 int smallestIndex = i;
 
-                for(int j = 0; j < this.playedLocations.size(); ++j) {
+                for(int j = i; j < this.playedLocations.size(); ++j) {
                     if (((String)this.playedLocations.get(smallestIndex)).charAt(0) > ((String)this.playedLocations.get(i)).charAt(0) || ((String)this.playedLocations.get(smallestIndex)).charAt(1) > ((String)this.playedLocations.get(i)).charAt(1)) {
-                        smallestIndex = i;
+                        smallestIndex = j;
                     }
                 }
 
