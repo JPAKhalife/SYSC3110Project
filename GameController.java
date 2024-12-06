@@ -109,9 +109,9 @@ public class GameController implements ActionListener {
             } else if (command[1].equals("exchange")) {
                 //put exchange behavior here
                 game.getCurrentPlayer().playerTurn(2); //DNE
-                newTurnFunctions();
+                game.handleNewTurn();
             } else if (command[1].equals("skip")) {
-                newTurnFunctions();
+                game.handleNewTurn();
                 //Don't need to do anything special here
             }else if(command[1].equals("undo")){
                 //pop "move" from top of stack (getting letter and location of last move)

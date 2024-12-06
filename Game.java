@@ -277,6 +277,9 @@ public class Game implements Serializable {
             activateTimer();
         } else {
             this.timer.cancel();
+            for (GameObserver view : views) {
+                view.handleTimerUpdate(this.timerValue,this.doTimer);
+            }
         }
     }
 
@@ -284,6 +287,7 @@ public class Game implements Serializable {
      * This method activates the timer
      */
     public void activateTimer() {
+        this.timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {

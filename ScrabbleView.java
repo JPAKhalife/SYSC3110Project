@@ -410,7 +410,8 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
         } else {
             timerPane.setText("");
         }
-
+    }
+    
     /**
      * This method is used to ask the player what the stand in letter should be for a blank tile.
      */
