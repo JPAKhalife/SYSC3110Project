@@ -69,6 +69,7 @@ public class GameController implements ActionListener {
             int winner = -1; //Holds the winning player, if any
             game.getBoard().clearStatus();
             if (command[1].equals("submit")) {
+                game.setInputWait(true);
                 //Getting the combination of letters and locations
                 Dictionary<ArrayList<Letter>, ArrayList<String>> wordLocation = game.getCurrentPlayer().playerTurn(1);
                 for (Letter l : wordLocation.keys().nextElement()) {
@@ -93,18 +94,20 @@ public class GameController implements ActionListener {
                     }
                     //Returning early so that the user can re-try their turn instead of it being passed to the next player
                     game.handleBoardError();
+                    game.setInputWait(false);
                     return;
                 }
                 else
                 {
                     if(!gameNotOver)
                     {
+                        game.setInputWait(false);
                         game.toggleTimer();
                         winner = game.findWinner();
                         return; //Game is over --> don't need to move onto next turn
                     }
                 }
-
+                game.setInputWait(false);
                 game.handleNewTurn();
             } else if (command[1].equals("exchange")) {
                 //put exchange behavior here

@@ -290,9 +290,12 @@ public class Player implements Serializable {
     /**
      * Removes the values from the undo and redo stack to perform a new turn
      */
-    public void clearUndoRedo()
+    public void clearCollections()
     {
         undoStack.clear();
         redoStack.clear();
+        playedLetters.clear();
+        playedLocations.clear();
+
     }
 }

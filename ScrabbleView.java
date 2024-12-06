@@ -315,7 +315,9 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
     @Override
     public void handleBoardUpdate(ErrorEvent e) {
         if(e.getError()!= ErrorEvent.GameError.NONE){
+            game.setInputWait(true);
             JOptionPane.showMessageDialog(null, e.getError().getErrorDescription());
+            game.setInputWait(false);
             switch (e.getError()) {
                 case CANNOT_REDO:
                     return;
@@ -406,12 +408,13 @@ public class ScrabbleView extends JFrame implements GameObserver, Serializable {
     @Override
     public void handleTimerUpdate(int time, boolean doTimer) {
         if (doTimer) {
+            System.out.println("time: " + time);
             timerPane.setText("Time Remaining: " + time);
         } else {
             timerPane.setText("");
         }
     }
-    
+
     /**
      * This method is used to ask the player what the stand in letter should be for a blank tile.
      */

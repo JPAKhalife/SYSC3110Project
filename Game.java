@@ -15,8 +15,9 @@ public class Game implements Serializable {
     private Board board;
     private int currentPlayer;
     private ArrayList<GameObserver> views;
-    private static final int TIMER_DELAY_S = 30;
+    private static final int TIMER_DELAY_S = 5;
     private boolean doTimer;
+    private boolean waitingForInput;
     private int timerValue;
     private Timer timer;
 
@@ -28,6 +29,7 @@ public class Game implements Serializable {
         players = new ArrayList<>();
         board = new Board(filename);
         currentPlayer = 0;
+        waitingForInput = false;
         views = new ArrayList<>();
         timer = new Timer();
         timerValue = TIMER_DELAY_S;
@@ -131,11 +133,7 @@ public class Game implements Serializable {
 
         int wordScore = board.addWord(letters, locations);
 
-        if (wordScore > 0) {
-            for (int i = 0 ; i < views.size() ; i++) {
-                views.get(i).handleBoardUpdate(getBoard().getStatus());
-            }
-        }
+        handleBoardError();
         return wordScore;
     }
 
@@ -222,8 +220,9 @@ public class Game implements Serializable {
      */
     public void handleNewTurn()
     {
+        setInputWait(true);
         //clearing the stacks
-        getCurrentPlayer().clearUndoRedo();
+        getCurrentPlayer().clearCollections();
         //Giving the next player a turn (including AI players)
         //turn order priority favours real players. Once all real players have finished, the AI players will play
         currentPlayer = (currentPlayer + 1) % (players.size());
@@ -233,8 +232,17 @@ public class Game implements Serializable {
             currentAI.aiTurn();
             currentPlayer = (currentPlayer + 1) % (players.size()); //incrementing again, since the AI just went
         }
+        System.out.println("chandlealled");
 
+        if (this.doTimer) {
+            setTimerValue(TIMER_DELAY_S);
+            for (GameObserver view : views) {
+                view.handleTimerUpdate(getTimerValue(),this.doTimer);
+            }
+        }
 
+        //Clear the board status
+        board.clearStatus();
         //displaying the updated scores and board statuses
         for(GameObserver view: views)
         {
@@ -243,9 +251,8 @@ public class Game implements Serializable {
             view.handleNewTurn(currentPlayer);
         }
 
-        if (this.doTimer) {
-            this.timerValue = TIMER_DELAY_S;
-        }
+        LetterBag.printContents();
+        setInputWait(false);
     }
 
     /**
@@ -258,6 +265,7 @@ public class Game implements Serializable {
         {
             view.handleBoardUpdate(board.getStatus());
         }
+        board.clearStatus();
     }
 
     /**
@@ -287,19 +295,75 @@ public class Game implements Serializable {
      * This method activates the timer
      */
     public void activateTimer() {
-        this.timer = new Timer();
+        this.timer = new Timer(); //Reinitialize the timer to start a new thread
+        //Declare the 1 second periodic task
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 for (GameObserver view : views) {
-                    timerValue--;
-                    view.handleTimerUpdate(timerValue,doTimer);
-                    if (timerValue <= 0) {
+                    if (getTimerValue() > 0) {
+                        System.out.println("ddecrememnt");
+                        setTimerValue(getTimerValue() - 1); //update the timer and display
+                        view.handleTimerUpdate(timerValue,doTimer);
+                    }
+                    if (getTimerValue() <= 0) {
+                        //If a JOptionPane is open when the turn increments:
+                        //the submit button has already been pressed
+                        //Wait for that part of the thread to complete.
+                        if (isWaitingForInput()) {
+                            //Stop the fixed rate scheduling so more threads are not created
+                            while (isWaitingForInput()) {
+                                try {
+                                    //To avoid a preventing the boolean from being changed, by calling get too often
+                                    Thread.sleep(5);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            setTimerValue(TIMER_DELAY_S); //run spawns a new thread besides the timer, which
+                            return; //We do not want to call handleNewTurn since submit does this already
+                        }
                         handleNewTurn();
                     }
-
                 }
             }
         },1000,1000);
+    }
+
+    /**
+     * This method is responsible for checking whether or we are waiting on input.
+     * More specifically, if a JOptionPane is currently open, this will be true.
+     * @return a boolean stating whether or input needs to be waited for
+     */
+    private synchronized boolean isWaitingForInput() {
+        return this.waitingForInput;
+    }
+
+    /**
+     * This method is responsible for setting whether or not the timer needs to wait on input
+     * @param waitingForInput - whether or not timer should wait for input
+     */
+    public synchronized void setInputWait(boolean waitingForInput) {
+        this.waitingForInput = waitingForInput;
+    }
+
+    /**
+     * This allows the timer and the main thread to set the timervalue without worrying about
+     * thread safety
+     * @param value
+     */
+    private synchronized void setTimerValue(int value) {
+        this.timerValue = value;
+        System.out.println("Set to " + value);
+    }
+
+    /**
+     * This allows the timer and the main thread to set the timervalue without worrying about
+     * thread safety
+     * @return an integer representing the timer value
+     */
+    private synchronized int getTimerValue() {
+        return this.timerValue;
     }
 }

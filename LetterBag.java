@@ -140,4 +140,11 @@ public class LetterBag implements Serializable {
         letters.clear();
         letterList.clear();
     }
+
+    public static void printContents() {
+        for (Letter i : letterList) {
+            System.out.print(i.getLetter() +  " ");
+        }
+        System.out.println();
+    }
 }
